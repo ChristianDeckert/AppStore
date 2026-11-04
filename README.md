@@ -4,4 +4,4 @@ Public documents for apps by Christian Deckert, linked from their App Store list
 
 | App | Document |
 |---|---|
-| Quick Gif (macOS) | [Privacy policy](QuickGif/PRIVACY.md) |
+| Quick Gif (macOS) | [Support](QuickGif/SUPPORT.md) · [Privacy policy](QuickGif/PRIVACY.md) |
