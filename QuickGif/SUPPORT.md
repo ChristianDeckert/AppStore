@@ -6,14 +6,18 @@ reach us.
 
 ## Getting started
 
-1. Launch Quick Gif. It has no Dock icon and no main window; look for the small rounded **GIF**
-   badge at the right-hand end of the menu bar.
+1. Launch Quick Gif. The first time, a short welcome window walks you through the menu bar,
+   the hot corner, the size presets, where your GIFs are saved, and the free credits. Skip it
+   whenever you like; it is always available again under **Settings… → About → Show Welcome…**.
+   Quick Gif has no Dock icon: look for the small rounded **GIF** badge at the right-hand end of
+   the menu bar.
 2. Click the badge and choose **Show Window** to open the converter panel.
 3. Drag a video onto the panel, or click **Choose File…** inside it (also **Convert File…** in
    the menu). You can drop several files at once; they convert one after another.
-4. The first time, Quick Gif asks once where to save your GIFs. The folder picker opens at
-   **Downloads**, so clicking **Save GIFs Here** keeps them there; you can change the folder
-   later under **Settings… → Output**.
+4. Your GIF is saved to the folder you chose in the welcome window. If you skipped that step,
+   the preview of your first GIF offers **Choose Folder…**; the picker opens at **Downloads**, so
+   clicking **Save GIFs Here** keeps them there. Change the folder any time under
+   **Settings… → Output**.
 5. The finished GIF is saved to that folder and a preview window opens. From there you can drag
    the GIF into any app, use **Save As…** to put a copy somewhere else, or **Show in Finder**.
 
@@ -55,10 +59,11 @@ Video files macOS can decode — including `.mp4`, `.mov` and `.m4v` — plus `.
 
 ## Troubleshooting
 
-- **My GIF wasn't saved anywhere.** If you cancelled the first-time folder question, automatic
-  saving is switched off; the preview window's **Save As…** still keeps each GIF. Turn
-  **Save GIFs automatically** back on under Settings… → Output, and the next conversion asks
-  for a folder again. The same happens if the chosen folder was deleted or its disk ejected.
+- **My GIF wasn't saved anywhere.** No folder has been chosen yet: use **Choose Folder…** in the
+  preview window, or Settings… → Output. If you picked **Not Now** there, automatic saving is
+  switched off; turn **Save GIFs automatically** back on under Settings… → Output. The preview's
+  **Save As…** always keeps a GIF. The same applies if the chosen folder was deleted or its disk
+  ejected.
 - **Nothing appeared after launch.** That is expected: find the GIF badge in the menu bar. If
   the menu bar is crowded, items at the left of the right-hand group may be hidden by the
   notch; quit another menu-bar app or use a wider display.
