@@ -11,9 +11,11 @@ reach us.
 2. Click the badge and choose **Show Window** to open the converter panel.
 3. Drag a video onto the panel, or click **Choose File…** inside it (also **Convert File…** in
    the menu). You can drop several files at once; they convert one after another.
-4. The finished GIF is saved to your **Downloads** folder and a preview window opens. From
-   there you can drag the GIF into any app, use **Save As…** to put a copy somewhere else, or
-   **Show in Finder**.
+4. The first time, Quick Gif asks once where to save your GIFs. The folder picker opens at
+   **Downloads**, so clicking **Save GIFs Here** keeps them there; you can change the folder
+   later under **Settings… → Output**.
+5. The finished GIF is saved to that folder and a preview window opens. From there you can drag
+   the GIF into any app, use **Save As…** to put a copy somewhere else, or **Show in Finder**.
 
 Press **Escape** to hide the panel. It never takes focus away from the app you were using.
 
@@ -53,6 +55,10 @@ Video files macOS can decode — including `.mp4`, `.mov` and `.m4v` — plus `.
 
 ## Troubleshooting
 
+- **My GIF wasn't saved anywhere.** If you cancelled the first-time folder question, automatic
+  saving is switched off; the preview window's **Save As…** still keeps each GIF. Turn
+  **Save GIFs automatically** back on under Settings… → Output, and the next conversion asks
+  for a folder again. The same happens if the chosen folder was deleted or its disk ejected.
 - **Nothing appeared after launch.** That is expected: find the GIF badge in the menu bar. If
   the menu bar is crowded, items at the left of the right-hand group may be hidden by the
   notch; quit another menu-bar app or use a wider display.

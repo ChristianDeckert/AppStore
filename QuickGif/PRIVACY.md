@@ -14,10 +14,11 @@ into animated GIFs. All of that work happens on your Mac.
 
 While a conversion is running, the app writes temporary files to a private folder inside its own
 sandboxed container. Those files are deleted when you close the preview window, or at the next
-launch if the app quits unexpectedly. The finished GIF is written to your Downloads folder, or
-to a folder you choose in Settings.
+launch if the app quits unexpectedly. The finished GIF is written to the folder you choose the
+first time you convert something, which you can change in Settings.
 
-Quick Gif reads a file only when you give it one. It has no access to the rest of your disk.
+Quick Gif reads a file only when you give it one, and writes only to the folder you chose. It
+has no access to the rest of your disk.
 
 ## Network
 
