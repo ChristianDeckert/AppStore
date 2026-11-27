@@ -30,8 +30,8 @@ The first time you open CRTCam, a short guide explains this. You can open it aga
 - **The status pill** at the top left shows what the shutter is synced to, for example
   "SYNCED 50.00 Hz" and the shutter time. Tap it for the sync details, where you can detect again
   or fine-tune. While CRTCam is detecting, tapping it cancels.
-- **The gear** at the top right opens Settings. Without Premium, a **star** next to it shows what
-  Premium adds.
+- **The gear** at the top right opens Settings. Without Premium, a **gold seal** next to it shows
+  what Premium adds.
 - **The rate keys** pick a preset: 50 Hz PAL, 59.94 Hz NTSC, and common VGA and VESA monitor rates.
 - **Detect** measures the screen's refresh rate; see below.
 - **The knob** takes the photo. The volume buttons do too, and on iPhones with a Camera Control
@@ -63,25 +63,27 @@ button), export it or delete it.
 
 ## Exporting
 
-Open a photo and tap **Export**.
+Exporting needs Premium. Open a photo and tap **Export**, or select several photos in the roll and
+tap **Share**.
 
-- **Save to Photos** adds the full-resolution photo to your photo library. This needs Premium.
-- **AirDrop & share** (on Android: **Share**) sends the photo with the system share sheet, for
-  example via AirDrop, Messages or Mail. Without Premium, CRTCam shares a smaller copy, 1280 pixels
-  on the long side, with a watermark. With Premium it shares the original.
+- **Save to Photos** adds the full-resolution photo to your photo library.
+- **AirDrop & share** (on Android: **Share**) sends the original photo with the system share
+  sheet, for example via AirDrop, Messages or Mail.
+
+Without Premium, both open the Premium page instead.
 
 ## Free and Premium
 
 - Everything for taking photos is free: sync, Detect, fine-tuning, all lenses and your full-size
-  photos in the app.
+  photos in the app. Without Premium, your photos stay in the app.
 - **Premium** is a one-time in-app purchase. There is no subscription. It adds:
+  - **AirDrop & share**: sending the original photos via AirDrop, Messages, Mail and other apps;
   - **Save to Photos** at full resolution;
-  - sharing the original photo, without the watermark;
   - viewing your photos without the watermark pattern.
 - Without Premium, the full-screen photo view shows a faint pattern of retro icons over the photo.
   It is only drawn on screen; the photo itself is unchanged, and buying Premium removes the pattern
   for every photo, including the ones you took before.
-- Tap the **star** on the camera screen to see Premium and its price. **Restore purchases** is on
+- Tap the **gold seal** on the camera screen to see Premium and its price. **Restore purchases** is on
   the same page and in Settings.
 - Purchases are Apple in-app purchases, handled by the App Store; CRTCam has no account of its own.
   If you bought Premium on another device, it comes back through your Apple Account.
@@ -114,7 +116,7 @@ CRTCam cannot sync them away.
 - **Save to Photos fails.** Allow CRTCam to add photos in the system Settings under
   **CRT Retro Cam › Photos**.
 - **The volume buttons don't take a photo.** They only do while the camera screen is showing.
-- **I bought Premium, but CRTCam still shows the star.** Make sure you are signed in to the App
+- **I bought Premium, but CRTCam still shows the gold seal.** Make sure you are signed in to the App
   Store with the Apple Account you bought it with, then tap **Restore purchases** on the Premium
   page or in Settings.
 - **On Android, CRTCam says it cannot sync.** Some Android phones don't allow apps to set the
@@ -128,7 +130,7 @@ Apple's App Store. Full details: [Privacy policy](PRIVACY.md).
 
 ## Requirements
 
-CRTCam requires an iPhone or iPad with iOS 15 or later; the volume buttons and the Camera Control
+CRTCam requires an iPhone with iOS 15 or later; the volume buttons and the Camera Control
 take photos from iOS 17.2. On Android it requires Android 10 or later and a camera that allows a
 manual shutter time. It is available in English.
 

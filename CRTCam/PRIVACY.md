@@ -24,13 +24,14 @@ file per photo that records when it was taken, the camera and lens, the refresh 
 shutter settings it used, and whether you marked it as a favourite. They do not go to your photo
 library, to iCloud Photos or anywhere else until you export them.
 
-You export a photo only by choosing to:
+With Premium, you export a photo only by choosing to:
 
 - **Save to Photos** adds it to your photo library. CRTCam asks for permission to add photos the
   first time; it can only add photos and cannot see your library.
-- **Share** hands it to the system share sheet, and it goes only where you send it, for example
-  via AirDrop, Messages or Mail. Without Premium, CRTCam shares a smaller copy with a watermark,
-  made on your device as a temporary file.
+- **AirDrop & share** hands it to the system share sheet, and it goes only where you send it, for
+  example via AirDrop, Messages or Mail.
+
+Without Premium, photos cannot leave the app.
 
 Deleting a photo in CRTCam removes it from the app's storage. Deleting the app removes all of its
 photos that you have not exported.
