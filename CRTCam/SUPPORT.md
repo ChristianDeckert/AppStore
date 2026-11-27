@@ -110,9 +110,9 @@ CRTCam cannot sync them away.
 - **Wavy patterns (moiré).** The screen's phosphor dots and the camera's pixels can interfere. Step
   a little closer or further away, or switch lenses.
 - **The camera doesn't start.** CRTCam needs camera access: turn it on in the system Settings under
-  **CRTCam › Camera**.
+  **CRT Retro Cam › Camera**.
 - **Save to Photos fails.** Allow CRTCam to add photos in the system Settings under
-  **CRTCam › Photos**.
+  **CRT Retro Cam › Photos**.
 - **The volume buttons don't take a photo.** They only do while the camera screen is showing.
 - **I bought Premium, but CRTCam still shows the star.** Make sure you are signed in to the App
   Store with the Apple Account you bought it with, then tap **Restore purchases** on the Premium
