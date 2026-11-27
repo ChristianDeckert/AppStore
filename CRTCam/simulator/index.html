@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>CRTCam Test Screen</title>
-<meta name="description" content="No CRT at hand? This page redraws a television's scanning beam at 50, 59.94 or other rates on a fast monitor, so you can test CRTCam's refresh detection and shutter sync.">
+<meta name="description" content="No CRT at hand? This page redraws a television's scanning beam at 50, 59.94 or other rates on a fast monitor, so you can test CRTCam's refresh detection and shutter sync. On slower monitors it rolls soft hum bars through the picture for demos.">
 <meta name="color-scheme" content="light dark">
 <meta name="theme-color" content="#E6DFCB" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#1A1713" media="(prefers-color-scheme: dark)">
@@ -55,8 +55,8 @@
   --bad: #B02A2D;
   --led-ok: #5EB544;
   --led-warn: #F9B824;
-  --led-bad: #DD3A3C;
   --led-off: #8C836F;
+  --led-bars: #0A96D4;
   --s1: #5EB544; --s2: #F9B824; --s3: #F28020; --s4: #DD3A3C; --s5: #91408F; --s6: #0A96D4;
   --focus: #0A96D4;
   --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -135,6 +135,8 @@ h1 { font: italic 500 clamp(34px, 6vw, 52px)/1.05 var(--font-display); letter-sp
 .screen .glass { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(110% 80% at 28% 8%, rgba(255, 255, 255, .11), transparent 42%), radial-gradient(150% 130% at 50% 50%, transparent 62%, rgba(0, 0, 0, .35)); }
 .standby { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); padding: 8px 14px; border-radius: 999px; background: rgba(23, 21, 18, .78); color: #F3EDDD; font: 600 12px/1 var(--font-mono); letter-spacing: .14em; white-space: nowrap; }
 .screen-stop { position: absolute; right: 14px; bottom: 14px; }
+.screen-mode { position: absolute; left: 14px; top: 14px; display: inline-flex; align-items: center; gap: 7px; padding: 7px 11px; border-radius: 999px; background: rgba(23, 21, 18, .78); color: #F3EDDD; font: 600 11px/1 var(--font-mono); letter-spacing: .12em; white-space: nowrap; }
+.screen-mode .led { margin: 0; width: 8px; height: 8px; }
 .screen:fullscreen { aspect-ratio: auto; width: 100vw; height: 100vh; border-radius: 0; }
 .screen:-webkit-full-screen { aspect-ratio: auto; width: 100vw; height: 100vh; border-radius: 0; }
 
@@ -151,7 +153,7 @@ h1 { font: italic 500 clamp(34px, 6vw, 52px)/1.05 var(--font-display); letter-sp
 .readout { background: var(--vf); color: var(--vf-ink); border-radius: 22px; padding: 16px; box-shadow: inset 0 2px 8px rgba(0, 0, 0, .55), 0 1px 0 var(--card); display: grid; gap: 14px; }
 .cells { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
 .cell { display: grid; gap: 2px; min-width: 0; }
-.cell .k { font: 600 10px/1.2 var(--font-mono); letter-spacing: .14em; color: var(--vf-dim); }
+.cell .k, .mode .k { font: 600 10px/1.2 var(--font-mono); letter-spacing: .14em; color: var(--vf-dim); }
 .cell .v { font: 600 clamp(15px, 2.2vw, 19px)/1.25 var(--font-mono); color: #F9B824; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
 .cell .s { font: 400 12px/1.35 var(--font-sans); color: var(--vf-dim); overflow-wrap: anywhere; }
 .verdict { display: flex; gap: 10px; align-items: flex-start; border-top: 1px solid rgba(243, 237, 221, .12); padding-top: 12px; }
@@ -159,7 +161,18 @@ h1 { font: italic 500 clamp(34px, 6vw, 52px)/1.05 var(--font-display); letter-sp
 .led { width: 10px; height: 10px; border-radius: 50%; flex: none; background: var(--led-off); margin-top: 5px; }
 [data-kind="clean"] > .led, .led[data-kind="clean"] { background: var(--led-ok); box-shadow: 0 0 8px var(--led-ok); }
 [data-kind="drift"] > .led, .led[data-kind="drift"] { background: var(--led-warn); box-shadow: 0 0 8px var(--led-warn); }
-[data-kind="no"] > .led, .led[data-kind="no"] { background: var(--led-bad); box-shadow: 0 0 8px var(--led-bad); }
+[data-kind="bars"] > .led, .led[data-kind="bars"] { background: var(--led-bars); box-shadow: 0 0 8px var(--led-bars); }
+.mode { display: grid; gap: 10px; }
+.mode-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; }
+.mode-seg { display: inline-flex; gap: 3px; padding: 3px; border-radius: 12px; background: rgba(0, 0, 0, .35); max-width: 100%; }
+.mode-seg span { display: inline-flex; align-items: center; gap: 7px; padding: 8px 10px; border-radius: 9px; font: 600 11px/1 var(--font-mono); letter-spacing: .12em; color: var(--vf-dim); opacity: .5; white-space: nowrap; transition: opacity 200ms, background 200ms; }
+.mode-seg span[data-on="true"] { opacity: 1; color: #F9B824; background: rgba(243, 237, 221, .09); }
+.mode-seg .led { margin: 0; width: 8px; height: 8px; }
+.mode-seg span:not([data-on="true"]) .led { background: var(--led-off); box-shadow: none; }
+.mode p { font-size: 13px; line-height: 1.45; color: var(--vf-dim); }
+.mode p b { color: var(--vf-ink); font-weight: 600; }
+.rate-tip { font-size: 13px; line-height: 1.45; color: var(--vf-dim); border-top: 1px solid rgba(243, 237, 221, .12); padding-top: 12px; }
+.rate-tip b { color: var(--vf-ink); font-weight: 600; }
 
 /* Console */
 .console { background: var(--card); border-radius: 26px; padding: 18px; box-shadow: 0 2px 0 var(--key-edge), 0 18px 36px -16px var(--shade); display: grid; gap: 18px; }
@@ -248,13 +261,20 @@ h2 { font: italic 500 24px/1.15 var(--font-display); }
 .card li::marker { font: 600 13px var(--font-mono); color: var(--label); }
 .card li b { font-weight: 600; }
 .card .tip { font-size: 13px; color: var(--label); background: var(--ground); border-radius: 12px; padding: 10px 12px; }
+.modes-grid { display: grid; gap: 16px; }
+@media (min-width: 820px) { .modes-grid { grid-template-columns: 1fr 1fr; gap: 24px; } }
+.modes-grid > div { display: grid; gap: 6px; align-content: start; }
+h3 { display: flex; align-items: center; gap: 9px; font: 600 13px/1.2 var(--font-mono); letter-spacing: .12em; }
+h3 .led { margin: 0; }
+.modes-grid p { font-size: 14px; color: var(--label); }
+.modes-grid p b { color: var(--ink); font-weight: 600; }
 
 @media (max-width: 420px) {
   .cells { grid-template-columns: 1fr 1fr; }
   .cells .cell:last-child { grid-column: 1 / -1; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .key, .switch, .switch::after, .power-led { transition: none; }
+  .key, .switch, .switch::after, .power-led, .mode-seg span { transition: none; }
 }
 </style>
 </head>
@@ -266,7 +286,7 @@ h2 { font: italic 500 24px/1.15 var(--font-display); }
   <header class="head">
     <span class="brand"><i aria-hidden="true"><b></b><b></b><b></b><b></b><b></b><b></b></i>CRTCAM</span>
     <h1>CRT Test Screen</h1>
-    <p class="lede">No CRT at hand? Point CRTCam at this page on a fast monitor. It redraws a television's scanning beam at the rate you pick, so you can test detection and shutter sync.</p>
+    <p class="lede">No CRT at hand? Point CRTCam at this page. On a fast monitor it redraws a television's scanning beam at the rate you pick, so you can test detection and shutter sync. Where the monitor can't keep up, it rolls soft hum bars through the picture instead, for demos.</p>
   </header>
 
   <div class="stage">
@@ -278,6 +298,7 @@ h2 { font: italic 500 24px/1.15 var(--font-display); }
             <div class="scanlines" aria-hidden="true"></div>
             <div class="glass" aria-hidden="true"></div>
             <div class="standby" id="standby">STANDBY · PRESS START</div>
+            <div class="screen-mode" id="screen-mode" hidden><span class="led" id="screen-mode-led"></span><span id="screen-mode-text"></span></div>
             <button class="key dark screen-stop" id="screen-stop" type="button" hidden>Stop · Space</button>
           </div>
         </div>
@@ -290,12 +311,23 @@ h2 { font: italic 500 24px/1.15 var(--font-display); }
       </section>
 
       <section class="readout" aria-label="Scan and display">
+        <div class="mode">
+          <div class="mode-row">
+            <span class="k">MODE</span>
+            <div class="mode-seg" id="mode-seg" role="img" aria-label="Mode: measuring the display">
+              <span id="seg-scan" data-on="false"><span class="led" id="seg-scan-led" data-kind="clean"></span>REAL SCAN</span>
+              <span id="seg-bars" data-on="false"><span class="led" data-kind="bars"></span>ROLLING BARS</span>
+            </div>
+          </div>
+          <p id="mode-text">Measuring the display before choosing a mode.</p>
+        </div>
         <div class="cells">
           <div class="cell"><span class="k">SCAN</span><span class="v" id="ro-scan">59.94 Hz</span><span class="s" id="ro-scan-note">NTSC preset</span></div>
           <div class="cell"><span class="k">DISPLAY</span><span class="v" id="ro-display">…</span><span class="s" id="ro-display-note">measuring</span></div>
           <div class="cell"><span class="k">FRAMES / SCAN</span><span class="v" id="ro-ratio">–</span><span class="s" id="ro-ratio-note"></span></div>
         </div>
         <div class="verdict" id="verdict" data-kind="measuring"><span class="led"></span><p id="verdict-text" aria-live="polite">Measuring the display…</p></div>
+        <p class="rate-tip" id="rate-tip" hidden></p>
       </section>
     </div>
 
@@ -303,7 +335,7 @@ h2 { font: italic 500 24px/1.15 var(--font-display); }
       <section class="console" aria-labelledby="rate-h">
         <div class="section-head">
           <h2 id="rate-h">Scan rate</h2>
-          <p class="hint">The light on each key: green fits this display, yellow drifts slowly, red can't be shown.</p>
+          <p class="hint">The light on each key: green scans cleanly on this display, yellow scans with a slow drift, blue runs as rolling bars (demo only).</p>
         </div>
         <div class="presets" id="presets" role="group" aria-label="Scan rate presets"></div>
         <form class="custom" id="custom-form" novalidate>
@@ -317,14 +349,14 @@ h2 { font: italic 500 24px/1.15 var(--font-display); }
           <div class="option">
             <div class="text">
               <span class="title" id="lock-title">Lock to display</span>
-              <span class="sub">Runs at an exact fraction of the measured refresh, so nothing drifts. The rate then differs from the preset by your monitor's own error.</span>
+              <span class="sub">Real scan only. Runs at an exact fraction of the measured refresh, so nothing drifts. The rate then differs from the preset by your monitor's own error.</span>
             </div>
             <button class="switch" id="lock" type="button" role="switch" aria-checked="false" aria-labelledby="lock-title"></button>
           </div>
           <div class="decay">
             <div class="row"><label for="decay" class="title">Phosphor decay</label><output id="decay-out" for="decay">1.00 ms</output></div>
             <input id="decay" type="range" min="0.05" max="4" step="0.05" value="1">
-            <span class="sub hint">How long a lit line keeps glowing. Colour tubes: about 0.1 to 2 ms.</span>
+            <span class="sub hint">Real scan only. How long a lit line keeps glowing. Colour tubes: about 0.1 to 2 ms.</span>
           </div>
           <div class="pictures" role="group" aria-label="Test picture">
             <button class="key" type="button" data-picture="bars" aria-pressed="true">Bars</button>
@@ -336,7 +368,7 @@ h2 { font: italic 500 24px/1.15 var(--font-display); }
         <div class="run">
           <div class="warning" role="note">
             <svg viewBox="0 0 26 26" aria-hidden="true"><path d="M13 2.5 25 23.5H1Z" fill="var(--s3)"/><path d="M13 9.5v7" stroke="var(--tube)" stroke-width="2.6" stroke-linecap="round"/><circle cx="13" cy="20" r="1.5" fill="var(--tube)"/></svg>
-            <p><strong>Flashing light.</strong> This page flickers the whole screen. Don't start it if you or anyone watching has photosensitive epilepsy. Space or Esc stops it at any time.</p>
+            <p><strong>Flashing light.</strong> Real scan flickers the whole screen. Rolling bars darken the picture slowly, about once every 3 seconds at any one spot. Don't start either if you or anyone watching has photosensitive epilepsy. Space or Esc stops it at any time.</p>
           </div>
           <div class="confirm" id="confirm" role="alertdialog" aria-labelledby="confirm-text" hidden>
             <p id="confirm-text"></p>
@@ -361,25 +393,40 @@ h2 { font: italic 500 24px/1.15 var(--font-display); }
     <figure class="figure" style="margin:0">
       <h2>Beam and display frames</h2>
       <div class="scroll"><svg id="timeline" viewBox="0 0 640 156" role="img" aria-label="Scan diagram"></svg></div>
-      <figcaption>The orange line is the beam running down the screen three times. Each shaded column is one frame of your monitor, and a frame can only show where the beam was during it. A whole number of frames per scan, two or more, keeps the picture even at the right exposure.</figcaption>
+      <figcaption>The orange line is the beam running down the screen three times. Each shaded column is one frame of your monitor, and a frame can only show where the beam was during it. A whole number of frames per scan, two or more, keeps the picture even at the right exposure. Any other ratio runs as rolling bars instead.</figcaption>
     </figure>
+
+    <section class="card" aria-labelledby="modes-h">
+      <h2 id="modes-h">Two modes</h2>
+      <div class="modes-grid">
+        <div>
+          <h3><span class="led" data-kind="clean"></span>REAL SCAN</h3>
+          <p>For rates that take a whole number of your monitor's frames, two or more: 60 and 59.94 Hz on a 120 Hz screen, 50 Hz on 100 Hz, 60 and 120 Hz on 240 Hz. The page redraws the beam, so the light really flickers at the scan rate. CRTCam's <b>Detect</b> finds that rate and the shutter sync clears the bands. <b>This is the mode for testing.</b></p>
+        </div>
+        <div>
+          <h3><span class="led" data-kind="bars"></span>ROLLING BARS</h3>
+          <p>For every other rate, and for every rate on a 60 Hz screen. One or two soft dark bars roll slowly down the test picture, the way a phone camera shows a CRT. Use it to see the effect, try CRTCam's controls and take demo shots. The bars are drawn into the picture, so <b>CRTCam can't sync them away, and Detect won't find a CRT rate</b>. To test the sync itself, use real scan or a real CRT.</p>
+        </div>
+      </div>
+    </section>
 
     <div class="cols">
       <section class="card">
         <h2>Test with CRTCam</h2>
         <ol>
           <li>Use a monitor that runs at 100 Hz or more, and set its brightness to full. Dimmed backlights often flicker on their own, and CRTCam may lock onto that instead.</li>
-          <li>Pick a rate with a green light, press <b>Start</b>, then full screen. Fill CRTCam's frame with the screen.</li>
+          <li>Pick a rate with a green light, check that the mode reads <b>REAL SCAN</b>, press <b>Start</b>, then full screen. Fill CRTCam's frame with the screen.</li>
           <li>Tap <b>Detect</b> in CRTCam. It should find the SCAN rate shown here, not your monitor's refresh.</li>
           <li>Pick a wrong preset in CRTCam to see bands, then the right one to see them go.</li>
         </ol>
-        <p class="tip">Safari on a 120 Hz Mac draws at 60 Hz unless you turn off "Prefer Page Rendering Updates near 60fps" under Develop › Feature Flags. Chrome and Firefox draw at the full rate.</p>
+        <p class="tip">On a 60 Hz screen every rate runs as rolling bars: fine for trying the app and taking demo shots, not for testing Detect or the sync.</p>
+        <p class="tip">Safari caps pages at 60 fps, even on 120 Hz ProMotion screens, unless you turn off its "Prefer Page Rendering Updates near 60fps" feature flag. On a Mac it is under Develop › Feature Flags (turn on "Show features for web developers" in Safari's Advanced settings to get the Develop menu). On iPhone and iPad it is under Settings › Apps › Safari › Advanced › Feature Flags. Reload the page afterwards. Chrome on a 120 Hz Mac runs at 120.</p>
       </section>
       <section class="card">
         <h2>What a browser can't do</h2>
         <ul>
           <li><b>No real beam.</b> A browser draws one picture per refresh of your monitor, so the page lights the band of lines the beam crossed during each frame. That's two steps per scan on a 120 Hz screen and four on 240 Hz.</li>
-          <li><b>Whole frames only.</b> Other rates would flash at a slow beat, which no CRT does, so the page won't run them. A 60 Hz monitor can't show any CRT rate.</li>
+          <li><b>Whole frames only.</b> A real scan at other rates would flash at a slow beat, which no CRT does, so the page draws rolling bars for them instead. A 60 Hz monitor can't scan any CRT rate.</li>
           <li><b>Your monitor flickers too.</b> LCD panels update top to bottom during each frame, and many dim with PWM. CRTCam may detect those instead of the scan.</li>
           <li><b>Uneven frames show as stray lines.</b> Plug in, close other tabs, and turn off variable refresh (G-Sync, FreeSync, adaptive ProMotion) if the display rate wanders.</li>
           <li><b>Dimmer while scanning.</b> The panel can't flash brighter than its maximum, so the picture averages half brightness on 120 Hz and a quarter on 240 Hz.</li>
@@ -417,7 +464,7 @@ h2 { font: italic 500 24px/1.15 var(--font-display); }
 
   const state = {
     target: 59.94, tag: 'NTSC', lock: false, tauMs: 1, picture: 'bars',
-    running: false, plan: null, confirmed: false,
+    running: false, plan: null, confirmed: { scan: false, bars: false },
   };
   let display = null;
 
@@ -425,31 +472,101 @@ h2 { font: italic 500 24px/1.15 var(--font-display); }
   const fmtSec = (s) => s < 10 ? `${s.toFixed(1)} s` : s < 120 ? `${Math.round(s)} s` : `${Math.round(s / 60)} min`;
 
   // ---- Display measurement -------------------------------------------------------------------
-  const intervals = [];
-  let lastTs = null;
+  const stamps = [];
   function measure(ts) {
-    if (lastTs !== null) {
-      const dt = ts - lastTs;
-      if (dt > 0 && dt < 200) {
-        intervals.push(dt);
-        if (intervals.length > 180) intervals.shift();
-      }
+    if (stamps.length) {
+      const dt = ts - stamps[stamps.length - 1];
+      if (dt <= 0) return;
+      if (dt >= 200) stamps.length = 0;
     }
-    lastTs = ts;
+    stamps.push(ts);
+    if (stamps.length > 181) stamps.shift();
   }
+  const COMMON_HZ = [30, 50, 60, 72, 75, 85, 90, 100, 120, 144, 165, 180, 200, 240, 360];
+
+  // How closely the frames sit on a grid of refreshes at hz: near 1 when every frame lands on
+  // it, near 0 when they don't. Dropped frames still land on the grid.
+  function onGrid(times, hz) {
+    let re = 0, im = 0;
+    for (const t of times) {
+      const turn = 2 * Math.PI * hz * t / 1000;
+      re += Math.cos(turn);
+      im += Math.sin(turn);
+    }
+    return { score: Math.hypot(re, im) / times.length, phase: Math.atan2(im, re) };
+  }
+
+  // The most common frame interval, not the mean: variable-refresh screens (ProMotion, G-Sync,
+  // FreeSync) and Safari hand out jittery, sometimes doubled intervals that drag a mean several
+  // hertz off, enough to refuse 60 Hz on a 120 Hz screen.
+  function commonInterval(intervals) {
+    let centre = 0, votes = -1;
+    for (const c of intervals) {
+      let n = 0;
+      for (const d of intervals) if (Math.abs(d - c) < c * 0.1) n++;
+      if (n > votes || (n === votes && c < centre)) { votes = n; centre = c; }
+    }
+    const cluster = intervals.filter((d) => Math.abs(d - centre) < centre * 0.1).sort((x, y) => x - y);
+    return cluster[cluster.length >> 1];
+  }
+
   function estimateDisplay() {
-    if (intervals.length < 30) return null;
-    const sorted = [...intervals].sort((a, b) => a - b);
-    const median = sorted[sorted.length >> 1];
-    const near = intervals.filter((d) => Math.abs(d - median) < median * 0.25);
-    const mean = near.reduce((a, b) => a + b, 0) / near.length;
-    const devs = near.map((d) => Math.abs(d - mean)).sort((a, b) => a - b);
-    const jitter = devs[Math.floor(devs.length * 0.9)] || 0;
-    const dropped = intervals.length - near.length;
-    return { hz: 1000 / mean, jitterMs: jitter, uneven: jitter > mean * 0.12 || dropped > intervals.length * 0.05 };
+    if (stamps.length < 31) return null;
+    const times = stamps.map((s) => s - stamps[0]);
+    const intervals = times.slice(1).map((t, i) => t - times[i]);
+    const typical = commonInterval(intervals);
+    // Snap to a common rate near the typical interval only when the frames sit on its grid, so
+    // a display that is merely close (117 Hz, say) is never taken for 120 and scanned into a
+    // fast beat. Multiples of the rate also fit the grid, hence "near".
+    let nominal = null, best = 0.25;
+    for (const hz of COMMON_HZ) {
+      if (Math.abs(hz - 1000 / typical) > hz * 0.15) continue;
+      const { score } = onGrid(times, hz);
+      if (score >= best) { best = score; nominal = hz; }
+    }
+
+    // Number each frame by the refreshes since the first, against a grid rather than its
+    // jittered neighbour, so a late frame counts as the refreshes it spans. A display off the
+    // common rates gets a grid that follows the fit as it goes.
+    let period = nominal ? 1000 / nominal : typical;
+    let offset = onGrid(times.slice(0, 16), 1000 / period).phase / (2 * Math.PI) * period;
+    let n = 0, late = 0, sN = 0, sT = 0, sNN = 0, sNT = 0;
+    const frameNo = times.map((t, i) => {
+      const slot = Math.round((t - offset) / period);
+      if (i === 0) n = slot;
+      else {
+        if (slot > n + 1) late += 1;
+        n = Math.max(n + 1, slot);
+      }
+      sN += n; sT += t; sNN += n * n; sNT += n * t;
+      if (!nominal && i >= 7) {
+        const count = i + 1;
+        period = (count * sNT - sN * sT) / (count * sNN - sN * sN);
+        offset = (sT - period * sN) / count;
+      }
+      return n;
+    });
+    const count = times.length;
+    period = (count * sNT - sN * sT) / (count * sNN - sN * sN);
+    offset = (sT - period * sN) / count;
+    const devs = times.map((t, i) => Math.abs(t - offset - period * frameNo[i])).sort((x, y) => x - y);
+    const jitter = devs[Math.floor(devs.length * 0.9)];
+    return {
+      hz: nominal ?? 1000 / period,
+      measured: 1000 / period,
+      snapped: nominal !== null,
+      jitterMs: jitter,
+      uneven: jitter > period * 0.12 || late > intervals.length * 0.05,
+    };
   }
 
   // ---- What this display can show -----------------------------------------------------------
+  // One hum bar up to 60 Hz and two above, roughly what a phone's rolling shutter shows.
+  const barsPlan = (reason, f, m, D, beat) => ({ kind: 'bars', reason, f, m, D, beat, count: f < 65 ? 1 : 2 });
+  const modeOf = (p) => p.kind === 'bars' ? 'bars' : p.kind === 'measuring' ? 'measuring' : 'scan';
+  const fmtRate = (x) => Number.isInteger(x) ? String(x) : fmtHz(x);
+  const orList = new Intl.ListFormat('en', { type: 'disjunction' });
+
   function planFor(hz) {
     if (!display) return { kind: 'measuring', f: hz };
     const D = display.hz;
@@ -460,17 +577,17 @@ h2 { font: italic 500 24px/1.15 var(--font-display); }
       }
     }
     const m = Math.round(D / hz);
-    if (m < 2) return { kind: 'no', reason: 'slow', f: hz, m, D };
+    if (m < 2) return barsPlan('slow', hz, m, D, null);
     const beat = Math.abs(D - m * hz);
     if (beat < 0.2) return { kind: 'clean', f: hz, m, D, beat, locked: false };
     if (beat < 3) return { kind: 'drift', f: hz, m, D, beat, locked: false };
-    return { kind: 'no', reason: 'beat', f: hz, m, D, beat };
+    return barsPlan('beat', hz, m, D, beat);
   }
 
-  function suggestion(D) {
+  function suggestion() {
     const fits = PRESETS.filter((p) => planFor(p.hz).kind === 'clean').map((p) => fmtHz(p.hz));
-    if (fits.length) return ` Presets that fit: ${fits.join(', ')} Hz.`;
-    return ` This display fits ${[2, 3, 4].map((m) => fmtHz(D / m)).join(', ')} Hz, none of them a CRT rate. Use a 100, 120, 144 or 240 Hz monitor.`;
+    if (fits.length) return ` For a real scan on this display, pick ${orList.format(fits)} Hz.`;
+    return ' A real scan needs a faster display: 120 Hz for 60 and 59.94 Hz, 100 Hz for 50 Hz.';
   }
 
   function verdictText(p) {
@@ -483,15 +600,21 @@ h2 { font: italic 500 24px/1.15 var(--font-display); }
         return `Clean. Each scan takes ${p.m} display frames. A thin line drifts through every ${fmtSec(1 / p.beat)}, as on a real set running a touch off its nominal rate.`;
       case 'drift':
         return `Usable. Each scan takes about ${p.m} display frames, so faint bands roll through every ${fmtSec(1 / p.beat)}. Turn on Lock to display to stop them.`;
-      default:
-        if (p.reason === 'slow') {
-          return `A ${fmtHz(p.D)} Hz display can't show ${f} Hz. A screen shows flicker up to half its refresh rate, so ${f} Hz needs ${fmtHz(2 * p.f)} Hz or more.${suggestion(p.D)}`;
-        }
-        return `${f} Hz doesn't divide into this display's ${fmtHz(p.D)} Hz. It would flash at ${Math.round(p.beat)} Hz, which no CRT does and which is unsafe to watch.${suggestion(p.D)}`;
+      default: {
+        const why = p.reason === 'slow'
+          ? `A ${fmtRate(p.D)} Hz display can't scan ${f} Hz: a scan needs two or more display frames, so ${f} Hz needs ${fmtHz(2 * p.f)} Hz or more.`
+          : `${f} Hz doesn't divide into this display's ${fmtRate(p.D)} Hz, and a scan would flash at ${Math.round(p.beat)} Hz, which no CRT does and which is unsafe to watch.`;
+        return `Rolling bars. ${why} Soft dark bars roll down the picture instead: enough to see the effect, try CRTCam's controls and take demo shots. CRTCam can't sync them away, and Detect won't find a CRT rate.${suggestion()}`;
+      }
     }
   }
 
-  const kindWords = { clean: 'fits this display', drift: 'drifts slowly on this display', no: "can't be shown on this display", measuring: 'measuring the display' };
+  const kindWords = { clean: 'real scan, fits this display', drift: 'real scan, drifts slowly on this display', bars: 'rolling bars only on this display', measuring: 'measuring the display' };
+  const modeTexts = {
+    measuring: 'Measuring the display before choosing a mode.',
+    scan: '<b>Real scan.</b> The page redraws the beam, so the light flickers at the scan rate. CRTCam can detect this rate and sync to it.',
+    bars: "<b>Rolling bars, demo only.</b> Hum bars drawn into the picture. CRTCam can't sync them away, and Detect won't find a CRT rate.",
+  };
 
   // ---- Test pictures -------------------------------------------------------------------------
   function paintPicture() {
@@ -656,9 +779,39 @@ h2 { font: italic 500 24px/1.15 var(--font-display); }
     ctx.drawImage(mask, 0, 0, 1, H, 0, 0, W, H);
   }
 
+  // ---- Rolling bars --------------------------------------------------------------------------
+  // Photosensitivity limits: a bar passes any one spot once every 3 seconds (the limit for
+  // flashes is 3 a second), it darkens at most to about half signal, and its edges ramp over a
+  // second or more, so nothing ever switches abruptly.
+  const BAR_PASS_HZ = 1 / 3;
+  const BAR_DEPTH = 0.5;
+  const BAR_START = 0.35;
+
+  function drawBars(ts) {
+    const p = state.plan;
+    const W = canvas.width, H = canvas.height;
+    const n = p.count;
+    const halfWidth = (n === 1 ? 0.42 : 0.3) / 2;
+    const shift = BAR_START + ((ts - t0) / 1000) * BAR_PASS_HZ;
+    const data = maskImage.data;
+    for (let i = 0; i < H; i++) {
+      const x = ((i + 0.5) / H) * n - shift;
+      const frac = x - Math.floor(x);
+      const d = Math.min(frac, 1 - frac) / n;
+      const a = d < halfWidth ? BAR_DEPTH * 0.5 * (1 + Math.cos(Math.PI * d / halfWidth)) : 0;
+      data[i * 4 + 3] = Math.round(255 * a);
+    }
+    mctx.putImageData(maskImage, 0, 0);
+    ctx.drawImage(picture, 0, 0);
+    ctx.drawImage(mask, 0, 0, 1, H, 0, 0, W, H);
+  }
+
   function loop(ts) {
     measure(ts);
-    if (state.running) drawScan(ts);
+    if (state.running) {
+      if (state.plan.kind === 'bars') drawBars(ts);
+      else drawScan(ts);
+    }
     requestAnimationFrame(loop);
   }
 
@@ -666,26 +819,48 @@ h2 { font: italic 500 24px/1.15 var(--font-display); }
   let wakeLock = null;
   const note = (text) => { $('run-note').textContent = text; };
 
+  const confirmTexts = {
+    scan: ['The whole screen will flicker at the scan rate. Start the flicker?', 'Start the flicker'],
+    bars: ['Soft dark bars will roll slowly down the picture. Start the rolling bars?', 'Start rolling bars'],
+  };
+
   function requestStart() {
     if (state.running) return;
     const p = planFor(state.target);
-    if (p.kind === 'no' || p.kind === 'measuring') return;
-    // The first start of a visit asks once, after the warning has been in view.
-    if (!state.confirmed) {
-      $('confirm-text').textContent = reducedMotion.matches
-        ? 'Your device asks for reduced motion, and the whole screen will flicker. Start anyway?'
-        : 'The whole screen will flicker. Start the flicker?';
+    const mode = modeOf(p);
+    if (mode === 'measuring') return;
+    // Each mode asks once a visit, after the warning has been in view. Agreeing to the slow bars
+    // must not also let the flicker start unasked.
+    if (!state.confirmed[mode]) {
+      const [question, yes] = confirmTexts[mode];
+      $('confirm-text').textContent = reducedMotion.matches ? `Your device asks for reduced motion. ${question}` : question;
+      $('confirm-yes').textContent = yes;
+      $('confirm').dataset.mode = mode;
       $('confirm').hidden = false;
       $('confirm-yes').focus();
+      return;
+    }
+    $('confirm').hidden = true;
+    begin(p);
+  }
+
+  // Switches a running screen to a new plan, unless that needs a mode this visit hasn't agreed to.
+  function rerun(p) {
+    const mode = modeOf(p);
+    if (mode === 'measuring') { stop(`Stopped: ${verdictText(p)}`); return; }
+    if (mode !== modeOf(state.plan) && !state.confirmed[mode]) {
+      stop();
+      requestStart();
       return;
     }
     begin(p);
   }
 
   function begin(p) {
+    const keepBarPhase = state.running && state.plan.kind === 'bars' && p.kind === 'bars';
     state.plan = p;
     state.running = true;
-    t0 = performance.now();
+    if (!keepBarPhase) t0 = performance.now();
     prevTs = null;
     frameIndex = 0;
     note('');
@@ -710,11 +885,8 @@ h2 { font: italic 500 24px/1.15 var(--font-display); }
     state.target = hz;
     state.tag = tag;
     $('custom-err').hidden = true;
-    if (state.running) {
-      const p = planFor(hz);
-      if (p.kind === 'no' || p.kind === 'measuring') stop(`Stopped: ${verdictText(p)}`);
-      else begin(p);
-    }
+    $('confirm').hidden = true;
+    if (state.running) rerun(planFor(hz));
     render();
   }
 
@@ -753,12 +925,12 @@ h2 { font: italic 500 24px/1.15 var(--font-display); }
       s += `<line class="beam" x1="${X(n / f)}" y1="${yTop}" x2="${X((n + ACTIVE) / f)}" y2="${yBot}"/>`;
       s += `<line class="retrace" x1="${X((n + ACTIVE) / f)}" y1="${yBot}" x2="${X((n + 1) / f)}" y2="${yTop}"/>`;
     }
-    s += `<text class="tl-label" x="8" y="16">Display frames · ${display ? fmtHz(display.hz) + ' Hz' : 'measuring'}</text>`;
+    s += `<text class="tl-label" x="8" y="16">Display frames · ${display ? fmtRate(display.hz) + ' Hz' : 'measuring'}</text>`;
     s += `<text class="tl-label" x="8" y="148">Beam, top to bottom · ${fmtHz(f)} Hz</text>`;
     const svg = $('timeline');
     svg.innerHTML = s;
     svg.setAttribute('aria-label', display
-      ? `Three scans at ${fmtHz(f)} hertz over display frames at ${fmtHz(display.hz)} hertz: ${(display.hz / f).toFixed(2)} frames per scan.`
+      ? `Three scans at ${fmtHz(f)} hertz over display frames at ${fmtRate(display.hz)} hertz: ${(display.hz / f).toFixed(2)} frames per scan.`
       : `Three scans at ${fmtHz(f)} hertz. The display is still being measured.`);
   }
 
@@ -770,17 +942,37 @@ h2 { font: italic 500 24px/1.15 var(--font-display); }
     $('ro-scan-note').textContent = p.locked
       ? `locked, preset ${fmtHz(state.target)}`
       : state.tag === 'custom' ? 'custom rate' : `${state.tag} preset`;
-    $('ro-display').textContent = display ? `${fmtHz(display.hz)} Hz` : '…';
+    $('ro-display').textContent = display ? `${fmtRate(display.hz)} Hz` : '…';
     $('ro-display-note').textContent = display
-      ? `±${display.jitterMs.toFixed(2)} ms${display.uneven ? ' · uneven' : ''}`
+      ? `${display.snapped ? `${display.measured.toFixed(1)} measured · ` : ''}±${display.jitterMs.toFixed(2)} ms${display.uneven ? ' · uneven' : ''}`
       : 'measuring';
     $('ro-ratio').textContent = display ? (display.hz / p.f).toFixed(2) : '–';
-    $('ro-ratio-note').textContent = !display ? '' : p.kind === 'no' ? 'not a whole number' : p.locked || !(p.beat >= 0.01) ? 'steady' : `drift every ${fmtSec(1 / p.beat)}`;
+    $('ro-ratio-note').textContent = !display ? ''
+      : p.kind === 'bars' ? (p.reason === 'slow' ? 'under 2, so bars' : 'not whole, so bars')
+      : p.locked || !(p.beat >= 0.01) ? 'steady' : `drift every ${fmtSec(1 / p.beat)}`;
+
+    const mode = modeOf(p);
+    $('seg-scan').dataset.on = String(mode === 'scan');
+    $('seg-bars').dataset.on = String(mode === 'bars');
+    $('seg-scan-led').dataset.kind = p.kind === 'drift' ? 'drift' : 'clean';
+    $('mode-seg').setAttribute('aria-label', mode === 'scan' ? 'Mode: real scan' : mode === 'bars' ? 'Mode: rolling bars' : 'Mode: measuring the display');
+    if ($('mode-text').dataset.mode !== mode) {
+      $('mode-text').innerHTML = modeTexts[mode];
+      $('mode-text').dataset.mode = mode;
+    }
 
     let text = verdictText(p);
-    if (display && display.uneven && p.kind !== 'no') text += ' Frames arrive unevenly: plug in and close other tabs.';
+    if (display && display.uneven && mode === 'scan') text += ' Frames arrive unevenly: plug in and close other tabs.';
     $('verdict').dataset.kind = p.kind;
     if (text !== lastVerdict) { $('verdict-text').textContent = text; lastVerdict = text; }
+
+    const tip = $('rate-tip');
+    // Below 90 Hz not even the slowest custom rate, 45 Hz, gets two frames per scan.
+    tip.hidden = !display || display.hz >= 90;
+    if (!tip.hidden && tip.dataset.hz !== String(display.hz)) {
+      tip.dataset.hz = String(display.hz);
+      tip.innerHTML = `This browser draws <b>${fmtRate(display.hz)} frames a second</b>, too few for a real scan, so every rate runs as rolling bars. On a 120 Hz screen, Safari caps pages at 60 fps unless you turn off its <b>Prefer Page Rendering Updates near 60fps</b> feature flag: on a Mac under Develop › Feature Flags, on iPhone and iPad under Settings › Apps › Safari › Advanced › Feature Flags. Then reload. Low Power Mode lowers the rate too. Chrome on a 120 Hz Mac runs at 120.`;
+    }
 
     presetBox.querySelectorAll('.preset').forEach((b) => {
       const hz = Number(b.dataset.hz);
@@ -793,15 +985,20 @@ h2 { font: italic 500 24px/1.15 var(--font-display); }
 
     const start = $('start');
     start.classList.toggle('running', state.running);
-    start.disabled = !state.running && (p.kind === 'no' || p.kind === 'measuring');
+    start.disabled = !state.running && mode === 'measuring';
     $('start-label').textContent = state.running ? 'Stop' : 'Start';
     $('start-sub').textContent = state.running
       ? 'SPACE OR ESC'
-      : p.kind === 'measuring' ? 'measuring the display'
-      : p.kind === 'no' ? 'not on this display'
-      : `flicker at ${fmtHz(p.f)} Hz`;
+      : mode === 'measuring' ? 'measuring the display'
+      : mode === 'bars' ? 'rolling bars · demo only'
+      : `real scan at ${fmtHz(p.f)} Hz`;
     $('standby').hidden = state.running;
     $('screen-stop').hidden = !state.running;
+    $('screen-mode').hidden = !state.running;
+    if (state.running) {
+      $('screen-mode-led').dataset.kind = p.kind;
+      $('screen-mode-text').textContent = mode === 'bars' ? 'ROLLING BARS · DEMO' : `REAL SCAN · ${fmtHz(p.f)} HZ`;
+    }
     tv.classList.toggle('on', state.running);
 
     renderTimeline(p.f);
@@ -810,10 +1007,14 @@ h2 { font: italic 500 24px/1.15 var(--font-display); }
   function refresh() {
     const d = estimateDisplay();
     if (d) display = d;
+    // A running screen never changes mode on its own: bars keep rolling whatever the
+    // measurement says, and a real scan the display can no longer keep up with stops.
     if (state.running) {
       const p = planFor(state.target);
-      if (p.kind === 'no' || p.kind === 'measuring') {
-        stop(`Stopped: ${verdictText(p)}`);
+      if (state.plan.kind === 'bars') {
+        if (p.kind === 'bars') state.plan = { ...p, count: state.plan.count };
+      } else if (modeOf(p) !== 'scan') {
+        stop(`Stopped the real scan: the display now runs at ${fmtRate(display.hz)} Hz, which can't scan ${fmtHz(p.f)} Hz. Start again for rolling bars.`);
       } else {
         state.plan = { ...state.plan, f: p.f, D: p.D, m: p.m, beat: p.beat, kind: p.kind };
       }
@@ -825,7 +1026,7 @@ h2 { font: italic 500 24px/1.15 var(--font-display); }
   $('start').addEventListener('click', () => (state.running ? stop() : requestStart()));
   $('screen-stop').addEventListener('click', () => stop());
   $('confirm-yes').addEventListener('click', () => {
-    state.confirmed = true;
+    state.confirmed[$('confirm').dataset.mode] = true;
     $('confirm').hidden = true;
     requestStart();
   });
@@ -852,11 +1053,8 @@ h2 { font: italic 500 24px/1.15 var(--font-display); }
   $('lock').addEventListener('click', () => {
     state.lock = !state.lock;
     $('lock').setAttribute('aria-checked', String(state.lock));
-    if (state.running) {
-      const p = planFor(state.target);
-      if (p.kind === 'no' || p.kind === 'measuring') stop(`Stopped: ${verdictText(p)}`);
-      else begin(p);
-    }
+    $('confirm').hidden = true;
+    if (state.running) rerun(planFor(state.target));
     render();
   });
 
@@ -913,8 +1111,7 @@ h2 { font: italic 500 24px/1.15 var(--font-display); }
 
   document.addEventListener('visibilitychange', () => {
     if (document.hidden) stop('Stopped because the page was hidden.');
-    intervals.length = 0;
-    lastTs = null;
+    stamps.length = 0;
   });
 
   new ResizeObserver(resize).observe(screen);
