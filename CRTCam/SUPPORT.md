@@ -1,6 +1,6 @@
-# CRTCam — Support
+# CRT Retro Cam — Support
 
-CRTCam photographs CRT TVs and monitors without the dark bands a normal phone photo shows. It
+CRT Retro Cam photographs CRT TVs and monitors without the dark bands a normal phone photo shows. It
 syncs the camera's shutter to the screen's refresh rate, so every line of the picture is lit
 exactly once. There is no account. This page covers how the app works, common questions, and how to
 reach us.
@@ -8,7 +8,7 @@ reach us.
 ## Why the bands appear
 
 A CRT draws its picture line by line, 50 to 120 times a second, and each line glows only briefly.
-A phone photo with a short shutter catches the screen half-drawn, so dark bands cross it. CRTCam
+A phone photo with a short shutter catches the screen half-drawn, so dark bands cross it. CRT Retro Cam
 keeps the shutter open for exactly one refresh, or a whole number of them, so the screen is
 drawn completely during the exposure.
 
@@ -20,7 +20,7 @@ drawn completely during the exposure.
 4. Turn the knob, or press a volume button.
 5. Fold the controls with the grabber for a clear view of the frame.
 
-The first time you open CRTCam, a short guide explains this. You can open it again under
+The first time you open CRT Retro Cam, a short guide explains this. You can open it again under
 **Settings › Show the guide**.
 
 ## The camera screen
@@ -29,7 +29,7 @@ The first time you open CRTCam, a short guide explains this. You can open it aga
   it to focus on that spot. A swipe down folds the controls, a swipe up unfolds them.
 - **The status pill** at the top left shows what the shutter is synced to, for example
   "SYNCED 50.00 Hz" and the shutter time. Tap it for the sync details, where you can detect again
-  or fine-tune. While CRTCam is detecting, tapping it cancels.
+  or fine-tune. While CRT Retro Cam is detecting, tapping it cancels.
 - **The gear** at the top right opens Settings. Without Premium, a **gold seal** next to it shows
   what Premium adds.
 - **The rate keys** pick a preset: 50 Hz PAL, 59.94 Hz NTSC, and common VGA and VESA monitor rates.
@@ -43,7 +43,7 @@ The first time you open CRTCam, a short guide explains this. You can open it aga
 
 ## Detect and fine-tuning
 
-Tap **Detect** and hold the phone still, pointed at the lit screen. CRTCam samples the flicker in
+Tap **Detect** and hold the phone still, pointed at the lit screen. CRT Retro Cam samples the flicker in
 three passes at different frame rates, checks the rates the flicker suggests, and locks onto the
 one where the banding disappears. It finds rates from 45 to 165 Hz.
 
@@ -56,7 +56,7 @@ Japanese ones at 59.94 Hz, and computer monitors at 60 to 85 Hz or more.
 
 ## Your photos
 
-Your photos stay in CRTCam until you export them: they are not added to your photo library on their
+Your photos stay in CRT Retro Cam until you export them: they are not added to your photo library on their
 own. Tap the print on the camera screen to see them all. Tap a photo to view it full screen, where
 you can mark it as a favourite (the heart), see the rate and shutter it was taken with (the details
 button), export it or delete it.
@@ -85,7 +85,7 @@ Without Premium, both open the Premium page instead.
   for every photo, including the ones you took before.
 - Tap the **gold seal** on the camera screen to see Premium and its price. **Restore purchases** is on
   the same page and in Settings.
-- Purchases are Apple in-app purchases, handled by the App Store; CRTCam has no account of its own.
+- Purchases are Apple in-app purchases, handled by the App Store; CRT Retro Cam has no account of its own.
   If you bought Premium on another device, it comes back through your Apple Account.
 - Refunds are handled by Apple at https://reportaproblem.apple.com.
 - On Android, Premium is not available yet.
@@ -96,7 +96,7 @@ The [CRT test screen](https://christiandeckert.github.io/AppStore/CRTCam/simulat
 computer monitor stand in for a CRT. It is an approximation: a real flicker for the camera needs a
 fast monitor (120 Hz or more) that the browser draws at full speed. On a 60 Hz monitor the page can
 only show rolling bars, which are drawn into the picture: they show what the effect looks like, but
-CRTCam cannot sync them away.
+CRT Retro Cam cannot sync them away.
 
 ## Troubleshooting
 
@@ -111,26 +111,26 @@ CRTCam cannot sync them away.
   down the TV's contrast or brightness.
 - **Wavy patterns (moiré).** The screen's phosphor dots and the camera's pixels can interfere. Step
   a little closer or further away, or switch lenses.
-- **The camera doesn't start.** CRTCam needs camera access: turn it on in the system Settings under
+- **The camera doesn't start.** CRT Retro Cam needs camera access: turn it on in the system Settings under
   **CRT Retro Cam › Camera**.
-- **Save to Photos fails.** Allow CRTCam to add photos in the system Settings under
+- **Save to Photos fails.** Allow CRT Retro Cam to add photos in the system Settings under
   **CRT Retro Cam › Photos**.
 - **The volume buttons don't take a photo.** They only do while the camera screen is showing.
-- **I bought Premium, but CRTCam still shows the gold seal.** Make sure you are signed in to the App
+- **I bought Premium, but CRT Retro Cam still shows the gold seal.** Make sure you are signed in to the App
   Store with the Apple Account you bought it with, then tap **Restore purchases** on the Premium
   page or in Settings.
-- **On Android, CRTCam says it cannot sync.** Some Android phones don't allow apps to set the
-  shutter time; CRTCam cannot sync on them.
+- **On Android, CRT Retro Cam says it cannot sync.** Some Android phones don't allow apps to set the
+  shutter time; CRT Retro Cam cannot sync on them.
 
 ## Privacy
 
-CRTCam has no account, no analytics, no advertising and no tracking. Your photos stay on your
+CRT Retro Cam has no account, no analytics, no advertising and no tracking. Your photos stay on your
 device until you export them, and its only network connection is for in-app purchases through
 Apple's App Store. Full details: [Privacy policy](PRIVACY.md).
 
 ## Requirements
 
-CRTCam requires an iPhone with iOS 15 or later; the volume buttons and the Camera Control
+CRT Retro Cam requires an iPhone with iOS 15 or later; the volume buttons and the Camera Control
 take photos from iOS 17.2. On Android it requires Android 10 or later and a camera that allows a
 manual shutter time. It is available in English.
 

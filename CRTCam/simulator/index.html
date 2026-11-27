@@ -3,14 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>CRTCam Test Screen</title>
-<meta name="description" content="No CRT at hand? This page redraws a television's scanning beam at 50, 59.94 or other rates on a fast monitor, so you can test CRTCam's refresh detection and shutter sync. On slower monitors it rolls soft hum bars through the picture for demos.">
+<title>CRT Retro Cam Test Screen</title>
+<meta name="description" content="No CRT at hand? This page redraws a television's scanning beam at 50, 59.94 or other rates on a fast monitor, so you can test CRT Retro Cam's refresh detection and shutter sync. On slower monitors it rolls soft hum bars through the picture for demos.">
 <meta name="color-scheme" content="light dark">
 <meta name="theme-color" content="#E6DFCB" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#1A1713" media="(prefers-color-scheme: dark)">
 <meta property="og:type" content="website">
-<meta property="og:title" content="CRTCam Test Screen">
-<meta property="og:description" content="A simulated CRT for testing CRTCam on a fast monitor: pick a scan rate, press Start, point the camera.">
+<meta property="og:title" content="CRT Retro Cam Test Screen">
+<meta property="og:description" content="A simulated CRT for testing CRT Retro Cam on a fast monitor: pick a scan rate, press Start, point the camera.">
 <meta property="og:url" content="https://christiandeckert.github.io/AppStore/CRTCam/simulator/">
 <meta property="og:image" content="https://christiandeckert.github.io/AppStore/CRTCam/simulator/og.png">
 <meta property="og:image:width" content="1200">
@@ -284,9 +284,9 @@ h3 .led { margin: 0; }
 
 <main class="page">
   <header class="head">
-    <span class="brand"><i aria-hidden="true"><b></b><b></b><b></b><b></b><b></b><b></b></i>CRTCAM</span>
+    <span class="brand"><i aria-hidden="true"><b></b><b></b><b></b><b></b><b></b><b></b></i>CRT RETRO CAM</span>
     <h1>CRT Test Screen</h1>
-    <p class="lede">No CRT at hand? Point CRTCam at this page. On a fast monitor it redraws a television's scanning beam at the rate you pick, so you can test detection and shutter sync. Where the monitor can't keep up, it rolls soft hum bars through the picture instead, for demos.</p>
+    <p class="lede">No CRT at hand? Point CRT Retro Cam at this page. On a fast monitor it redraws a television's scanning beam at the rate you pick, so you can test detection and shutter sync. Where the monitor can't keep up, it rolls soft hum bars through the picture instead, for demos.</p>
   </header>
 
   <div class="stage">
@@ -303,7 +303,7 @@ h3 .led { margin: 0; }
           </div>
         </div>
         <div class="tv-panel" aria-hidden="true">
-          <span class="badge">CRTCam</span>
+          <span class="badge">CRT Retro Cam</span>
           <span class="grille"></span>
           <span class="knob"></span><span class="knob"></span>
           <span class="power-led"></span>
@@ -401,23 +401,23 @@ h3 .led { margin: 0; }
       <div class="modes-grid">
         <div>
           <h3><span class="led" data-kind="clean"></span>REAL SCAN</h3>
-          <p>For rates that take a whole number of your monitor's frames, two or more: 60 and 59.94 Hz on a 120 Hz screen, 50 Hz on 100 Hz, 60 and 120 Hz on 240 Hz. The page redraws the beam, so the light really flickers at the scan rate. CRTCam's <b>Detect</b> finds that rate and the shutter sync clears the bands. <b>This is the mode for testing.</b></p>
+          <p>For rates that take a whole number of your monitor's frames, two or more: 60 and 59.94 Hz on a 120 Hz screen, 50 Hz on 100 Hz, 60 and 120 Hz on 240 Hz. The page redraws the beam, so the light really flickers at the scan rate. CRT Retro Cam's <b>Detect</b> finds that rate and the shutter sync clears the bands. <b>This is the mode for testing.</b></p>
         </div>
         <div>
           <h3><span class="led" data-kind="bars"></span>ROLLING BARS</h3>
-          <p>For every other rate, and for every rate on a 60 Hz screen. One or two soft dark bars roll slowly down the test picture, the way a phone camera shows a CRT. Use it to see the effect, try CRTCam's controls and take demo shots. The bars are drawn into the picture, so <b>CRTCam can't sync them away, and Detect won't find a CRT rate</b>. To test the sync itself, use real scan or a real CRT.</p>
+          <p>For every other rate, and for every rate on a 60 Hz screen. One or two soft dark bars roll slowly down the test picture, the way a phone camera shows a CRT. Use it to see the effect, try CRT Retro Cam's controls and take demo shots. The bars are drawn into the picture, so <b>CRT Retro Cam can't sync them away, and Detect won't find a CRT rate</b>. To test the sync itself, use real scan or a real CRT.</p>
         </div>
       </div>
     </section>
 
     <div class="cols">
       <section class="card">
-        <h2>Test with CRTCam</h2>
+        <h2>Test with CRT Retro Cam</h2>
         <ol>
-          <li>Use a monitor that runs at 100 Hz or more, and set its brightness to full. Dimmed backlights often flicker on their own, and CRTCam may lock onto that instead.</li>
-          <li>Pick a rate with a green light, check that the mode reads <b>REAL SCAN</b>, press <b>Start</b>, then full screen. Fill CRTCam's frame with the screen.</li>
-          <li>Tap <b>Detect</b> in CRTCam. It should find the SCAN rate shown here, not your monitor's refresh.</li>
-          <li>Pick a wrong preset in CRTCam to see bands, then the right one to see them go.</li>
+          <li>Use a monitor that runs at 100 Hz or more, and set its brightness to full. Dimmed backlights often flicker on their own, and CRT Retro Cam may lock onto that instead.</li>
+          <li>Pick a rate with a green light, check that the mode reads <b>REAL SCAN</b>, press <b>Start</b>, then full screen. Fill CRT Retro Cam's frame with the screen.</li>
+          <li>Tap <b>Detect</b> in CRT Retro Cam. It should find the SCAN rate shown here, not your monitor's refresh.</li>
+          <li>Pick a wrong preset in CRT Retro Cam to see bands, then the right one to see them go.</li>
         </ol>
         <p class="tip">On a 60 Hz screen every rate runs as rolling bars: fine for trying the app and taking demo shots, not for testing Detect or the sync.</p>
         <p class="tip">Safari caps pages at 60 fps, even on 120 Hz ProMotion screens, unless you turn off its "Prefer Page Rendering Updates near 60fps" feature flag. On a Mac it is under Develop › Feature Flags (turn on "Show features for web developers" in Safari's Advanced settings to get the Develop menu). On iPhone and iPad it is under Settings › Apps › Safari › Advanced › Feature Flags. Reload the page afterwards. Chrome on a 120 Hz Mac runs at 120.</p>
@@ -427,7 +427,7 @@ h3 .led { margin: 0; }
         <ul>
           <li><b>No real beam.</b> A browser draws one picture per refresh of your monitor, so the page lights the band of lines the beam crossed during each frame. That's two steps per scan on a 120 Hz screen and four on 240 Hz.</li>
           <li><b>Whole frames only.</b> A real scan at other rates would flash at a slow beat, which no CRT does, so the page draws rolling bars for them instead. A 60 Hz monitor can't scan any CRT rate.</li>
-          <li><b>Your monitor flickers too.</b> LCD panels update top to bottom during each frame, and many dim with PWM. CRTCam may detect those instead of the scan.</li>
+          <li><b>Your monitor flickers too.</b> LCD panels update top to bottom during each frame, and many dim with PWM. CRT Retro Cam may detect those instead of the scan.</li>
           <li><b>Uneven frames show as stray lines.</b> Plug in, close other tabs, and turn off variable refresh (G-Sync, FreeSync, adaptive ProMotion) if the display rate wanders.</li>
           <li><b>Dimmer while scanning.</b> The panel can't flash brighter than its maximum, so the picture averages half brightness on 120 Hz and a quarter on 240 Hz.</li>
         </ul>
@@ -436,7 +436,7 @@ h3 .led { margin: 0; }
   </section>
 
   <footer class="foot">
-    <span>Part of CRTCam, an app that photographs CRT screens without the flicker.</span>
+    <span>Part of CRT Retro Cam, an app that photographs CRT screens without the flicker.</span>
     <a href="https://github.com/ChristianDeckert/AppStore">App Store documents</a>
   </footer>
 </main>
@@ -604,7 +604,7 @@ h3 .led { margin: 0; }
         const why = p.reason === 'slow'
           ? `A ${fmtRate(p.D)} Hz display can't scan ${f} Hz: a scan needs two or more display frames, so ${f} Hz needs ${fmtHz(2 * p.f)} Hz or more.`
           : `${f} Hz doesn't divide into this display's ${fmtRate(p.D)} Hz, and a scan would flash at ${Math.round(p.beat)} Hz, which no CRT does and which is unsafe to watch.`;
-        return `Rolling bars. ${why} Soft dark bars roll down the picture instead: enough to see the effect, try CRTCam's controls and take demo shots. CRTCam can't sync them away, and Detect won't find a CRT rate.${suggestion()}`;
+        return `Rolling bars. ${why} Soft dark bars roll down the picture instead: enough to see the effect, try CRT Retro Cam's controls and take demo shots. CRT Retro Cam can't sync them away, and Detect won't find a CRT rate.${suggestion()}`;
       }
     }
   }
@@ -612,8 +612,8 @@ h3 .led { margin: 0; }
   const kindWords = { clean: 'real scan, fits this display', drift: 'real scan, drifts slowly on this display', bars: 'rolling bars only on this display', measuring: 'measuring the display' };
   const modeTexts = {
     measuring: 'Measuring the display before choosing a mode.',
-    scan: '<b>Real scan.</b> The page redraws the beam, so the light flickers at the scan rate. CRTCam can detect this rate and sync to it.',
-    bars: "<b>Rolling bars, demo only.</b> Hum bars drawn into the picture. CRTCam can't sync them away, and Detect won't find a CRT rate.",
+    scan: '<b>Real scan.</b> The page redraws the beam, so the light flickers at the scan rate. CRT Retro Cam can detect this rate and sync to it.',
+    bars: "<b>Rolling bars, demo only.</b> Hum bars drawn into the picture. CRT Retro Cam can't sync them away, and Detect won't find a CRT rate.",
   };
 
   // ---- Test pictures -------------------------------------------------------------------------
@@ -647,7 +647,7 @@ h3 .led { margin: 0; }
     }
     const size = Math.max(10, Math.round(H * 0.05));
     pctx.font = `600 ${size}px "IBM Plex Mono", ui-monospace, monospace`;
-    const label = 'CRTCAM TEST';
+    const label = 'CRT RETRO CAM';
     const tw = pctx.measureText(label).width;
     const bw = tw + size * 1.6, bh = size * 1.9;
     pctx.fillStyle = '#171512';
