@@ -1,0 +1,931 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CRTCam Test Screen</title>
+<meta name="description" content="No CRT at hand? This page redraws a television's scanning beam at 50, 59.94 or other rates on a fast monitor, so you can test CRTCam's refresh detection and shutter sync.">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#E6DFCB" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1A1713" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="website">
+<meta property="og:title" content="CRTCam Test Screen">
+<meta property="og:description" content="A simulated CRT for testing CRTCam on a fast monitor: pick a scan rate, press Start, point the camera.">
+<meta property="og:url" content="https://christiandeckert.github.io/AppStore/CRTCam/simulator/">
+<meta property="og:image" content="https://christiandeckert.github.io/AppStore/CRTCam/simulator/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='2' y='5' width='28' height='22' rx='6' fill='%23D9D0BA'/%3E%3Crect x='5' y='8' width='17' height='16' rx='4' fill='%23171512'/%3E%3Crect x='7' y='10' width='13' height='2.4' fill='%235EB544'/%3E%3Crect x='7' y='12.4' width='13' height='2.4' fill='%23F9B824'/%3E%3Crect x='7' y='14.8' width='13' height='2.4' fill='%23F28020'/%3E%3Crect x='7' y='17.2' width='13' height='2.4' fill='%23DD3A3C'/%3E%3Crect x='7' y='19.6' width='13' height='2.4' fill='%230A96D4'/%3E%3Ccircle cx='26' cy='12' r='1.8' fill='%23201C17'/%3E%3Ccircle cx='26' cy='18' r='1.8' fill='%23201C17'/%3E%3C/svg%3E">
+<link rel="preload" href="fonts/Inter.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+/* Served from this folder instead of a font CDN, so opening the page contacts no one else. */
+@font-face { font-family: "Inter"; src: url("fonts/Inter.woff2") format("woff2"); font-weight: 100 900; font-style: normal; font-display: swap; }
+@font-face { font-family: "Newsreader"; src: url("fonts/Newsreader-Italic.woff2") format("woff2"); font-weight: 500; font-style: italic; font-display: swap; }
+@font-face { font-family: "IBM Plex Mono"; src: url("fonts/IBMPlexMono-Regular.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: "IBM Plex Mono"; src: url("fonts/IBMPlexMono-SemiBold.woff2") format("woff2"); font-weight: 600; font-style: normal; font-display: swap; }
+
+:root {
+  /* Layout: the TV is the hero; a console of raised keys sits beside it on wide screens and
+     under it on phones; the scan diagram and the fine print follow. */
+  --ground: #E6DFCB;
+  --card: #F6F1E4;
+  --key-top: #FFFDF4;
+  --key-edge: #C4BAA2;
+  --groove: #D5CBB3;
+  --ink: #201C17;
+  --label: #5C5548;
+  --dim: #8C836F;
+  --shade: rgba(70, 56, 34, .35);
+  --key-dark: #201C17;
+  --key-dark-top: #3A342D;
+  --key-dark-edge: #050403;
+  --on-dark: #F9B824;
+  --tv-hi: #EFE8D6;
+  --tv-body: #D9D0BA;
+  --tv-edge: #B9AF97;
+  --tv-ink: #3A342D;
+  --tube: #171512;
+  --vf: #2B2621;
+  --vf-ink: #F3EDDD;
+  --vf-dim: #B3AB99;
+  --screen-black: #050404;
+  --ok: #2F7A1F;
+  --warn: #8A5A00;
+  --bad: #B02A2D;
+  --led-ok: #5EB544;
+  --led-warn: #F9B824;
+  --led-bad: #DD3A3C;
+  --led-off: #8C836F;
+  --s1: #5EB544; --s2: #F9B824; --s3: #F28020; --s4: #DD3A3C; --s5: #91408F; --s6: #0A96D4;
+  --focus: #0A96D4;
+  --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: "Newsreader", "Iowan Old Style", Georgia, serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ground: #1A1713; --card: #27221C; --key-top: #2F2922; --key-edge: #0D0B09; --groove: #15120F;
+    --ink: #F3EDDD; --label: #B3AB99; --dim: #8C836F; --shade: rgba(0, 0, 0, .55);
+    --key-dark: #0B0A08; --key-dark-top: #221D18; --key-dark-edge: #000000; --on-dark: #F9B824;
+    --tv-hi: #D9D0BA; --tv-body: #C4BAA2; --tv-edge: #7A7262; --tv-ink: #2B2621;
+    --vf: #120F0D; --ok: #7FCB63; --warn: #F9B824; --bad: #F0686A; --focus: #4FC0F0;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --ground: #1A1713; --card: #27221C; --key-top: #2F2922; --key-edge: #0D0B09; --groove: #15120F;
+  --ink: #F3EDDD; --label: #B3AB99; --dim: #8C836F; --shade: rgba(0, 0, 0, .55);
+  --key-dark: #0B0A08; --key-dark-top: #221D18; --key-dark-edge: #000000; --on-dark: #F9B824;
+  --tv-hi: #D9D0BA; --tv-body: #C4BAA2; --tv-edge: #7A7262; --tv-ink: #2B2621;
+  --vf: #120F0D; --ok: #7FCB63; --warn: #F9B824; --bad: #F0686A; --focus: #4FC0F0;
+  color-scheme: dark;
+}
+
+[hidden] { display: none !important; }
+body { margin: 0; background: var(--ground); color: var(--ink); font: 400 15px/1.5 var(--font-sans); -webkit-text-size-adjust: 100%; }
+.foot { color: var(--label); font-size: 13px; display: flex; flex-wrap: wrap; gap: 6px 16px; }
+.foot a { color: inherit; }
+* { box-sizing: border-box; }
+h1, h2, h3, p { margin: 0; }
+h1, h2 { text-wrap: balance; }
+
+.stripe { display: flex; height: 6px; }
+.stripe span { flex: 1; }
+.stripe span:nth-child(1) { background: var(--s1); }
+.stripe span:nth-child(2) { background: var(--s2); }
+.stripe span:nth-child(3) { background: var(--s3); }
+.stripe span:nth-child(4) { background: var(--s4); }
+.stripe span:nth-child(5) { background: var(--s5); }
+.stripe span:nth-child(6) { background: var(--s6); }
+
+.page {
+  max-width: 1140px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 28px 56px;
+  display: grid; gap: 28px;
+}
+
+.head { display: grid; gap: 8px; max-width: 62ch; }
+.brand { display: inline-flex; align-items: center; gap: 8px; font: 600 12px/1 var(--font-mono); letter-spacing: .12em; color: var(--label); }
+.brand i { display: inline-flex; width: 30px; height: 10px; border-radius: 2px; overflow: hidden; }
+.brand i b { flex: 1; }
+.brand i b:nth-child(1) { background: var(--s1); } .brand i b:nth-child(2) { background: var(--s2); }
+.brand i b:nth-child(3) { background: var(--s3); } .brand i b:nth-child(4) { background: var(--s4); }
+.brand i b:nth-child(5) { background: var(--s5); } .brand i b:nth-child(6) { background: var(--s6); }
+h1 { font: italic 500 clamp(34px, 6vw, 52px)/1.05 var(--font-display); letter-spacing: -.01em; }
+.lede { color: var(--label); font-size: 16px; }
+
+.stage { display: grid; gap: 24px; align-items: start; }
+@media (min-width: 980px) { .stage { grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); } }
+.left, .right { display: grid; gap: 18px; min-width: 0; }
+
+/* The TV */
+.tv {
+  background: linear-gradient(180deg, var(--tv-hi), var(--tv-body) 55%);
+  border-radius: 30px; padding: clamp(12px, 2.4vw, 22px) clamp(12px, 2.4vw, 22px) 14px;
+  box-shadow: 0 6px 0 var(--tv-edge), 0 28px 48px -14px var(--shade);
+  display: grid; gap: 12px;
+}
+.bezel { background: var(--tube); border-radius: 24px; padding: clamp(8px, 1.8vw, 14px); box-shadow: inset 0 3px 10px rgba(0, 0, 0, .7); }
+.screen { position: relative; aspect-ratio: 4 / 3; max-width: 100%; border-radius: 20px / 18px; overflow: hidden; background: var(--screen-black); }
+.screen canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.screen .scanlines { position: absolute; inset: 0; pointer-events: none; background: repeating-linear-gradient(to bottom, rgba(0, 0, 0, .16) 0 1px, transparent 1px 3px); }
+.screen .glass { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(110% 80% at 28% 8%, rgba(255, 255, 255, .11), transparent 42%), radial-gradient(150% 130% at 50% 50%, transparent 62%, rgba(0, 0, 0, .35)); }
+.standby { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); padding: 8px 14px; border-radius: 999px; background: rgba(23, 21, 18, .78); color: #F3EDDD; font: 600 12px/1 var(--font-mono); letter-spacing: .14em; white-space: nowrap; }
+.screen-stop { position: absolute; right: 14px; bottom: 14px; }
+.screen:fullscreen { aspect-ratio: auto; width: 100vw; height: 100vh; border-radius: 0; }
+.screen:-webkit-full-screen { aspect-ratio: auto; width: 100vw; height: 100vh; border-radius: 0; }
+
+.tv-panel { display: flex; align-items: center; gap: 14px; padding: 0 6px; }
+.badge { font: italic 500 20px/1 var(--font-display); color: var(--tv-ink); display: inline-flex; align-items: center; gap: 8px; }
+.grille { flex: 1; height: 22px; border-radius: 6px; background: repeating-linear-gradient(90deg, rgba(23, 21, 18, .28) 0 2px, transparent 2px 6px); opacity: .8; }
+.knob { width: 30px; height: 30px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #5C5548, #171512 70%); box-shadow: 0 2px 0 var(--tv-edge), 0 4px 6px var(--shade); position: relative; flex: none; }
+.knob::after { content: ""; position: absolute; left: 50%; top: 4px; width: 3px; height: 9px; margin-left: -1.5px; border-radius: 2px; background: var(--s2); }
+.knob + .knob::after { transform: rotate(40deg); transform-origin: 50% 11px; }
+.power-led { width: 10px; height: 10px; border-radius: 50%; background: var(--led-off); flex: none; transition: background 300ms, box-shadow 300ms; }
+.tv.on .power-led { background: var(--led-ok); box-shadow: 0 0 10px var(--led-ok); }
+
+/* Readout */
+.readout { background: var(--vf); color: var(--vf-ink); border-radius: 22px; padding: 16px; box-shadow: inset 0 2px 8px rgba(0, 0, 0, .55), 0 1px 0 var(--card); display: grid; gap: 14px; }
+.cells { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.cell { display: grid; gap: 2px; min-width: 0; }
+.cell .k { font: 600 10px/1.2 var(--font-mono); letter-spacing: .14em; color: var(--vf-dim); }
+.cell .v { font: 600 clamp(15px, 2.2vw, 19px)/1.25 var(--font-mono); color: #F9B824; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.cell .s { font: 400 12px/1.35 var(--font-sans); color: var(--vf-dim); overflow-wrap: anywhere; }
+.verdict { display: flex; gap: 10px; align-items: flex-start; border-top: 1px solid rgba(243, 237, 221, .12); padding-top: 12px; }
+.verdict p { font-size: 14px; line-height: 1.45; color: var(--vf-ink); min-width: 0; }
+.led { width: 10px; height: 10px; border-radius: 50%; flex: none; background: var(--led-off); margin-top: 5px; }
+[data-kind="clean"] > .led, .led[data-kind="clean"] { background: var(--led-ok); box-shadow: 0 0 8px var(--led-ok); }
+[data-kind="drift"] > .led, .led[data-kind="drift"] { background: var(--led-warn); box-shadow: 0 0 8px var(--led-warn); }
+[data-kind="no"] > .led, .led[data-kind="no"] { background: var(--led-bad); box-shadow: 0 0 8px var(--led-bad); }
+
+/* Console */
+.console { background: var(--card); border-radius: 26px; padding: 18px; box-shadow: 0 2px 0 var(--key-edge), 0 18px 36px -16px var(--shade); display: grid; gap: 18px; }
+.section-head { display: grid; gap: 2px; }
+h2 { font: italic 500 24px/1.15 var(--font-display); }
+.hint { color: var(--label); font-size: 13px; }
+
+.key {
+  font: 600 15px/1.1 var(--font-sans); color: var(--ink);
+  background: linear-gradient(180deg, var(--key-top), var(--card));
+  border: 0; border-radius: 14px; padding: 11px 15px; cursor: pointer;
+  box-shadow: 0 4px 0 var(--key-edge), 0 10px 16px -8px var(--shade);
+  transform: translateY(0);
+  transition: transform 260ms cubic-bezier(.34, 1.56, .64, 1), box-shadow 260ms ease, opacity 200ms, filter 200ms;
+  -webkit-tap-highlight-color: transparent; touch-action: manipulation;
+}
+.key:active:not(:disabled) { transform: translateY(3px); box-shadow: 0 1px 0 var(--key-edge), 0 4px 8px -6px var(--shade); transition-duration: 70ms; }
+.key[aria-pressed="true"] { background: var(--key-dark); color: var(--on-dark); transform: translateY(3px); box-shadow: 0 1px 0 var(--key-dark-edge), inset 0 2px 6px rgba(0, 0, 0, .55); }
+.key:disabled { opacity: .45; filter: saturate(.2); cursor: not-allowed; }
+.key:focus-visible, .switch:focus-visible, input:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+.key.dark { background: linear-gradient(180deg, var(--key-dark-top), var(--key-dark)); color: var(--on-dark); box-shadow: 0 4px 0 var(--key-dark-edge), 0 12px 18px -8px var(--shade); }
+.key.dark:active:not(:disabled) { box-shadow: 0 1px 0 var(--key-dark-edge), 0 4px 8px -6px var(--shade); }
+
+.presets { display: grid; grid-template-columns: repeat(auto-fill, minmax(76px, 1fr)); gap: 14px 10px; padding-bottom: 4px; }
+.preset { position: relative; display: grid; gap: 3px; justify-items: center; padding: 12px 6px 10px; }
+.preset .hz { font: 600 18px/1 var(--font-mono); font-variant-numeric: tabular-nums; }
+.preset .tag { font: 600 10px/1 var(--font-mono); letter-spacing: .1em; color: var(--label); min-height: 10px; }
+.preset[aria-pressed="true"] .tag { color: var(--on-dark); opacity: .8; }
+.preset .led { position: absolute; top: 7px; right: 7px; width: 7px; height: 7px; margin: 0; }
+
+.custom { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.custom label { font: 600 13px/1 var(--font-sans); color: var(--label); }
+.field { display: inline-flex; align-items: center; gap: 6px; background: var(--groove); border-radius: 12px; padding: 0 12px; box-shadow: inset 0 2px 4px var(--shade); }
+.field input { width: 6.5em; border: 0; background: transparent; color: var(--ink); font: 600 16px/1 var(--font-mono); padding: 11px 0; }
+.field span { font: 600 13px/1 var(--font-mono); color: var(--label); }
+.err { color: var(--bad); font-size: 13px; flex-basis: 100%; }
+
+.options { display: grid; gap: 14px; }
+.option { display: flex; align-items: center; justify-content: space-between; gap: 14px; }
+.option .text { display: grid; gap: 2px; min-width: 0; }
+.option .title { font-weight: 600; }
+.option .sub { font-size: 13px; color: var(--label); }
+.switch { position: relative; width: 54px; height: 32px; border-radius: 16px; background: var(--groove); border: 0; box-shadow: inset 0 2px 4px var(--shade); cursor: pointer; flex: none; transition: background 220ms; }
+.switch::after { content: ""; position: absolute; top: 3px; left: 3px; width: 26px; height: 26px; border-radius: 50%; background: linear-gradient(180deg, var(--key-top), var(--card)); box-shadow: 0 2px 0 var(--key-edge), 0 3px 6px var(--shade); transition: transform 240ms cubic-bezier(.34, 1.56, .64, 1); }
+.switch[aria-checked="true"] { background: var(--s1); }
+.switch[aria-checked="true"]::after { transform: translateX(22px); }
+.decay { display: grid; gap: 6px; }
+.decay .row { display: flex; justify-content: space-between; gap: 10px; }
+.decay output { font: 600 14px/1 var(--font-mono); font-variant-numeric: tabular-nums; }
+.decay input { width: 100%; accent-color: var(--s3); }
+.pictures { display: flex; gap: 10px; flex-wrap: wrap; }
+.pictures .key { flex: 1; min-width: 76px; padding: 10px 8px; font-size: 14px; }
+
+.run { display: grid; gap: 14px; }
+.run-keys { display: flex; gap: 12px; }
+.start { flex: 1; min-height: 62px; display: grid; gap: 4px; justify-items: center; font-size: 19px; }
+.start small { font: 500 11px/1 var(--font-mono); letter-spacing: .06em; opacity: .8; }
+.start.running { background: linear-gradient(180deg, #E14B4D, #B02A2D); color: #FFFDF4; box-shadow: 0 4px 0 #6E1719, 0 12px 18px -8px var(--shade); }
+.fs { flex: none; min-height: 62px; display: grid; place-items: center; padding: 0 16px; }
+.fs svg { width: 24px; height: 24px; }
+.warning { display: flex; gap: 12px; align-items: flex-start; background: var(--ground); border-radius: 16px; padding: 12px 14px; box-shadow: inset 0 1px 3px var(--shade); }
+.warning svg { flex: none; width: 26px; height: 26px; margin-top: 1px; }
+.warning p { font-size: 13px; color: var(--label); }
+.warning strong { color: var(--ink); }
+.confirm { display: grid; gap: 10px; background: var(--ground); border-radius: 16px; padding: 12px 14px; }
+.confirm .row { display: flex; gap: 10px; flex-wrap: wrap; }
+.note { font-size: 13px; color: var(--bad); min-height: 1em; }
+
+/* Notes */
+.notes { display: grid; gap: 18px; }
+.figure { background: var(--card); border-radius: 22px; padding: 18px; display: grid; gap: 10px; box-shadow: 0 2px 0 var(--key-edge); }
+.figure .scroll { overflow-x: auto; }
+.figure svg { display: block; width: 100%; min-width: 460px; max-width: 780px; height: auto; }
+.figure figcaption { font-size: 13px; color: var(--label); max-width: 70ch; }
+.fr-a { fill: var(--ground); }
+.fr-b { fill: var(--groove); }
+.fr-line { stroke: var(--key-edge); stroke-width: 1; }
+.beam { stroke: var(--s3); stroke-width: 3.5; stroke-linecap: round; }
+.retrace { stroke: var(--dim); stroke-width: 1.5; stroke-dasharray: 4 5; }
+.tl-label { fill: var(--label); font: 600 15px var(--font-mono); }
+.cols { display: grid; gap: 18px; }
+@media (min-width: 820px) { .cols { grid-template-columns: 1fr 1fr; } }
+.card { background: var(--card); border-radius: 22px; padding: 18px 20px; display: grid; gap: 12px; align-content: start; box-shadow: 0 2px 0 var(--key-edge); min-width: 0; }
+.card ol, .card ul { margin: 0; padding-left: 1.2em; display: grid; gap: 10px; }
+.card li { padding-left: 4px; }
+.card li::marker { font: 600 13px var(--font-mono); color: var(--label); }
+.card li b { font-weight: 600; }
+.card .tip { font-size: 13px; color: var(--label); background: var(--ground); border-radius: 12px; padding: 10px 12px; }
+
+@media (max-width: 420px) {
+  .cells { grid-template-columns: 1fr 1fr; }
+  .cells .cell:last-child { grid-column: 1 / -1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .key, .switch, .switch::after, .power-led { transition: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="stripe" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+
+<main class="page">
+  <header class="head">
+    <span class="brand"><i aria-hidden="true"><b></b><b></b><b></b><b></b><b></b><b></b></i>CRTCAM</span>
+    <h1>CRT Test Screen</h1>
+    <p class="lede">No CRT at hand? Point CRTCam at this page on a fast monitor. It redraws a television's scanning beam at the rate you pick, so you can test detection and shutter sync.</p>
+  </header>
+
+  <div class="stage">
+    <div class="left">
+      <section class="tv" id="tv" aria-label="Simulated CRT">
+        <div class="bezel">
+          <div class="screen" id="screen">
+            <canvas id="crt" aria-label="Test picture"></canvas>
+            <div class="scanlines" aria-hidden="true"></div>
+            <div class="glass" aria-hidden="true"></div>
+            <div class="standby" id="standby">STANDBY · PRESS START</div>
+            <button class="key dark screen-stop" id="screen-stop" type="button" hidden>Stop · Space</button>
+          </div>
+        </div>
+        <div class="tv-panel" aria-hidden="true">
+          <span class="badge">CRTCam</span>
+          <span class="grille"></span>
+          <span class="knob"></span><span class="knob"></span>
+          <span class="power-led"></span>
+        </div>
+      </section>
+
+      <section class="readout" aria-label="Scan and display">
+        <div class="cells">
+          <div class="cell"><span class="k">SCAN</span><span class="v" id="ro-scan">59.94 Hz</span><span class="s" id="ro-scan-note">NTSC preset</span></div>
+          <div class="cell"><span class="k">DISPLAY</span><span class="v" id="ro-display">…</span><span class="s" id="ro-display-note">measuring</span></div>
+          <div class="cell"><span class="k">FRAMES / SCAN</span><span class="v" id="ro-ratio">–</span><span class="s" id="ro-ratio-note"></span></div>
+        </div>
+        <div class="verdict" id="verdict" data-kind="measuring"><span class="led"></span><p id="verdict-text" aria-live="polite">Measuring the display…</p></div>
+      </section>
+    </div>
+
+    <div class="right">
+      <section class="console" aria-labelledby="rate-h">
+        <div class="section-head">
+          <h2 id="rate-h">Scan rate</h2>
+          <p class="hint">The light on each key: green fits this display, yellow drifts slowly, red can't be shown.</p>
+        </div>
+        <div class="presets" id="presets" role="group" aria-label="Scan rate presets"></div>
+        <form class="custom" id="custom-form" novalidate>
+          <label for="custom-hz">Custom</label>
+          <span class="field"><input id="custom-hz" type="text" inputmode="decimal" autocomplete="off" placeholder="57.50"><span>Hz</span></span>
+          <button class="key" type="submit">Set</button>
+          <span class="err" id="custom-err" hidden></span>
+        </form>
+
+        <div class="options">
+          <div class="option">
+            <div class="text">
+              <span class="title" id="lock-title">Lock to display</span>
+              <span class="sub">Runs at an exact fraction of the measured refresh, so nothing drifts. The rate then differs from the preset by your monitor's own error.</span>
+            </div>
+            <button class="switch" id="lock" type="button" role="switch" aria-checked="false" aria-labelledby="lock-title"></button>
+          </div>
+          <div class="decay">
+            <div class="row"><label for="decay" class="title">Phosphor decay</label><output id="decay-out" for="decay">1.00 ms</output></div>
+            <input id="decay" type="range" min="0.05" max="4" step="0.05" value="1">
+            <span class="sub hint">How long a lit line keeps glowing. Colour tubes: about 0.1 to 2 ms.</span>
+          </div>
+          <div class="pictures" role="group" aria-label="Test picture">
+            <button class="key" type="button" data-picture="bars" aria-pressed="true">Bars</button>
+            <button class="key" type="button" data-picture="scene" aria-pressed="false">Scene</button>
+            <button class="key" type="button" data-picture="flat" aria-pressed="false">Flat</button>
+          </div>
+        </div>
+
+        <div class="run">
+          <div class="warning" role="note">
+            <svg viewBox="0 0 26 26" aria-hidden="true"><path d="M13 2.5 25 23.5H1Z" fill="var(--s3)"/><path d="M13 9.5v7" stroke="var(--tube)" stroke-width="2.6" stroke-linecap="round"/><circle cx="13" cy="20" r="1.5" fill="var(--tube)"/></svg>
+            <p><strong>Flashing light.</strong> This page flickers the whole screen. Don't start it if you or anyone watching has photosensitive epilepsy. Space or Esc stops it at any time.</p>
+          </div>
+          <div class="confirm" id="confirm" role="alertdialog" aria-labelledby="confirm-text" hidden>
+            <p id="confirm-text"></p>
+            <div class="row">
+              <button class="key dark" type="button" id="confirm-yes">Start the flicker</button>
+              <button class="key" type="button" id="confirm-no">Cancel</button>
+            </div>
+          </div>
+          <div class="run-keys">
+            <button class="key dark start" id="start" type="button" disabled><span id="start-label">Start</span><small id="start-sub">measuring the display</small></button>
+            <button class="key fs" id="fs" type="button" aria-label="Full screen">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
+            </button>
+          </div>
+          <p class="note" id="run-note" role="status"></p>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <section class="notes" aria-label="How it works">
+    <figure class="figure" style="margin:0">
+      <h2>Beam and display frames</h2>
+      <div class="scroll"><svg id="timeline" viewBox="0 0 640 156" role="img" aria-label="Scan diagram"></svg></div>
+      <figcaption>The orange line is the beam running down the screen three times. Each shaded column is one frame of your monitor, and a frame can only show where the beam was during it. A whole number of frames per scan, two or more, keeps the picture even at the right exposure.</figcaption>
+    </figure>
+
+    <div class="cols">
+      <section class="card">
+        <h2>Test with CRTCam</h2>
+        <ol>
+          <li>Use a monitor that runs at 100 Hz or more, and set its brightness to full. Dimmed backlights often flicker on their own, and CRTCam may lock onto that instead.</li>
+          <li>Pick a rate with a green light, press <b>Start</b>, then full screen. Fill CRTCam's frame with the screen.</li>
+          <li>Tap <b>Detect</b> in CRTCam. It should find the SCAN rate shown here, not your monitor's refresh.</li>
+          <li>Pick a wrong preset in CRTCam to see bands, then the right one to see them go.</li>
+        </ol>
+        <p class="tip">Safari on a 120 Hz Mac draws at 60 Hz unless you turn off "Prefer Page Rendering Updates near 60fps" under Develop › Feature Flags. Chrome and Firefox draw at the full rate.</p>
+      </section>
+      <section class="card">
+        <h2>What a browser can't do</h2>
+        <ul>
+          <li><b>No real beam.</b> A browser draws one picture per refresh of your monitor, so the page lights the band of lines the beam crossed during each frame. That's two steps per scan on a 120 Hz screen and four on 240 Hz.</li>
+          <li><b>Whole frames only.</b> Other rates would flash at a slow beat, which no CRT does, so the page won't run them. A 60 Hz monitor can't show any CRT rate.</li>
+          <li><b>Your monitor flickers too.</b> LCD panels update top to bottom during each frame, and many dim with PWM. CRTCam may detect those instead of the scan.</li>
+          <li><b>Uneven frames show as stray lines.</b> Plug in, close other tabs, and turn off variable refresh (G-Sync, FreeSync, adaptive ProMotion) if the display rate wanders.</li>
+          <li><b>Dimmer while scanning.</b> The panel can't flash brighter than its maximum, so the picture averages half brightness on 120 Hz and a quarter on 240 Hz.</li>
+        </ul>
+      </section>
+    </div>
+  </section>
+
+  <footer class="foot">
+    <span>Part of CRTCam, an app that photographs CRT screens without the flicker.</span>
+    <a href="https://github.com/ChristianDeckert/AppStore">App Store documents</a>
+  </footer>
+</main>
+
+<script>
+(() => {
+  'use strict';
+
+  // Share of each scan the beam spends on visible lines; the rest is vertical blanking.
+  const ACTIVE = 0.92;
+  const GAMMA = 2.2;
+  const PRESETS = [
+    { hz: 50, tag: 'PAL' }, { hz: 59.94, tag: 'NTSC' }, { hz: 60, tag: '60P' },
+    { hz: 70, tag: 'VGA' }, { hz: 72, tag: 'VESA' }, { hz: 75, tag: 'VESA' },
+    { hz: 85, tag: 'VESA' }, { hz: 100, tag: 'PAL 100' }, { hz: 120, tag: 'VESA' },
+  ];
+
+  const $ = (id) => document.getElementById(id);
+  const tv = $('tv'), screen = $('screen'), canvas = $('crt');
+  const ctx = canvas.getContext('2d', { alpha: false });
+  const picture = document.createElement('canvas'), pctx = picture.getContext('2d');
+  const mask = document.createElement('canvas'), mctx = mask.getContext('2d');
+  let maskImage = null;
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  const state = {
+    target: 59.94, tag: 'NTSC', lock: false, tauMs: 1, picture: 'bars',
+    running: false, plan: null, confirmed: false,
+  };
+  let display = null;
+
+  const fmtHz = (x) => x.toFixed(2);
+  const fmtSec = (s) => s < 10 ? `${s.toFixed(1)} s` : s < 120 ? `${Math.round(s)} s` : `${Math.round(s / 60)} min`;
+
+  // ---- Display measurement -------------------------------------------------------------------
+  const intervals = [];
+  let lastTs = null;
+  function measure(ts) {
+    if (lastTs !== null) {
+      const dt = ts - lastTs;
+      if (dt > 0 && dt < 200) {
+        intervals.push(dt);
+        if (intervals.length > 180) intervals.shift();
+      }
+    }
+    lastTs = ts;
+  }
+  function estimateDisplay() {
+    if (intervals.length < 30) return null;
+    const sorted = [...intervals].sort((a, b) => a - b);
+    const median = sorted[sorted.length >> 1];
+    const near = intervals.filter((d) => Math.abs(d - median) < median * 0.25);
+    const mean = near.reduce((a, b) => a + b, 0) / near.length;
+    const devs = near.map((d) => Math.abs(d - mean)).sort((a, b) => a - b);
+    const jitter = devs[Math.floor(devs.length * 0.9)] || 0;
+    const dropped = intervals.length - near.length;
+    return { hz: 1000 / mean, jitterMs: jitter, uneven: jitter > mean * 0.12 || dropped > intervals.length * 0.05 };
+  }
+
+  // ---- What this display can show -----------------------------------------------------------
+  function planFor(hz) {
+    if (!display) return { kind: 'measuring', f: hz };
+    const D = display.hz;
+    if (state.lock) {
+      const m = Math.round(D / hz);
+      if (m >= 2 && Math.abs(D / m - hz) / hz < 0.02) {
+        return { kind: 'clean', f: D / m, m, D, beat: 0, locked: true };
+      }
+    }
+    const m = Math.round(D / hz);
+    if (m < 2) return { kind: 'no', reason: 'slow', f: hz, m, D };
+    const beat = Math.abs(D - m * hz);
+    if (beat < 0.2) return { kind: 'clean', f: hz, m, D, beat, locked: false };
+    if (beat < 3) return { kind: 'drift', f: hz, m, D, beat, locked: false };
+    return { kind: 'no', reason: 'beat', f: hz, m, D, beat };
+  }
+
+  function suggestion(D) {
+    const fits = PRESETS.filter((p) => planFor(p.hz).kind === 'clean').map((p) => fmtHz(p.hz));
+    if (fits.length) return ` Presets that fit: ${fits.join(', ')} Hz.`;
+    return ` This display fits ${[2, 3, 4].map((m) => fmtHz(D / m)).join(', ')} Hz, none of them a CRT rate. Use a 100, 120, 144 or 240 Hz monitor.`;
+  }
+
+  function verdictText(p) {
+    const f = fmtHz(p.f);
+    switch (p.kind) {
+      case 'measuring': return 'Measuring the display…';
+      case 'clean':
+        if (p.locked) return `Locked to the display. Every scan takes exactly ${p.m} display frames, so nothing drifts. The scan runs at ${f} Hz.`;
+        if (p.beat < 0.01) return `Clean. Each scan takes ${p.m} display frames.`;
+        return `Clean. Each scan takes ${p.m} display frames. A thin line drifts through every ${fmtSec(1 / p.beat)}, as on a real set running a touch off its nominal rate.`;
+      case 'drift':
+        return `Usable. Each scan takes about ${p.m} display frames, so faint bands roll through every ${fmtSec(1 / p.beat)}. Turn on Lock to display to stop them.`;
+      default:
+        if (p.reason === 'slow') {
+          return `A ${fmtHz(p.D)} Hz display can't show ${f} Hz. A screen shows flicker up to half its refresh rate, so ${f} Hz needs ${fmtHz(2 * p.f)} Hz or more.${suggestion(p.D)}`;
+        }
+        return `${f} Hz doesn't divide into this display's ${fmtHz(p.D)} Hz. It would flash at ${Math.round(p.beat)} Hz, which no CRT does and which is unsafe to watch.${suggestion(p.D)}`;
+    }
+  }
+
+  const kindWords = { clean: 'fits this display', drift: 'drifts slowly on this display', no: "can't be shown on this display", measuring: 'measuring the display' };
+
+  // ---- Test pictures -------------------------------------------------------------------------
+  function paintPicture() {
+    const W = picture.width, H = picture.height;
+    pctx.imageSmoothingEnabled = false;
+    pctx.fillStyle = '#000';
+    pctx.fillRect(0, 0, W, H);
+    if (state.picture === 'bars') paintBars(W, H);
+    else if (state.picture === 'scene') paintScene(W, H);
+    else paintFlat(W, H);
+  }
+
+  function paintBars(W, H) {
+    const bars = ['#F3EDDD', '#F9B824', '#0A96D4', '#5EB544', '#91408F', '#DD3A3C', '#F28020'];
+    const h1 = Math.round(H * 0.64), h2 = Math.round(H * 0.08);
+    bars.forEach((c, i) => {
+      pctx.fillStyle = c;
+      pctx.fillRect(Math.floor(i * W / 7), 0, Math.ceil(W / 7) + 1, h1);
+    });
+    pctx.globalAlpha = 0.6;
+    [...bars].reverse().forEach((c, i) => {
+      pctx.fillStyle = c;
+      pctx.fillRect(Math.floor(i * W / 7), h1, Math.ceil(W / 7) + 1, h2);
+    });
+    pctx.globalAlpha = 1;
+    for (let i = 0; i < 8; i++) {
+      const v = Math.round(255 * i / 7);
+      pctx.fillStyle = `rgb(${v},${v},${v})`;
+      pctx.fillRect(Math.floor(i * W / 8), h1 + h2, Math.ceil(W / 8) + 1, H - h1 - h2);
+    }
+    const size = Math.max(10, Math.round(H * 0.05));
+    pctx.font = `600 ${size}px "IBM Plex Mono", ui-monospace, monospace`;
+    const label = 'CRTCAM TEST';
+    const tw = pctx.measureText(label).width;
+    const bw = tw + size * 1.6, bh = size * 1.9;
+    pctx.fillStyle = '#171512';
+    pctx.fillRect(Math.round((W - bw) / 2), Math.round(h1 * 0.5 - bh / 2), Math.round(bw), Math.round(bh));
+    pctx.fillStyle = '#F3EDDD';
+    pctx.textAlign = 'center';
+    pctx.textBaseline = 'middle';
+    pctx.fillText(label, W / 2, h1 * 0.5 + size * 0.05);
+  }
+
+  function paintScene(W, H) {
+    const w = 160, h = Math.max(72, Math.round(160 * H / W));
+    const s = document.createElement('canvas');
+    s.width = w; s.height = h;
+    const g = s.getContext('2d');
+    const px = (x, y, ww, hh, c) => { g.fillStyle = c; g.fillRect(Math.round(x), Math.round(y), ww, hh); };
+    const horizon = Math.round(h * 0.66);
+    const sky = ['#1C5FB8', '#2A74C6', '#3A8AD3', '#4CA0DE', '#62B5E8', '#7DC8EF', '#9DD8F3', '#BFE6F5'];
+    sky.forEach((c, i) => px(0, Math.floor(i * horizon / sky.length), w, Math.ceil(horizon / sky.length) + 1, c));
+    const sx = Math.round(w * 0.78), sy = Math.round(h * 0.22), r = Math.round(h * 0.09);
+    for (let y = -r; y <= r; y++) for (let x = -r; x <= r; x++) {
+      const d = x * x + y * y;
+      if (d <= r * r) px(sx + x, sy + y, 1, 1, d > (r - 2) * (r - 2) ? '#F28020' : '#F9B824');
+    }
+    const cloud = (cx, cy) => {
+      px(cx, cy, 18, 4, '#F3EDDD'); px(cx + 3, cy - 3, 9, 3, '#F3EDDD'); px(cx + 9, cy - 5, 6, 3, '#F3EDDD');
+      px(cx, cy + 4, 18, 1, '#C9D9E6');
+    };
+    cloud(18, Math.round(h * 0.2)); cloud(70, Math.round(h * 0.12)); cloud(112, Math.round(h * 0.36));
+    for (let x = 0; x < w; x++) {
+      const far = Math.round(horizon - 9 - 6 * Math.sin(x / 13) - 3 * Math.sin(x / 5.3));
+      px(x, far, 1, h - far, '#3D8C3A');
+    }
+    for (let x = 0; x < w; x++) {
+      const near = Math.round(horizon + 2 - 5 * Math.sin(x / 21 + 1.3) - 2 * Math.sin(x / 7));
+      px(x, near, 1, h - near, '#5EB544');
+    }
+    const gy = Math.round(h * 0.82);
+    px(0, gy, w, h - gy, '#8A5A2B');
+    px(0, gy, w, 2, '#2F7A1F');
+    for (let y = gy + 5; y < h; y += 5) {
+      px(0, y, w, 1, '#6E4520');
+      for (let x = ((y / 5) % 2) * 5; x < w; x += 10) px(x, y - 4, 1, 4, '#6E4520');
+    }
+    const tx = 34, ty = gy - 26;
+    px(tx + 6, ty - 6, 1, 6, '#171512'); px(tx + 5, ty - 7, 1, 1, '#171512');
+    px(tx + 15, ty - 6, 1, 6, '#171512'); px(tx + 16, ty - 7, 1, 1, '#171512');
+    px(tx, ty, 22, 18, '#171512');
+    px(tx + 1, ty + 1, 20, 16, '#D9D0BA');
+    px(tx + 3, ty + 3, 12, 11, '#171512');
+    px(tx + 4, ty + 4, 10, 9, '#0A96D4');
+    px(tx + 6, ty + 7, 2, 2, '#F3EDDD'); px(tx + 10, ty + 7, 2, 2, '#F3EDDD');
+    px(tx + 7, ty + 11, 4, 1, '#F3EDDD');
+    px(tx + 17, ty + 5, 2, 2, '#DD3A3C'); px(tx + 17, ty + 9, 2, 2, '#171512');
+    px(tx + 4, ty + 18, 2, 8, '#171512'); px(tx + 16, ty + 18, 2, 8, '#171512');
+    px(tx + 2, ty + 25, 5, 1, '#171512'); px(tx + 15, ty + 25, 5, 1, '#171512');
+    pctx.imageSmoothingEnabled = false;
+    pctx.drawImage(s, 0, 0, W, H);
+  }
+
+  function paintFlat(W, H) {
+    pctx.fillStyle = '#D6D6D6';
+    pctx.fillRect(0, 0, W, H);
+    const size = Math.max(10, Math.round(H * 0.035));
+    pctx.font = `600 ${size}px "IBM Plex Mono", ui-monospace, monospace`;
+    pctx.fillStyle = '#9A9A9A';
+    pctx.textAlign = 'center';
+    pctx.textBaseline = 'alphabetic';
+    pctx.fillText('FLAT FIELD', W / 2, H - size * 1.4);
+  }
+
+  function showPicture() { ctx.drawImage(picture, 0, 0); }
+
+  function resize() {
+    const dpr = Math.min(window.devicePixelRatio || 1, 3);
+    const rect = screen.getBoundingClientRect();
+    const W = Math.max(1, Math.round(rect.width * dpr)), H = Math.max(1, Math.round(rect.height * dpr));
+    if (W === canvas.width && H === canvas.height && maskImage) return;
+    canvas.width = W; canvas.height = H;
+    picture.width = W; picture.height = H;
+    mask.width = 1; mask.height = H;
+    maskImage = mctx.createImageData(1, H);
+    ctx.imageSmoothingEnabled = false;
+    paintPicture();
+    if (!state.running) showPicture();
+  }
+
+  // ---- The scan ------------------------------------------------------------------------------
+  let t0 = 0, prevTs = null, frameIndex = 0;
+
+  // Light one beam pass has given off after z periods, as a share of all it gives off.
+  const lit = (z, tau) => z <= 0 ? 0 : tau <= 0 ? 1 : 1 - Math.exp(-z / tau);
+
+  function drawScan(ts) {
+    const p = state.plan;
+    const W = canvas.width, H = canvas.height;
+    let xa, xb, expected;
+    if (p.locked) {
+      xa = frameIndex / p.m;
+      xb = (frameIndex + 1) / p.m;
+      frameIndex += 1;
+      expected = 1 / p.m;
+    } else {
+      if (prevTs === null) prevTs = ts - 1000 / p.D;
+      xa = (prevTs - t0) * p.f / 1000;
+      xb = (ts - t0) * p.f / 1000;
+      prevTs = ts;
+      expected = p.f / p.D;
+      if (xb - xa > 4) xa = xb - expected;
+    }
+    const span = xb - xa;
+    const tau = state.tauMs * p.f / 1000;
+    const reach = 12 * tau;
+    const data = maskImage.data;
+    for (let i = 0; i < H; i++) {
+      const phase = ((i + 0.5) / H) * ACTIVE;
+      let energy = 0;
+      const last = Math.floor(xb - phase);
+      for (let n = Math.floor(xa - phase - reach); n <= last; n++) {
+        const pass = n + phase;
+        energy += lit(xb - pass, tau) - lit(xa - pass, tau);
+      }
+      // Linear light per frame, so a matched exposure adds up to the same light on every line.
+      const level = Math.min(1, energy * expected / span);
+      data[i * 4 + 3] = Math.round(255 * (1 - Math.pow(level, 1 / GAMMA)));
+    }
+    mctx.putImageData(maskImage, 0, 0);
+    ctx.drawImage(picture, 0, 0);
+    ctx.drawImage(mask, 0, 0, 1, H, 0, 0, W, H);
+  }
+
+  function loop(ts) {
+    measure(ts);
+    if (state.running) drawScan(ts);
+    requestAnimationFrame(loop);
+  }
+
+  // ---- Start and stop ------------------------------------------------------------------------
+  let wakeLock = null;
+  const note = (text) => { $('run-note').textContent = text; };
+
+  function requestStart() {
+    if (state.running) return;
+    const p = planFor(state.target);
+    if (p.kind === 'no' || p.kind === 'measuring') return;
+    // The first start of a visit asks once, after the warning has been in view.
+    if (!state.confirmed) {
+      $('confirm-text').textContent = reducedMotion.matches
+        ? 'Your device asks for reduced motion, and the whole screen will flicker. Start anyway?'
+        : 'The whole screen will flicker. Start the flicker?';
+      $('confirm').hidden = false;
+      $('confirm-yes').focus();
+      return;
+    }
+    begin(p);
+  }
+
+  function begin(p) {
+    state.plan = p;
+    state.running = true;
+    t0 = performance.now();
+    prevTs = null;
+    frameIndex = 0;
+    note('');
+    if (navigator.wakeLock) {
+      navigator.wakeLock.request('screen').then((lock) => { wakeLock = lock; }).catch(() => {});
+    }
+    render();
+  }
+
+  function stop(message) {
+    if (!state.running) return;
+    state.running = false;
+    state.plan = null;
+    showPicture();
+    if (wakeLock) { wakeLock.release().catch(() => {}); wakeLock = null; }
+    note(message || '');
+    if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
+    render();
+  }
+
+  function select(hz, tag) {
+    state.target = hz;
+    state.tag = tag;
+    $('custom-err').hidden = true;
+    if (state.running) {
+      const p = planFor(hz);
+      if (p.kind === 'no' || p.kind === 'measuring') stop(`Stopped: ${verdictText(p)}`);
+      else begin(p);
+    }
+    render();
+  }
+
+  // ---- Rendering the controls ----------------------------------------------------------------
+  const presetBox = $('presets');
+  PRESETS.forEach((p) => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'key preset';
+    b.dataset.hz = String(p.hz);
+    b.innerHTML = `<span class="hz">${p.hz % 1 ? p.hz.toFixed(2) : p.hz}</span><span class="tag">${p.tag}</span><span class="led"></span>`;
+    b.addEventListener('click', () => select(p.hz, p.tag));
+    presetBox.appendChild(b);
+  });
+
+  let timelineKey = '';
+  function renderTimeline(f) {
+    const key = `${f.toFixed(3)}|${display ? display.hz.toFixed(2) : '-'}`;
+    if (key === timelineKey) return;
+    timelineKey = key;
+    const x0 = 8, x1 = 632, yTop = 32, yBot = 118;
+    const span = 3 / f;
+    const X = (t) => (x0 + (t / span) * (x1 - x0)).toFixed(1);
+    let s = '';
+    if (display) {
+      const Td = 1 / display.hz;
+      for (let k = 0; k * Td < span; k++) {
+        const a = Number(X(k * Td)), b = Number(X(Math.min(span, (k + 1) * Td)));
+        s += `<rect class="${k % 2 ? 'fr-b' : 'fr-a'}" x="${a}" y="${yTop - 8}" width="${(b - a).toFixed(1)}" height="${yBot - yTop + 16}"/>`;
+      }
+      for (let k = 1; k * Td < span; k++) {
+        s += `<line class="fr-line" x1="${X(k * Td)}" x2="${X(k * Td)}" y1="${yTop - 8}" y2="${yBot + 8}"/>`;
+      }
+    }
+    for (let n = 0; n < 3; n++) {
+      s += `<line class="beam" x1="${X(n / f)}" y1="${yTop}" x2="${X((n + ACTIVE) / f)}" y2="${yBot}"/>`;
+      s += `<line class="retrace" x1="${X((n + ACTIVE) / f)}" y1="${yBot}" x2="${X((n + 1) / f)}" y2="${yTop}"/>`;
+    }
+    s += `<text class="tl-label" x="8" y="16">Display frames · ${display ? fmtHz(display.hz) + ' Hz' : 'measuring'}</text>`;
+    s += `<text class="tl-label" x="8" y="148">Beam, top to bottom · ${fmtHz(f)} Hz</text>`;
+    const svg = $('timeline');
+    svg.innerHTML = s;
+    svg.setAttribute('aria-label', display
+      ? `Three scans at ${fmtHz(f)} hertz over display frames at ${fmtHz(display.hz)} hertz: ${(display.hz / f).toFixed(2)} frames per scan.`
+      : `Three scans at ${fmtHz(f)} hertz. The display is still being measured.`);
+  }
+
+  let lastVerdict = '';
+  function render() {
+    const p = state.running ? state.plan : planFor(state.target);
+
+    $('ro-scan').textContent = `${fmtHz(p.f)} Hz`;
+    $('ro-scan-note').textContent = p.locked
+      ? `locked, preset ${fmtHz(state.target)}`
+      : state.tag === 'custom' ? 'custom rate' : `${state.tag} preset`;
+    $('ro-display').textContent = display ? `${fmtHz(display.hz)} Hz` : '…';
+    $('ro-display-note').textContent = display
+      ? `±${display.jitterMs.toFixed(2)} ms${display.uneven ? ' · uneven' : ''}`
+      : 'measuring';
+    $('ro-ratio').textContent = display ? (display.hz / p.f).toFixed(2) : '–';
+    $('ro-ratio-note').textContent = !display ? '' : p.kind === 'no' ? 'not a whole number' : p.locked || !(p.beat >= 0.01) ? 'steady' : `drift every ${fmtSec(1 / p.beat)}`;
+
+    let text = verdictText(p);
+    if (display && display.uneven && p.kind !== 'no') text += ' Frames arrive unevenly: plug in and close other tabs.';
+    $('verdict').dataset.kind = p.kind;
+    if (text !== lastVerdict) { $('verdict-text').textContent = text; lastVerdict = text; }
+
+    presetBox.querySelectorAll('.preset').forEach((b) => {
+      const hz = Number(b.dataset.hz);
+      const kind = planFor(hz).kind;
+      const chosen = state.tag !== 'custom' && Math.abs(hz - state.target) < 0.001;
+      b.setAttribute('aria-pressed', String(chosen));
+      b.querySelector('.led').dataset.kind = kind;
+      b.setAttribute('aria-label', `${hz} hertz ${b.querySelector('.tag').textContent}, ${kindWords[kind]}`);
+    });
+
+    const start = $('start');
+    start.classList.toggle('running', state.running);
+    start.disabled = !state.running && (p.kind === 'no' || p.kind === 'measuring');
+    $('start-label').textContent = state.running ? 'Stop' : 'Start';
+    $('start-sub').textContent = state.running
+      ? 'SPACE OR ESC'
+      : p.kind === 'measuring' ? 'measuring the display'
+      : p.kind === 'no' ? 'not on this display'
+      : `flicker at ${fmtHz(p.f)} Hz`;
+    $('standby').hidden = state.running;
+    $('screen-stop').hidden = !state.running;
+    tv.classList.toggle('on', state.running);
+
+    renderTimeline(p.f);
+  }
+
+  function refresh() {
+    const d = estimateDisplay();
+    if (d) display = d;
+    if (state.running) {
+      const p = planFor(state.target);
+      if (p.kind === 'no' || p.kind === 'measuring') {
+        stop(`Stopped: ${verdictText(p)}`);
+      } else {
+        state.plan = { ...state.plan, f: p.f, D: p.D, m: p.m, beat: p.beat, kind: p.kind };
+      }
+    }
+    render();
+  }
+
+  // ---- Events --------------------------------------------------------------------------------
+  $('start').addEventListener('click', () => (state.running ? stop() : requestStart()));
+  $('screen-stop').addEventListener('click', () => stop());
+  $('confirm-yes').addEventListener('click', () => {
+    state.confirmed = true;
+    $('confirm').hidden = true;
+    requestStart();
+  });
+  $('confirm-no').addEventListener('click', () => {
+    $('confirm').hidden = true;
+    $('start').focus();
+  });
+
+  $('custom-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const raw = $('custom-hz').value.trim().replace(',', '.');
+    const hz = Number(raw);
+    // CRTs run at 45 Hz or more; slower scans would flash in the range most likely to
+    // trigger seizures, so they are not offered.
+    if (!raw || !Number.isFinite(hz) || hz < 45 || hz > 165) {
+      const err = $('custom-err');
+      err.textContent = 'Enter a rate from 45 to 165 Hz, for example 57.5.';
+      err.hidden = false;
+      return;
+    }
+    select(Math.round(hz * 100) / 100, 'custom');
+  });
+
+  $('lock').addEventListener('click', () => {
+    state.lock = !state.lock;
+    $('lock').setAttribute('aria-checked', String(state.lock));
+    if (state.running) {
+      const p = planFor(state.target);
+      if (p.kind === 'no' || p.kind === 'measuring') stop(`Stopped: ${verdictText(p)}`);
+      else begin(p);
+    }
+    render();
+  });
+
+  $('decay').addEventListener('input', (e) => {
+    state.tauMs = Number(e.target.value);
+    $('decay-out').textContent = `${state.tauMs.toFixed(2)} ms`;
+  });
+
+  document.querySelectorAll('[data-picture]').forEach((b) => {
+    b.addEventListener('click', () => {
+      state.picture = b.dataset.picture;
+      document.querySelectorAll('[data-picture]').forEach((o) => o.setAttribute('aria-pressed', String(o === b)));
+      paintPicture();
+      if (!state.running) showPicture();
+    });
+  });
+
+  $('fs').addEventListener('click', () => {
+    const request = screen.requestFullscreen || screen.webkitRequestFullscreen;
+    const unavailable = "Full screen isn't available here. Zoom the page until the TV fills the window instead.";
+    if (!request) { note(unavailable); return; }
+    try {
+      const result = request.call(screen);
+      if (result && typeof result.catch === 'function') result.catch(() => note(unavailable));
+    } catch (_) {
+      note(unavailable);
+    }
+  });
+
+  // Leaving full screen (Esc there never reaches the page) stops the flicker too.
+  const onFullscreenChange = () => {
+    if (!(document.fullscreenElement || document.webkitFullscreenElement) && state.running) stop();
+  };
+  document.addEventListener('fullscreenchange', onFullscreenChange);
+  document.addEventListener('webkitfullscreenchange', onFullscreenChange);
+
+  // A Space that stops the flicker must not also click the focused key on its way up, or a
+  // focused Start key would start it again.
+  let swallowSpaceUp = false;
+  document.addEventListener('keydown', (e) => {
+    if (!state.running) return;
+    if (e.key === ' ' || e.key === 'Escape') {
+      e.preventDefault();
+      swallowSpaceUp = e.key === ' ';
+      stop();
+    }
+  });
+  document.addEventListener('keyup', (e) => {
+    if (e.key === ' ' && swallowSpaceUp) {
+      e.preventDefault();
+      swallowSpaceUp = false;
+    }
+  });
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) stop('Stopped because the page was hidden.');
+    intervals.length = 0;
+    lastTs = null;
+  });
+
+  new ResizeObserver(resize).observe(screen);
+  resize();
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(() => { paintPicture(); if (!state.running) showPicture(); });
+  }
+  render();
+  setInterval(refresh, 500);
+  requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>
