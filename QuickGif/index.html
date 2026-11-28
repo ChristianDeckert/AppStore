@@ -72,9 +72,23 @@ h2 { font: 700 clamp(28px, 4.4vw, 42px)/1.1 var(--font-round); letter-spacing: -
 .section-head p { color: var(--ink-2); }
 .glass { background: var(--glass); border: 1px solid var(--glass-edge); -webkit-backdrop-filter: blur(24px) saturate(1.4); backdrop-filter: blur(24px) saturate(1.4); box-shadow: var(--shadow); }
 
+/* Site header */
+.site-head {
+  position: sticky; top: 0; z-index: 10;
+  padding: env(safe-area-inset-top, 0px) var(--gutter-r) 0 var(--gutter);
+  background: var(--glass); -webkit-backdrop-filter: blur(24px) saturate(1.4); backdrop-filter: blur(24px) saturate(1.4);
+  border-bottom: 1px solid var(--hairline);
+}
+.site-head .bar { max-width: 1120px; margin: 0 auto; height: 52px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.site-head .home { display: inline-flex; align-items: center; gap: 6px; margin-left: -6px; padding: 6px 10px 6px 4px; font: 700 14px/1 var(--font-round); color: var(--ink-2); text-decoration: none; }
+.site-head .home:hover { color: var(--ink); }
+.site-head .home svg { width: 16px; height: 16px; color: var(--accent); }
+.site-head .here { display: inline-flex; align-items: center; gap: 9px; min-width: 0; font: 800 17px/1 var(--font-round); color: var(--ink); white-space: nowrap; }
+.site-head .here img { width: 28px; height: 28px; border-radius: 22.37%; box-shadow: 0 4px 10px -4px rgba(75, 46, 143, .5); }
+
 /* Hero */
-.hero { display: grid; gap: 28px; align-items: center; padding-top: 56px; }
-@media (min-width: 860px) { .hero { grid-template-columns: minmax(0, 1fr) auto; padding-top: 80px; } }
+.hero { display: grid; gap: 28px; align-items: center; padding-top: 40px; }
+@media (min-width: 860px) { .hero { grid-template-columns: minmax(0, 1fr) auto; padding-top: 64px; } }
 .intro { display: grid; gap: 18px; justify-items: start; }
 .badge-gif { display: inline-flex; align-items: center; gap: 8px; font: 700 13px/1 var(--font-round); letter-spacing: .06em; color: var(--ink-2); text-transform: uppercase; }
 .badge-gif b { padding: 3px 6px; border: 2px solid currentColor; border-radius: 6px; font-size: 12px; letter-spacing: .04em; }
@@ -130,6 +144,12 @@ h1 { font: 800 clamp(48px, 8vw, 80px)/1 var(--font-round); letter-spacing: -.03e
 </style>
 </head>
 <body>
+<header class="site-head">
+  <div class="bar">
+    <a class="home" href="../"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>All apps</a>
+    <span class="here"><img src="img/icon-192.webp" width="28" height="28" alt="">Quick Gif</span>
+  </div>
+</header>
 <main class="page">
 
   <header class="hero">
