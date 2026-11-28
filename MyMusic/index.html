@@ -63,6 +63,11 @@ h2 { font-size: clamp(28px, 4.4vw, 42px); line-height: 1.1; font-weight: 700; le
 .site-head .home:hover { color: var(--text); }
 .site-head .home svg { width: 16px; height: 16px; color: var(--accent); transition: color 600ms; }
 .site-head .here { display: inline-flex; align-items: center; gap: 9px; min-width: 0; font-size: 15px; font-weight: 650; color: var(--text); white-space: nowrap; }
+.lang-switch { margin-left: auto; display: inline-flex; padding: 3px; border-radius: 999px; background: var(--raised); box-shadow: 0 0 0 1px var(--line); }
+.lang-switch a { padding: 5px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; line-height: 1; letter-spacing: .08em; color: var(--text-2); text-decoration: none; }
+.lang-switch a:hover { color: var(--text); }
+.lang-switch a[aria-current] { background: var(--accent); color: var(--bg); transition: background 600ms; }
+@media (max-width: 420px) { .site-head .here-name { display: none; } }
 .site-head .here img { width: 26px; height: 26px; border-radius: 22.37%; box-shadow: 0 0 14px -4px rgba(255, 94, 122, .7); }
 
 /* Hero */
@@ -157,8 +162,9 @@ h1 { font-size: clamp(48px, 8vw, 76px); line-height: 1; font-weight: 800; letter
 <div class="glow" aria-hidden="true"></div>
 <header class="site-head">
   <div class="bar">
-    <a class="home" href="../"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>All apps</a>
-    <span class="here"><img src="img/icon-192.webp" width="26" height="26" alt="">My Music</span>
+    <a class="home" href="../"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg><span data-i18n="nav.all">All apps</span></a>
+    <nav class="lang-switch" aria-label="Language" data-i18n-aria="lang.label"><a href="?lang=de" hreflang="de" lang="de" title="Deutsch">DE</a><a href="?lang=en" hreflang="en" lang="en" title="English">EN</a></nav>
+    <span class="here"><img src="img/icon-192.webp" width="26" height="26" alt=""><span class="here-name">My Music</span></span>
   </div>
 </header>
 <main class="page">
@@ -170,19 +176,19 @@ h1 { font-size: clamp(48px, 8vw, 76px); line-height: 1; font-weight: 800; letter
         <span class="platforms">iPhone · iPad</span>
       </div>
       <h1>My Music</h1>
-      <p class="subtitle"><span>Your files, your folders.</span><br>No subscription.</p>
-      <p class="promo">A beautiful player for the music you own: albums you ripped years ago, DJ mixes, live recordings, your own demos, even concert videos. Bring them in from your Mac, your PC or the Files app, and they appear exactly the way you organised them.</p>
+      <p class="subtitle" data-i18n="subtitle"><span>Your files, your folders.</span><br>No subscription.</p>
+      <p class="promo" data-i18n="promo">A beautiful player for the music you own: albums you ripped years ago, DJ mixes, live recordings, your own demos, even concert videos. Bring them in from your Mac, your PC or the Files app, and they appear exactly the way you organised them.</p>
       <div class="cta">
-        <a class="store" href="https://apps.apple.com/app/id1027516877"><img src="../badges/app-store.svg" width="144" height="48" alt="Download on the App Store"></a>
-        <span class="meta">Free for 25 files. Premium is a one-time purchase.<br>Requires iOS or iPadOS 18 or later.</span>
+        <a class="store" href="https://apps.apple.com/app/id1027516877"><img src="../badges/app-store.svg" width="144" height="48" data-i18n-alt="badge.alt" alt="Download on the App Store"></a>
+        <span class="meta" data-i18n="meta">Free for 25 files. Premium is a one-time purchase.<br>Requires iOS or iPadOS 18 or later.</span>
       </div>
     </div>
 
     <figure>
-      <section class="player" id="player" aria-label="Try the player">
-        <p class="from"><small>PLAYING FROM</small><b>Festival Sets 2026</b></p>
+      <section class="player" id="player" aria-label="Try the player" data-i18n-aria="player.label">
+        <p class="from"><small data-i18n="player.from">PLAYING FROM</small><b>Festival Sets 2026</b></p>
         <div class="ring-wrap" id="ring-wrap">
-          <input type="range" id="seek" min="0" max="1000" value="300" aria-label="Position in the song">
+          <input type="range" id="seek" min="0" max="1000" value="300" aria-label="Position in the song" data-i18n-aria="player.seek">
           <svg id="ring" viewBox="0 0 300 300" aria-hidden="true">
             <defs>
               <linearGradient id="prog" x1="0" y1="0" x2="1" y2="1">
@@ -212,118 +218,185 @@ h1 { font-size: clamp(48px, 8vw, 76px); line-height: 1; font-weight: 800; letter
         <div class="controls">
           <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 3h5v5M4 20 21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/></svg>
           <svg class="icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M11 6v12L2.5 12 11 6Zm10 0v12l-8.5-6L21 6Z"/></svg>
-          <button class="play" id="play" type="button" aria-label="Pause"><svg id="play-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg></button>
+          <button class="play" id="play" type="button" aria-label="Pause" data-i18n-aria="player.pause"><svg id="play-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg></button>
           <svg class="icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13 6v12l8.5-6L13 6ZM3 6v12l8.5-6L3 6Z"/></svg>
           <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 2l4 4-4 4M3 11V9a3 3 0 0 1 3-3h15M7 22l-4-4 4-4M21 13v2a3 3 0 0 1-3 3H3"/></svg>
         </div>
-        <div class="covers" role="group" aria-label="Cover" id="covers"></div>
+        <div class="covers" role="group" aria-label="Cover" data-i18n-aria="covers.label" id="covers"></div>
       </section>
-      <figcaption class="player-cap">Drag the ring to scrub, or pick another cover and watch the colours follow. This demo is silent; in the app the bars follow the real music.</figcaption>
+      <figcaption class="player-cap" data-i18n="player.cap">Drag the ring to scrub, or pick another cover and watch the colours follow. This demo is silent; in the app the bars follow the real music.</figcaption>
     </figure>
   </header>
 
-  <section class="rows" aria-label="Features">
+  <section class="rows" aria-label="Features" data-i18n-aria="rows.label">
     <article class="row">
       <div class="text">
-        <span class="eyebrow">Real folders, not a database</span>
-        <h2>Your folders are the library</h2>
-        <p>The folders in My Music are the real folders on your device, the same ones you see in the Files app and in Finder.</p>
+        <span data-i18n="r1.eyebrow" class="eyebrow">Real folders, not a database</span>
+        <h2 data-i18n="r1.h2">Your folders are the library</h2>
+        <p data-i18n="r1.p">The folders in My Music are the real folders on your device, the same ones you see in the Files app and in Finder.</p>
         <ul>
-          <li>Drag whole folders in from your Mac or PC, import them from iCloud Drive or anywhere in Files, or share files to it from other apps.</li>
-          <li>Rename, move or delete in the app or in Files, and the library keeps up by itself.</li>
-          <li>Albums are recognised automatically; playlists are there when you want a mix across folders.</li>
+          <li data-i18n="r1.li1">Drag whole folders in from your Mac or PC, import them from iCloud Drive or anywhere in Files, or share files to it from other apps.</li>
+          <li data-i18n="r1.li2">Rename, move or delete in the app or in Files, and the library keeps up by itself.</li>
+          <li data-i18n="r1.li3">Albums are recognised automatically; playlists are there when you want a mix across folders.</li>
         </ul>
       </div>
       <div class="pair">
-        <img src="img/iphone-library.webp" width="600" height="1304" loading="lazy" decoding="async" alt="The Library: Recently played covers, Favourites, Most played, Recently added and playlists.">
-        <img src="img/iphone-festival-sets.webp" width="600" height="1304" loading="lazy" decoding="async" alt="The Festival Sets 2026 folder with its sets, Play and Shuffle.">
+        <img src="img/iphone-library.webp" width="600" height="1304" loading="lazy" decoding="async" data-i18n-alt="alt.library" alt="The Library: Recently played covers, Favourites, Most played, Recently added and playlists.">
+        <img src="img/iphone-festival-sets.webp" width="600" height="1304" loading="lazy" decoding="async" data-i18n-alt="alt.festival" alt="The Festival Sets 2026 folder with its sets, Play and Shuffle.">
       </div>
     </article>
     <article class="row">
       <div class="text">
-        <span class="eyebrow">A player that looks like your music</span>
-        <h2>Coloured by every cover</h2>
+        <span data-i18n="r2.eyebrow" class="eyebrow">A player that looks like your music</span>
+        <h2 data-i18n="r2.h2">Coloured by every cover</h2>
         <ul>
-          <li>Colours taken from the cover tint the whole player and follow every song.</li>
-          <li>Three live visualizers, Bars ring, Spectrum and Wave, react to what is playing.</li>
-          <li>Scrub by dragging a ring around the cover, like the hand of a clock.</li>
-          <li>Up Next, shuffle, repeat, a sleep timer, gapless playback, AirPlay, lock screen and Control Center.</li>
-          <li>Picks up where you left off, down to the second.</li>
+          <li data-i18n="r2.li1">Colours taken from the cover tint the whole player and follow every song.</li>
+          <li data-i18n="r2.li2">Three live visualizers, Bars ring, Spectrum and Wave, react to what is playing.</li>
+          <li data-i18n="r2.li3">Scrub by dragging a ring around the cover, like the hand of a clock.</li>
+          <li data-i18n="r2.li4">Up Next, shuffle, repeat, a sleep timer, gapless playback, AirPlay, lock screen and Control Center.</li>
+          <li data-i18n="r2.li5">Picks up where you left off, down to the second.</li>
         </ul>
       </div>
       <div class="pair">
-        <img src="img/iphone-player.webp" width="600" height="1304" loading="lazy" decoding="async" alt="The player for Sunrise Set by Halden: the Bars ring visualizer around a sunset cover, tinted in its colours.">
-        <img src="img/iphone-wave.webp" width="600" height="1304" loading="lazy" decoding="async" alt="The Wave visualizer under the cover.">
+        <img src="img/iphone-player.webp" width="600" height="1304" loading="lazy" decoding="async" data-i18n-alt="alt.player" alt="The player for Sunrise Set by Halden: the Bars ring visualizer around a sunset cover, tinted in its colours.">
+        <img src="img/iphone-wave.webp" width="600" height="1304" loading="lazy" decoding="async" data-i18n-alt="alt.wave" alt="The Wave visualizer under the cover.">
       </div>
     </article>
     <article class="row">
       <div class="text">
-        <span class="eyebrow">A library that stays tidy</span>
-        <h2>Tags and covers, written into your files</h2>
+        <span data-i18n="r3.eyebrow" class="eyebrow">A library that stays tidy</span>
+        <h2 data-i18n="r3.h2">Tags and covers, written into your files</h2>
         <ul>
-          <li>Edit title, artist, album, track number and cover, saved straight into your MP3 and M4A files so every app sees them.</li>
-          <li>Find covers in Apple's iTunes catalogue, or pick one from Photos or Files, for one song or a whole folder at once.</li>
-          <li>Long-press a song for Play next, Play later, Share, Move and more. Every move can be undone.</li>
-          <li>Search everything, or pull down inside a folder to search just that folder.</li>
+          <li data-i18n="r3.li1">Edit title, artist, album, track number and cover, saved straight into your MP3 and M4A files so every app sees them.</li>
+          <li data-i18n="r3.li2">Find covers in Apple's iTunes catalogue, or pick one from Photos or Files, for one song or a whole folder at once.</li>
+          <li data-i18n="r3.li3">Long-press a song for Play next, Play later, Share, Move and more. Every move can be undone.</li>
+          <li data-i18n="r3.li4">Search everything, or pull down inside a folder to search just that folder.</li>
         </ul>
       </div>
       <div class="pair">
-        <img src="img/iphone-album.webp" width="600" height="1304" loading="lazy" decoding="async" alt="The album Copper Sky by Idris Vale, sorted by track number.">
-        <img src="img/iphone-menu.webp" width="600" height="1304" loading="lazy" decoding="async" alt="A song's long-press menu: Play next, Play later, Share, Add to playlist, Favourite, Move, Edit details, Update artwork and Delete.">
+        <img src="img/iphone-album.webp" width="600" height="1304" loading="lazy" decoding="async" data-i18n-alt="alt.album" alt="The album Copper Sky by Idris Vale, sorted by track number.">
+        <img src="img/iphone-menu.webp" width="600" height="1304" loading="lazy" decoding="async" data-i18n-alt="alt.menu" alt="A song's long-press menu: Play next, Play later, Share, Add to playlist, Favourite, Move, Edit details, Update artwork and Delete.">
       </div>
     </article>
   </section>
 
   <section class="more" aria-labelledby="more-h">
     <div class="section-head">
-      <span class="eyebrow">And also</span>
-      <h2 id="more-h">Videos for listening, and room on iPad</h2>
+      <span data-i18n="more.eyebrow" class="eyebrow">And also</span>
+      <h2 data-i18n="more.h2" id="more-h">Videos for listening, and room on iPad</h2>
     </div>
     <div class="ipad">
-      <img src="img/ipad-festival-sets.webp" width="900" height="1200" loading="lazy" decoding="async" alt="My Music on iPad: the Festival Sets folder on the left and the player on the right.">
-      <img src="img/ipad-album-wave.webp" width="900" height="1200" loading="lazy" decoding="async" alt="My Music on iPad: the Copper Sky album beside the player with the Wave visualizer.">
+      <img src="img/ipad-festival-sets.webp" width="900" height="1200" loading="lazy" decoding="async" data-i18n-alt="alt.ipad1" alt="My Music on iPad: the Festival Sets folder on the left and the player on the right.">
+      <img src="img/ipad-album-wave.webp" width="900" height="1200" loading="lazy" decoding="async" data-i18n-alt="alt.ipad2" alt="My Music on iPad: the Copper Sky album beside the player with the Wave visualizer.">
     </div>
     <div class="cards">
       <article class="card">
-        <h3>Videos, for listening</h3>
-        <p>MP4, M4V and MOV videos play as audio, like any song, with their embedded artwork or a frame from the video as the cover. Ideal for the live set that only exists as a video.</p>
+        <h3 data-i18n="card1.h3">Videos, for listening</h3>
+        <p data-i18n="card1.p">MP4, M4V and MOV videos play as audio, like any song, with their embedded artwork or a frame from the video as the cover. Ideal for the live set that only exists as a video.</p>
       </article>
       <article class="card">
-        <h3>Made for iPad</h3>
-        <p>Your library on the left and the player on the right, with Up Next beside it in landscape.</p>
+        <h3 data-i18n="card2.h3">Made for iPad</h3>
+        <p data-i18n="card2.p">Your library on the left and the player on the right, with Up Next beside it in landscape.</p>
       </article>
       <article class="card">
-        <h3>Free for 25 files</h3>
-        <p>Every feature included. Premium, a one-time in-app purchase, removes the limit for good. Bought Premium for an earlier version? It's still yours.</p>
+        <h3 data-i18n="card3.h3">Free for 25 files</h3>
+        <p data-i18n="card3.p">Every feature included. Premium, a one-time in-app purchase, removes the limit for good. Bought Premium for an earlier version? It's still yours.</p>
       </article>
       <article class="card">
-        <h3>Plays</h3>
+        <h3 data-i18n="card4.h3">Plays</h3>
         <ul class="formats"><li>MP3</li><li>M4A</li><li>Apple Lossless</li><li>M4B</li><li>AAC</li><li>WAV</li><li>AIFF</li><li>CAF</li><li>FLAC</li><li>MP4</li><li>M4V</li><li>MOV</li></ul>
-        <p>Videos play as audio.</p>
+        <p data-i18n="card4.p">Videos play as audio.</p>
       </article>
     </div>
   </section>
 
   <section class="note" aria-labelledby="note-h">
-    <span class="eyebrow" id="note-h">A note from the developer</span>
-    <blockquote>I built My Music for myself. I collect festival sets and live cuts, recordings no streaming service will ever offer, and I want them on my phone exactly as they sit on my Mac: one folder per festival, one per artist. So My Music does the opposite of other players: your folders are the library. I first released it in 2015, and version 2 is rebuilt from the ground up.</blockquote>
+    <span data-i18n="note.eyebrow" class="eyebrow" id="note-h">A note from the developer</span>
+    <blockquote data-i18n="note.quote">I built My Music for myself. I collect festival sets and live cuts, recordings no streaming service will ever offer, and I want them on my phone exactly as they sit on my Mac: one folder per festival, one per artist. So My Music does the opposite of other players: your folders are the library. I first released it in 2015, and version 2 is rebuilt from the ground up.</blockquote>
     <cite>– Christian</cite>
   </section>
 
   <section class="privacy" aria-labelledby="privacy-h">
-    <span class="eyebrow">Privacy</span>
-    <h2 id="privacy-h">No account, no ads, no analytics, no tracking</h2>
-    <p>Everything plays offline. Apart from purchases, which Apple's App Store handles, the only time My Music goes online is when you search for a cover. <a href="PRIVACY">Read the privacy policy</a>.</p>
+    <span data-i18n="privacy.eyebrow" class="eyebrow">Privacy</span>
+    <h2 data-i18n="privacy.h2" id="privacy-h">No account, no ads, no analytics, no tracking</h2>
+    <p data-i18n="privacy.p">Everything plays offline. Apart from purchases, which Apple's App Store handles, the only time My Music goes online is when you search for a cover. <a href="PRIVACY" hreflang="en">Read the privacy policy</a>.</p>
   </section>
 
   <footer class="foot">
-    <a href="SUPPORT">Support</a>
-    <a href="PRIVACY">Privacy policy</a>
-    <a href="../">All apps</a>
+    <a href="SUPPORT" hreflang="en" data-i18n="foot.support">Support</a>
+    <a href="PRIVACY" hreflang="en" data-i18n="foot.privacy">Privacy policy</a>
+    <a href="../" data-i18n="foot.all">All apps</a>
     <span class="legal">© 2026 Christian Deckert · <a href="mailto:deckert.christian@icloud.com">deckert.christian@icloud.com</a></span>
   </footer>
 </main>
 
+<script type="application/json" id="strings-de">
+{
+  "title": "My Music",
+  "description": "My Music spielt die Musikdateien, die dir gehören, auf iPhone und iPad, aus deinen echten Ordnern und mit einem Player in den Farben jedes Covers. Kein Streaming, kein Konto.",
+  "lang.label": "Sprache",
+  "nav.all": "Alle Apps",
+  "subtitle": "<span>Deine Dateien, deine Ordner.</span><br>Kein Abo.",
+  "promo": "Ein schöner Player für die Musik, die dir gehört: Alben, die du vor Jahren gerippt hast, DJ-Mixe, Live-Mitschnitte, deine eigenen Demos, sogar Konzertvideos. Hol sie vom Mac, vom PC oder aus der Dateien-App, und sie erscheinen genau so, wie du sie sortiert hast.",
+  "badge.alt": "Laden im App Store",
+  "meta": "Gratis für 25 Dateien. Premium ist ein einmaliger Kauf.<br>Erfordert iOS oder iPadOS 18 oder neuer.",
+  "player.label": "Probier den Player aus",
+  "player.from": "WIEDERGABE AUS",
+  "player.seek": "Position im Song",
+  "player.pause": "Pausieren",
+  "player.play": "Abspielen",
+  "player.of": "von",
+  "covers.label": "Cover",
+  "player.cap": "Zieh am Ring, um zu spulen, oder wähl ein anderes Cover und sieh zu, wie die Farben folgen. Diese Demo ist stumm; in der App folgen die Balken der echten Musik.",
+  "rows.label": "Funktionen",
+  "r1.eyebrow": "Echte Ordner statt Datenbank",
+  "r1.h2": "Deine Ordner sind die Bibliothek",
+  "r1.p": "Die Ordner in My Music sind die echten Ordner auf deinem Gerät, dieselben, die du in der Dateien-App und im Finder siehst.",
+  "r1.li1": "Zieh ganze Ordner vom Mac oder PC herüber, importiere sie aus iCloud Drive oder von überall in der Dateien-App, oder teile Dateien aus anderen Apps mit My Music.",
+  "r1.li2": "Umbenennen, verschieben, löschen – in der App oder in der Dateien-App. Die Bibliothek zieht von selbst nach.",
+  "r1.li3": "Alben erkennt My Music automatisch, und für einen Mix quer durch alle Ordner gibt es Wiedergabelisten.",
+  "r2.eyebrow": "Ein Player, der aussieht wie deine Musik",
+  "r2.h2": "In den Farben jedes Covers",
+  "r2.li1": "Die Farben des Covers tauchen den ganzen Player ein und wechseln mit jedem Song.",
+  "r2.li2": "Drei Live-Visualizer, Balkenring, Spektrum und Welle, reagieren auf das, was gerade läuft.",
+  "r2.li3": "Spulen, indem du einen Ring um das Cover ziehst, wie den Zeiger einer Uhr.",
+  "r2.li4": "Als Nächstes, Zufallswiedergabe, Wiederholen, Schlaf-Timer, lückenlose Wiedergabe, AirPlay, Sperrbildschirm und Kontrollzentrum.",
+  "r2.li5": "Macht genau da weiter, wo du aufgehört hast, auf die Sekunde.",
+  "r3.eyebrow": "Eine Bibliothek, die ordentlich bleibt",
+  "r3.h2": "Tags und Cover, direkt in deinen Dateien",
+  "r3.li1": "Titel, Interpret, Album, Titelnummer und Cover bearbeiten, direkt in deine MP3- und M4A-Dateien geschrieben, damit jede App sie sieht.",
+  "r3.li2": "Cover im iTunes-Katalog von Apple finden oder aus Fotos oder Dateien wählen, für einen Song oder gleich einen ganzen Ordner.",
+  "r3.li3": "Halte einen Song gedrückt für „Als Nächstes abspielen“, „Später abspielen“, „Teilen …“, „Verschieben …“ und mehr. Jedes Verschieben lässt sich rückgängig machen.",
+  "r3.li4": "Alles durchsuchen oder in einem Ordner nach unten ziehen, um nur dort zu suchen.",
+  "alt.library": "Die Bibliothek: zuletzt gespielte Cover, Favoriten, Meistgespielt, Neu hinzugefügt und Wiedergabelisten.",
+  "alt.festival": "Der Ordner Festival Sets 2026 mit seinen Sets, Abspielen und Zufallswiedergabe.",
+  "alt.player": "Der Player für Sunrise Set von Halden: der Visualizer Balkenring um ein Sonnenuntergangs-Cover, in dessen Farben getönt.",
+  "alt.wave": "Der Visualizer Welle unter dem Cover.",
+  "alt.album": "Das Album Copper Sky von Idris Vale, nach Titelnummer sortiert.",
+  "alt.menu": "Das Menü eines Songs nach langem Drücken: Als Nächstes abspielen, Später abspielen, Teilen, Zur Wiedergabeliste, Favorit, Verschieben, Details bearbeiten, Cover aktualisieren und Löschen.",
+  "more.eyebrow": "Außerdem",
+  "more.h2": "Videos zum Hören und Platz auf dem iPad",
+  "alt.ipad1": "My Music auf dem iPad: links der Ordner Festival Sets, rechts der Player.",
+  "alt.ipad2": "My Music auf dem iPad: das Album Copper Sky neben dem Player mit dem Visualizer Welle.",
+  "card1.h3": "Videos zum Hören",
+  "card1.p": "Videos im Format MP4, M4V und MOV spielt My Music als Audio ab, wie jeden Song, mit dem eingebetteten Cover oder einem Bild aus dem Video. Ideal für das Live-Set, das es nur als Video gibt.",
+  "card2.h3": "Fürs iPad gemacht",
+  "card2.p": "Links deine Bibliothek, rechts der Player und im Querformat „Als Nächstes“ gleich daneben.",
+  "card3.h3": "Gratis für 25 Dateien",
+  "card3.p": "Mit allen Funktionen. Premium, ein einmaliger In-App-Kauf, hebt die Grenze für immer auf. Premium schon für eine frühere Version gekauft? Dann gehört es weiterhin dir.",
+  "card4.h3": "Spielt",
+  "card4.p": "Videos laufen als Audio.",
+  "note.eyebrow": "Ein paar Worte von mir",
+  "note.quote": "Ich habe My Music für mich selbst gebaut. Ich sammle Festival-Sets und Live-Mitschnitte, Aufnahmen, die du bei keinem Streamingdienst findest, und ich will sie auf dem iPhone genau so haben wie auf meinem Mac: ein Ordner pro Festival, einer pro Künstler. My Music macht es deshalb andersherum als andere Player: Deine Ordner sind die Bibliothek. Die erste Version kam 2015 heraus, Version 2 habe ich von Grund auf neu geschrieben.",
+  "privacy.eyebrow": "Datenschutz",
+  "privacy.h2": "Kein Konto, keine Werbung, keine Analyse, kein Tracking",
+  "privacy.p": "Alles spielt offline. Abgesehen von Käufen, um die sich der App Store von Apple kümmert, geht My Music nur online, wenn du nach einem Cover suchst. <a href='PRIVACY' hreflang='en'>Zur Datenschutzerklärung (EN)</a>.",
+  "foot.support": "Support (EN)",
+  "foot.privacy": "Datenschutzerklärung (EN)",
+  "foot.all": "Alle Apps"
+}
+</script>
+<script src="../i18n.js"></script>
 <script>
 (() => {
   'use strict';
@@ -335,6 +408,7 @@ h1 { font-size: clamp(48px, 8vw, 76px); line-height: 1; font-weight: 800; letter
     { title: 'Glass Harbor', artist: 'Nova Lindqvist', length: 191, art: ['#0E2F36', '#1E7F7A', '#7FE3D4'], sun: '#D9FFF6', ground: '#0A2226',
       tint: { accent: '#7FE3D4', a: '#3FB8C9', b: '#7FE3D4', c: '#D9FFF6', glowA: '#1E6E68', glowB: '#08201F' } },
   ];
+  const PAUSE = I18N.t('player.pause', 'Pause'), PLAY = I18N.t('player.play', 'Play'), OF = I18N.t('player.of', 'of');
   const $ = (id) => document.getElementById(id);
   const root = document.documentElement.style;
   const reduce = matchMedia('(prefers-reduced-motion: reduce)');
@@ -368,7 +442,7 @@ h1 { font-size: clamp(48px, 8vw, 76px); line-height: 1; font-weight: 800; letter
     $('knob').setAttribute('cx', 150 + 136 * Math.cos(a)); $('knob').setAttribute('cy', 150 + 136 * Math.sin(a));
     $('elapsed').textContent = fmt(pos); $('remaining').textContent = '-' + fmt(cover.length - pos);
     $('seek').value = String(Math.round(f * 1000));
-    $('seek').setAttribute('aria-valuetext', fmt(pos) + ' of ' + fmt(cover.length));
+    $('seek').setAttribute('aria-valuetext', fmt(pos) + ' ' + OF + ' ' + fmt(cover.length));
   }
   function frame(now) {
     const dt = (now - last) / 1000; last = now;
@@ -414,7 +488,7 @@ h1 { font-size: clamp(48px, 8vw, 76px); line-height: 1; font-weight: 800; letter
 
   $('play').addEventListener('click', () => {
     playing = !playing;
-    $('play').setAttribute('aria-label', playing ? 'Pause' : 'Play');
+    $('play').setAttribute('aria-label', playing ? PAUSE : PLAY);
     $('play-icon').innerHTML = playing ? '<path d="M6 4h4v16H6zM14 4h4v16h-4z"/>' : '<path d="M7 4.5v15l12.5-7.5L7 4.5Z"/>';
     if (reduce.matches) drawBars(0);
   });
