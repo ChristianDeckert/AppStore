@@ -1,0 +1,423 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CRT Retro Cam</title>
+<meta name="description" content="CRT Retro Cam photographs CRT TVs and monitors without the dark bands a normal phone photo shows, by syncing the camera's shutter to the screen's refresh rate.">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#E6DFCB" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1A1713" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="website">
+<meta property="og:title" content="CRT Retro Cam">
+<meta property="og:description" content="Point, sync, shoot: flicker-free photos of CRT TVs and monitors. Join the iPhone beta on TestFlight.">
+<meta property="og:url" content="https://christiandeckert.github.io/AppStore/CRTCam/">
+<meta property="og:image" content="https://christiandeckert.github.io/AppStore/CRTCam/img/icon.png">
+<meta name="twitter:card" content="summary">
+<link rel="icon" type="image/png" href="img/favicon.png">
+<link rel="apple-touch-icon" href="img/icon.png">
+<link rel="preload" href="simulator/fonts/Inter.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+/* Fonts are the test screen's own copies, so opening the page contacts no one else. */
+@font-face { font-family: "Inter"; src: url("simulator/fonts/Inter.woff2") format("woff2"); font-weight: 100 900; font-style: normal; font-display: swap; }
+@font-face { font-family: "Newsreader"; src: url("simulator/fonts/Newsreader-Italic.woff2") format("woff2"); font-weight: 500; font-style: italic; font-display: swap; }
+@font-face { font-family: "IBM Plex Mono"; src: url("simulator/fonts/IBMPlexMono-Regular.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: "IBM Plex Mono"; src: url("simulator/fonts/IBMPlexMono-SemiBold.woff2") format("woff2"); font-weight: 600; font-style: normal; font-display: swap; }
+
+:root {
+  /* The app's "beige box, six stripes" theme (lib/app/ui/retro.dart), as on the test screen. */
+  --ground: #E6DFCB;
+  --card: #F6F1E4;
+  --key-top: #FFFDF4;
+  --key-edge: #C4BAA2;
+  --ink: #201C17;
+  --label: #5C5548;
+  --dim: #8C836F;
+  --shade: rgba(70, 56, 34, .35);
+  --key-dark: #201C17;
+  --key-dark-top: #3A342D;
+  --key-dark-edge: #050403;
+  --on-dark: #F9B824;
+  --tube: #171512;
+  --vf: #2B2621;
+  --vf-ink: #F3EDDD;
+  --vf-dim: #B3AB99;
+  --ok: #2F7A1F;
+  --s1: #5EB544; --s2: #F9B824; --s3: #F28020; --s4: #DD3A3C; --s5: #91408F; --s6: #0A96D4;
+  --focus: #0A96D4;
+  --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: "Newsreader", "Iowan Old Style", Georgia, serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ground: #1A1713; --card: #27221C; --key-top: #2F2922; --key-edge: #0D0B09;
+    --ink: #F3EDDD; --label: #B3AB99; --dim: #8C836F; --shade: rgba(0, 0, 0, .55);
+    --key-dark: #0B0A08; --key-dark-top: #221D18; --key-dark-edge: #000000;
+    --vf: #120F0D; --ok: #7FCB63; --focus: #4FC0F0;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --ground: #1A1713; --card: #27221C; --key-top: #2F2922; --key-edge: #0D0B09;
+  --ink: #F3EDDD; --label: #B3AB99; --dim: #8C836F; --shade: rgba(0, 0, 0, .55);
+  --key-dark: #0B0A08; --key-dark-top: #221D18; --key-dark-edge: #000000;
+  --vf: #120F0D; --ok: #7FCB63; --focus: #4FC0F0;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--ground); color: var(--ink); font: 400 16px/1.55 var(--font-sans); }
+h1, h2, h3, p, figure, ol, ul { margin: 0; }
+h1, h2 { text-wrap: balance; }
+a { color: inherit; }
+a:focus-visible, input:focus-visible + .handle .grip { outline: 3px solid var(--focus); outline-offset: 3px; }
+img { display: block; max-width: 100%; height: auto; }
+
+.stripe { display: flex; height: 6px; }
+.stripe span { flex: 1; }
+.stripe span:nth-child(1) { background: var(--s1); } .stripe span:nth-child(2) { background: var(--s2); }
+.stripe span:nth-child(3) { background: var(--s3); } .stripe span:nth-child(4) { background: var(--s4); }
+.stripe span:nth-child(5) { background: var(--s5); } .stripe span:nth-child(6) { background: var(--s6); }
+
+.page {
+  max-width: 1140px; margin: 0 auto; display: grid; gap: 72px;
+  padding: 36px max(16px, env(safe-area-inset-right, 0px)) 56px max(16px, env(safe-area-inset-left, 0px));
+}
+/* Grid tracks default to their content's min width, so wide children would widen the page. */
+.page, .hero, .intro, .steps-wrap, .photos, .why, .early { grid-template-columns: minmax(0, 1fr); }
+
+.brand { display: inline-flex; align-items: center; gap: 8px; font: 600 12px/1 var(--font-mono); letter-spacing: .12em; color: var(--label); text-transform: uppercase; }
+.brand i { display: inline-flex; width: 30px; height: 10px; border-radius: 2px; overflow: hidden; }
+.brand i b { flex: 1; }
+.brand i b:nth-child(1) { background: var(--s1); } .brand i b:nth-child(2) { background: var(--s2); }
+.brand i b:nth-child(3) { background: var(--s3); } .brand i b:nth-child(4) { background: var(--s4); }
+.brand i b:nth-child(5) { background: var(--s5); } .brand i b:nth-child(6) { background: var(--s6); }
+h2 { font: italic 500 clamp(30px, 4.6vw, 44px)/1.08 var(--font-display); letter-spacing: -.01em; }
+.section-head { display: grid; gap: 10px; max-width: 64ch; }
+.section-head p { color: var(--label); }
+
+/* Hero */
+.hero { display: grid; gap: 36px; align-items: center; }
+@media (min-width: 940px) { .hero { grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); gap: 48px; } }
+.intro { display: grid; gap: 18px; justify-items: start; }
+.app-icon { width: 92px; height: 92px; border-radius: 22.37%; box-shadow: 0 4px 0 var(--key-edge), 0 18px 30px -12px var(--shade); }
+h1 { font: italic 500 clamp(46px, 7vw, 68px)/1 var(--font-display); letter-spacing: -.015em; }
+.subtitle { font-size: clamp(19px, 2.3vw, 22px); font-weight: 600; line-height: 1.3; }
+.promo { color: var(--label); max-width: 46ch; }
+.cta { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 18px; margin-top: 4px; }
+.stores { display: flex; flex-wrap: wrap; gap: 10px 12px; margin-top: 4px; }
+.soon {
+  display: inline-flex; align-items: center; gap: 10px; padding: 13px 18px; border-radius: 14px;
+  background: linear-gradient(180deg, var(--key-dark-top), var(--key-dark)); color: var(--on-dark);
+  font: 600 13px/1 var(--font-mono); letter-spacing: .06em; text-transform: uppercase;
+  box-shadow: 0 4px 0 var(--key-dark-edge), 0 12px 18px -8px var(--shade);
+}
+.soon .led { width: 9px; height: 9px; border-radius: 50%; background: var(--s2); box-shadow: 0 0 8px var(--s2); }
+.soon.play .led { background: var(--s1); box-shadow: 0 0 8px var(--s1); }
+.dl {
+  display: inline-flex; align-items: center; gap: 12px; padding: 11px 18px 11px 14px; border-radius: 14px; text-decoration: none;
+  font: 600 15px/1.15 var(--font-sans); -webkit-tap-highlight-color: transparent;
+  transition: transform 260ms cubic-bezier(.34, 1.56, .64, 1), box-shadow 260ms ease;
+}
+.dl svg { width: 26px; height: 26px; flex: none; }
+.dl span { display: grid; }
+.dl small { font: 600 11px/1.3 var(--font-mono); letter-spacing: .08em; text-transform: uppercase; opacity: .8; }
+.dl.dark { background: linear-gradient(180deg, var(--key-dark-top), var(--key-dark)); color: var(--on-dark); box-shadow: 0 4px 0 var(--key-dark-edge), 0 12px 18px -8px var(--shade); }
+.dl.light { background: linear-gradient(180deg, var(--key-top), var(--card)); color: var(--ink); box-shadow: 0 4px 0 var(--key-edge), 0 12px 18px -8px var(--shade); }
+.dl[href]:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--key-edge); transition-duration: 70ms; }
+/* The APK key turns into a download once it gets an href; until then it is plain text. */
+.dl:not([href]) { box-shadow: 0 2px 0 var(--key-edge); opacity: .88; cursor: default; }
+.dl:not([href]) .when-ready, .dl[href] .when-soon { display: none; }
+.meta { font-size: 14px; color: var(--label); }
+
+/* Before / after */
+.compare-card { background: var(--card); border-radius: 28px; padding: clamp(10px, 1.6vw, 16px); box-shadow: 0 2px 0 var(--key-edge), 0 28px 48px -18px var(--shade); display: grid; gap: 12px; }
+.compare { position: relative; border-radius: 18px; overflow: hidden; background: var(--tube); aspect-ratio: 1400 / 962; touch-action: pan-y; cursor: ew-resize; user-select: none; -webkit-user-select: none; --pos: 50%; }
+.compare img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
+.compare .before { clip-path: inset(0 calc(100% - var(--pos)) 0 0); }
+.compare input { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; margin: 0; pointer-events: none; }
+.handle { position: absolute; top: 0; bottom: 0; left: var(--pos); width: 0; pointer-events: none; }
+.handle::before { content: ""; position: absolute; top: 0; bottom: 0; left: -1.5px; width: 3px; background: var(--vf-ink); box-shadow: 0 0 0 1px rgba(0, 0, 0, .35); }
+.grip { position: absolute; top: 50%; left: 0; width: 46px; height: 46px; margin: -23px 0 0 -23px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #5C5548, #171512 70%); box-shadow: 0 3px 0 #050403, 0 8px 16px rgba(0, 0, 0, .45); display: grid; place-items: center; }
+.grip svg { width: 22px; height: 22px; color: var(--s2); }
+.tag { position: absolute; top: 12px; display: inline-flex; align-items: center; gap: 7px; padding: 7px 11px; border-radius: 999px; background: rgba(23, 21, 18, .82); color: var(--vf-ink); font: 600 11px/1 var(--font-mono); letter-spacing: .12em; pointer-events: none; white-space: nowrap; }
+.tag.l { left: 12px; } .tag.r { right: 12px; }
+.tag .led { width: 8px; height: 8px; border-radius: 50%; }
+.tag.l .led { background: var(--s4); box-shadow: 0 0 6px var(--s4); }
+.tag.r .led { background: var(--s1); box-shadow: 0 0 6px var(--s1); }
+.compare-cap { font-size: 13px; color: var(--label); padding: 0 6px 4px; }
+
+/* Why */
+.why { display: grid; gap: 20px; }
+@media (min-width: 860px) { .why { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 40px; align-items: start; } }
+.readout { background: var(--vf); color: var(--vf-ink); border-radius: 22px; padding: 20px; box-shadow: inset 0 2px 8px rgba(0, 0, 0, .55); display: grid; gap: 14px; }
+.readout p { color: var(--vf-dim); font-size: 15px; }
+.readout b { color: var(--vf-ink); font-weight: 600; }
+.cells { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.cell { display: grid; gap: 2px; min-width: 0; }
+.cell .k { font: 600 10px/1.2 var(--font-mono); letter-spacing: .14em; color: var(--vf-dim); }
+.cell .v { font: 600 clamp(16px, 2.4vw, 22px)/1.25 var(--font-mono); color: var(--s2); font-variant-numeric: tabular-nums; }
+
+/* Steps */
+.steps-wrap { display: grid; gap: 28px; }
+.steps { list-style: none; padding: 0; display: grid; gap: 22px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr)); counter-reset: step; }
+.steps li { display: grid; gap: 12px; align-content: start; counter-increment: step; }
+.steps img { border-radius: 26px; box-shadow: 0 2px 0 var(--key-edge), 0 22px 36px -18px var(--shade); width: min(100%, 300px); justify-self: center; }
+.steps h3 { display: flex; align-items: center; gap: 10px; font-size: 18px; font-weight: 650; }
+.steps h3::before {
+  content: counter(step); flex: none; width: 28px; height: 28px; border-radius: 9px; display: grid; place-items: center;
+  font: 600 14px/1 var(--font-mono); color: var(--ink);
+  background: linear-gradient(180deg, var(--key-top), var(--card)); box-shadow: 0 3px 0 var(--key-edge);
+}
+.steps li:nth-child(1) h3::before { box-shadow: 0 3px 0 var(--key-edge), inset 0 -3px 0 var(--s1); }
+.steps li:nth-child(2) h3::before { box-shadow: 0 3px 0 var(--key-edge), inset 0 -3px 0 var(--s2); }
+.steps li:nth-child(3) h3::before { box-shadow: 0 3px 0 var(--key-edge), inset 0 -3px 0 var(--s3); }
+.steps li:nth-child(4) h3::before { box-shadow: 0 3px 0 var(--key-edge), inset 0 -3px 0 var(--s4); }
+.steps p { color: var(--label); font-size: 15px; }
+
+/* Cards */
+.cards { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr)); }
+.card { background: var(--card); border-radius: 22px; padding: 20px 22px; display: grid; gap: 8px; align-content: start; box-shadow: 0 2px 0 var(--key-edge); }
+.card h3 { font-size: 17px; font-weight: 650; }
+.card p { color: var(--label); font-size: 15px; }
+.card .k { font: 600 11px/1 var(--font-mono); letter-spacing: .14em; color: var(--label); text-transform: uppercase; }
+
+/* Photos and Premium */
+.photos { display: grid; gap: 28px; align-items: center; }
+@media (min-width: 900px) { .photos { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 48px; } }
+.photos .shots { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; max-width: 560px; justify-self: center; }
+.photos .shots img { border-radius: 24px; box-shadow: 0 2px 0 var(--key-edge), 0 22px 36px -18px var(--shade); }
+.photos .text { display: grid; gap: 16px; }
+.plans { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); }
+.plan { background: var(--card); border-radius: 20px; padding: 18px; display: grid; gap: 8px; align-content: start; box-shadow: 0 2px 0 var(--key-edge); }
+.plan h3 { font: italic 500 22px/1.1 var(--font-display); display: flex; align-items: center; gap: 8px; }
+.plan.premium h3::before { content: "★"; display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: var(--s2); color: var(--tube); font: 700 13px/1 var(--font-sans); font-style: normal; }
+.plan ul { padding-left: 1.1em; display: grid; gap: 6px; color: var(--label); font-size: 15px; }
+
+/* Beta and preview */
+.early { display: grid; gap: 28px; }
+.early .cards { grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: 18px; }
+.early .card { gap: 14px; padding: 24px; }
+.early ol { margin: 0; padding-left: 1.2em; display: grid; gap: 8px; color: var(--label); font-size: 15px; }
+.early .note { font-size: 14px; color: var(--label); }
+.early .card .dl { justify-self: start; }
+
+/* Test screen */
+.test { display: grid; gap: 14px; padding: 26px; border-radius: 26px; background: var(--vf); color: var(--vf-ink); box-shadow: inset 0 2px 8px rgba(0, 0, 0, .5); }
+.test p { color: var(--vf-dim); max-width: 64ch; }
+.test .key {
+  justify-self: start; display: inline-flex; align-items: center; gap: 10px; padding: 12px 16px; border-radius: 14px; text-decoration: none;
+  background: linear-gradient(180deg, #FFFDF4, #F6F1E4); color: #201C17; font: 600 15px/1.1 var(--font-sans);
+  box-shadow: 0 4px 0 #C4BAA2, 0 10px 16px -8px rgba(0, 0, 0, .5);
+}
+.test .key i { display: inline-flex; width: 24px; height: 9px; border-radius: 2px; overflow: hidden; }
+.test .key i b { flex: 1; }
+.test .key i b:nth-child(1) { background: var(--s1); } .test .key i b:nth-child(2) { background: var(--s2); }
+.test .key i b:nth-child(3) { background: var(--s3); } .test .key i b:nth-child(4) { background: var(--s4); }
+.test .key i b:nth-child(5) { background: var(--s5); } .test .key i b:nth-child(6) { background: var(--s6); }
+
+/* Privacy and footer */
+.privacy { display: grid; gap: 10px; padding: 26px; border-radius: 26px; background: var(--card); box-shadow: 0 2px 0 var(--key-edge); }
+.privacy p { color: var(--label); max-width: 70ch; }
+.foot { color: var(--label); font-size: 14px; display: flex; flex-wrap: wrap; gap: 8px 20px; border-top: 1px solid var(--key-edge); padding-top: 24px; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+</style>
+</head>
+<body>
+<div class="stripe" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+<main class="page">
+
+  <header class="hero">
+    <div class="intro">
+      <picture>
+        <source srcset="img/icon-dark.png" media="(prefers-color-scheme: dark)">
+        <img class="app-icon" src="img/icon.png" width="92" height="92" alt="">
+      </picture>
+      <span class="brand"><i aria-hidden="true"><b></b><b></b><b></b><b></b><b></b><b></b></i>iPhone · Android preview</span>
+      <h1>CRT Retro Cam</h1>
+      <p class="subtitle">Flicker-free CRT TV photos.</p>
+      <p class="promo">Point, sync, shoot: CRT Retro Cam times the shutter to your screen's refresh rate, so retro games and old monitors look as clean in photos as they do in person.</p>
+      <div class="stores">
+        <span class="soon"><span class="led" aria-hidden="true"></span>Coming soon to the App Store</span>
+        <span class="soon play"><span class="led" aria-hidden="true"></span>Coming soon to Google Play</span>
+      </div>
+      <div class="cta">
+        <a class="dl dark" href="https://testflight.apple.com/join/Wc9429HK"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3h6M10 3v6.5L4.8 18.2A1.9 1.9 0 0 0 6.4 21h11.2a1.9 1.9 0 0 0 1.6-2.8L14 9.5V3"/><path d="M7.5 15h9"/></svg><span>Join the iPhone beta<small>on TestFlight</small></span></a>
+        <a class="dl light apk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M12 7v7M9 11.5l3 3 3-3M10.5 18.5h3"/></svg><span>Android preview<small class="when-soon">APK coming soon</small><small class="when-ready">Download APK</small></span></a>
+      </div>
+      <p class="meta">Try it now: the iPhone beta, or the Android preview once it is ready.<br>Free to shoot; Premium is a one-time purchase. iOS 15 or Android 10 or later.</p>
+    </div>
+
+    <figure class="compare-card">
+      <div class="compare" id="compare">
+        <img src="img/after.webp" width="1200" height="824" alt="The same CRT photographed with CRT Retro Cam: the whole picture is lit, no bands.">
+        <img class="before" src="img/before.webp" width="1200" height="825" alt="The CRT through a normal phone camera: a dark band covers most of the picture.">
+        <span class="tag l"><span class="led"></span>PHONE CAMERA</span>
+        <span class="tag r"><span class="led"></span>SYNCED</span>
+        <input type="range" id="compare-range" min="0" max="100" value="50" aria-label="Compare a normal phone photo, left, with a CRT Retro Cam photo, right">
+        <span class="handle" aria-hidden="true"><span class="grip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l-5 6 5 6M15 6l5 6-5 6"/></svg></span></span>
+      </div>
+      <figcaption class="compare-cap">Same TV, same game. Drag to compare a normal phone photo with a synced one.</figcaption>
+    </figure>
+  </header>
+
+  <section class="why" aria-labelledby="why-h">
+    <div class="section-head">
+      <span class="brand"><i aria-hidden="true"><b></b><b></b><b></b><b></b><b></b><b></b></i>Why the bands appear</span>
+      <h2 id="why-h">One refresh per photo, every line lit</h2>
+      <p>A CRT draws its picture line by line, 50 to 120 times a second, and each line glows only briefly. A phone photo with a short shutter catches the screen half-drawn, so dark bands cross it.</p>
+      <p>CRT Retro Cam keeps the shutter open for exactly one refresh, or a whole number of them, so the screen is drawn completely during the exposure.</p>
+    </div>
+    <div class="readout" role="img" aria-label="Example readout: scan 59.94 hertz, shutter one sixtieth of a second, status locked.">
+      <div class="cells">
+        <div class="cell"><span class="k">SCAN</span><span class="v">59.94 Hz</span></div>
+        <div class="cell"><span class="k">SHUTTER</span><span class="v">1/60 s</span></div>
+        <div class="cell"><span class="k">STATUS</span><span class="v">LOCKED</span></div>
+      </div>
+      <p><b>Detect</b> finds rates from 45 to 165 Hz. Most European TVs run at 50 Hz, most American and Japanese ones at 59.94 Hz, and computer monitors at 60 to 85 Hz or more.</p>
+    </div>
+  </section>
+
+  <section class="steps-wrap" aria-labelledby="steps-h">
+    <div class="section-head">
+      <span class="brand"><i aria-hidden="true"><b></b><b></b><b></b><b></b><b></b><b></b></i>Taking a photo</span>
+      <h2 id="steps-h">Point, sync, shoot</h2>
+    </div>
+    <ol class="steps">
+      <li>
+        <img src="img/camera.webp" width="600" height="1304" loading="lazy" decoding="async" alt="The camera screen: a beige TV in the full-width viewfinder, the status pill reading SYNCED 59.94 Hz, rate keys for AUTO, 50, 59.94, 60 and 70 Hz, and the shutter knob.">
+        <h3>Fill the frame</h3>
+        <p>Turn the screen on and fill most of the frame with it. The viewfinder shows exactly what the photo will contain; tap it to focus.</p>
+      </li>
+      <li>
+        <img src="img/detecting.webp" width="600" height="1304" loading="lazy" decoding="async" alt="Detecting: a meter checks 59.94 Hz while the picture in the viewfinder rolls.">
+        <h3>Detect, or pick the rate</h3>
+        <p>Tap Detect and hold still. The app samples the flicker and locks onto the rate where the banding disappears. Or pick a preset: 50 Hz PAL, 59.94 Hz NTSC, VGA and VESA rates.</p>
+      </li>
+      <li>
+        <img src="img/locked.webp" width="600" height="1304" loading="lazy" decoding="async" alt="Locked at 59.94 Hz with a shutter of 1/60 s, the picture clean and still.">
+        <h3>Fine-tune</h3>
+        <p>Fine-tuning tries shutter times around the detected rate and keeps the one that leaves the least banding, with a "vertical hold" animation while it locks on.</p>
+      </li>
+      <li>
+        <img src="img/folded.webp" width="600" height="1304" loading="lazy" decoding="async" alt="The control deck folded down to the knob and the last photo, for a clear view of the frame.">
+        <h3>Shoot</h3>
+        <p>Turn the knob, or press a volume button or the Camera Control. Fold the controls away with the grabber for a clear view of the whole frame.</p>
+      </li>
+    </ol>
+  </section>
+
+  <section aria-labelledby="deck-h" class="steps-wrap">
+    <div class="section-head">
+      <span class="brand"><i aria-hidden="true"><b></b><b></b><b></b><b></b><b></b><b></b></i>Made for retro screens</span>
+      <h2 id="deck-h">A camera that looks the part</h2>
+    </div>
+    <div class="cards">
+      <article class="card"><span class="k">Lenses</span><h3>Every back camera</h3><p>Switch between the back lenses your phone has, for example 0.5×, 1× and 2×.</p></article>
+      <article class="card"><span class="k">Controls</span><h3>Knob, buttons, Camera Control</h3><p>Shoot with the on-screen knob, the volume buttons, or the Camera Control on iPhones that have one.</p></article>
+      <article class="card"><span class="k">Look</span><h3>Beige box, six stripes</h3><p>A retro look inspired by beige computers, CRT TVs and VHS tapes, with a short guide on first start.</p></article>
+    </div>
+  </section>
+
+  <section class="photos" aria-labelledby="photos-h">
+    <div class="shots">
+      <img src="img/roll.webp" width="600" height="1304" loading="lazy" decoding="async" alt="The roll: photos grouped by day, each marked with the rate it was taken at.">
+      <img src="img/premium.webp" width="600" height="1304" loading="lazy" decoding="async" alt="The Premium page: AirDrop and share, Save to Photos, and no watermark, with Upgrade and Restore purchases.">
+    </div>
+    <div class="text">
+      <div class="section-head">
+        <span class="brand"><i aria-hidden="true"><b></b><b></b><b></b><b></b><b></b><b></b></i>Your photos</span>
+        <h2 id="photos-h">They stay in the app until you export them</h2>
+        <p>Mark favourites, and see the rate and shutter each photo was taken with.</p>
+      </div>
+      <div class="plans">
+        <article class="plan">
+          <h3>Free</h3>
+          <ul><li>Sync, Detect and fine-tuning</li><li>All lenses</li><li>Full-size photos kept in the app</li></ul>
+        </article>
+        <article class="plan premium">
+          <h3>Premium</h3>
+          <ul><li>AirDrop &amp; share the original photos</li><li>Save to Photos at full resolution</li><li>Photos without the watermark pattern</li></ul>
+        </article>
+      </div>
+      <p class="meta">Premium is a one-time in-app purchase, not a subscription, and applies to every photo, including the ones you took before.</p>
+    </div>
+  </section>
+
+  <section class="early" id="beta" aria-labelledby="early-h">
+    <div class="section-head">
+      <span class="brand"><i aria-hidden="true"><b></b><b></b><b></b><b></b><b></b><b></b></i>Try it early</span>
+      <h2 id="early-h">Beta on iPhone, preview on Android</h2>
+      <p>CRT Retro Cam is not in the stores yet. You can try it now and tell us what your screens make of it.</p>
+    </div>
+    <div class="cards">
+      <article class="card">
+        <span class="k">iPhone · TestFlight</span>
+        <h3>Join the beta</h3>
+        <ol>
+          <li>Install Apple's TestFlight app from the App Store.</li>
+          <li>Open the invitation on your iPhone and tap Accept, then Install.</li>
+          <li>Beta updates arrive through TestFlight by themselves.</li>
+        </ol>
+        <a class="dl dark" href="https://testflight.apple.com/join/Wc9429HK"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3h6M10 3v6.5L4.8 18.2A1.9 1.9 0 0 0 6.4 21h11.2a1.9 1.9 0 0 0 1.6-2.8L14 9.5V3"/><path d="M7.5 15h9"/></svg><span>Join the iPhone beta<small>on TestFlight</small></span></a>
+        <p class="note">Requires an iPhone with iOS 15 or later.</p>
+      </article>
+      <article class="card">
+        <span class="k">Android · APK</span>
+        <h3>Install the preview</h3>
+        <ol>
+          <li>Download the APK on your Android phone.</li>
+          <li>Open it, and allow your browser to install apps when Android asks.</li>
+          <li>Install a newer preview over the old one to update.</li>
+        </ol>
+        <a class="dl light apk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M12 7v7M9 11.5l3 3 3-3M10.5 18.5h3"/></svg><span>Android preview<small class="when-soon">APK coming soon</small><small class="when-ready">Download APK</small></span></a>
+        <p class="note">Requires Android 10 or later and a camera that allows a manual shutter time. Some Android phones don't let apps set the shutter time; CRT Retro Cam cannot sync on them.</p>
+      </article>
+    </div>
+    <p class="note">Found a bug? Open an issue at <a href="https://github.com/ChristianDeckert/AppStore/issues">github.com/ChristianDeckert/AppStore/issues</a> with your phone model and system version.</p>
+  </section>
+
+  <section class="test" aria-labelledby="test-h">
+    <h2 id="test-h">No CRT at hand?</h2>
+    <p>The CRT test screen lets a computer monitor stand in for a CRT. A real flicker for the camera needs a fast monitor, 120 Hz or more; on a 60 Hz monitor the page shows rolling bars that demonstrate the effect.</p>
+    <a class="key" href="simulator/"><i aria-hidden="true"><b></b><b></b><b></b><b></b><b></b><b></b></i>Open the CRT test screen</a>
+  </section>
+
+  <section class="privacy" aria-labelledby="privacy-h">
+    <span class="brand"><i aria-hidden="true"><b></b><b></b><b></b><b></b><b></b><b></b></i>Privacy</span>
+    <h2 id="privacy-h">No account, no ads, no analytics, no tracking</h2>
+    <p>Your photos stay on your device until you export them, and the app's only network connection is for in-app purchases through Apple's App Store. <a href="PRIVACY">Read the privacy policy</a>.</p>
+  </section>
+
+  <footer class="foot">
+    <a href="SUPPORT">Support</a>
+    <a href="PRIVACY">Privacy policy</a>
+    <a href="simulator/">CRT test screen</a>
+    <a href="https://testflight.apple.com/join/Wc9429HK">TestFlight beta</a>
+    <a href="https://github.com/ChristianDeckert/AppStore">App Store documents</a>
+  </footer>
+</main>
+
+<script>
+(() => {
+  'use strict';
+  // Set to the APK's URL once the Android preview is published; both APK keys then become downloads.
+  const APK_URL = '';
+  if (APK_URL) for (const a of document.querySelectorAll('a.apk')) a.href = APK_URL;
+
+  const box = document.getElementById('compare');
+  const range = document.getElementById('compare-range');
+  const set = (pct) => { const v = Math.max(0, Math.min(100, pct)); box.style.setProperty('--pos', v + '%'); range.value = String(Math.round(v)); };
+  const fromPointer = (e) => { const r = box.getBoundingClientRect(); set((e.clientX - r.left) / r.width * 100); };
+  range.addEventListener('input', () => set(Number(range.value)));
+  box.addEventListener('pointerdown', (e) => { box.setPointerCapture(e.pointerId); fromPointer(e); });
+  box.addEventListener('pointermove', (e) => { if (box.hasPointerCapture(e.pointerId)) fromPointer(e); });
+})();
+</script>
+</body>
+</html>
