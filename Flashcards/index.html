@@ -1,0 +1,409 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Flashcards</title>
+<meta name="description" content="Flashcards helps you learn anything – vocabulary, capitals, facts – with piles of colorful cards you write yourself, on iPhone and iPad.">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#F3EEFF">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Flashcards">
+<meta property="og:description" content="Flashcards for anything: write your own colorful piles, train in minutes, sync with iCloud.">
+<meta property="og:url" content="https://christiandeckert.github.io/AppStore/Flashcards/">
+<meta property="og:image" content="https://christiandeckert.github.io/AppStore/Flashcards/img/icon.png">
+<meta name="twitter:card" content="summary">
+<link rel="icon" type="image/png" href="img/favicon.png">
+<link rel="apple-touch-icon" href="img/icon.png">
+<style>
+:root {
+  /* The app's sticker theme (DesignSystem/Theme.swift, Data/PileColor.swift). */
+  --lilac: #F3EEFF;
+  --paper: #FFFFFF;
+  --grape: #6C4DF6;
+  --grape-deep: #5236D6;
+  --ink: #1F1A3D;
+  --ink-soft: #4A4470;
+  --night: #2A2450;
+  --lavender: #D9D2FF;
+  --coral: #FF6B7A;
+  --sunflower: #FFD84D;
+  --mint: #6EE7B0;
+  --bubblegum: #FF9DBB;
+  --sky: #7CCBFF;
+  --blob-a: #E2D8FF;
+  --blob-b: #FFE9A8;
+  --edge: 3px solid var(--ink);
+  --lift: 0 5px 0 var(--ink);
+  --font: ui-rounded, "SF Pro Rounded", -apple-system, BlinkMacSystemFont, system-ui, "Segoe UI", Roboto, sans-serif;
+  --gutter: max(16px, env(safe-area-inset-left, 0px));
+  --gutter-r: max(16px, env(safe-area-inset-right, 0px));
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; color: var(--ink); font: 500 17px/1.5 var(--font);
+  background:
+    radial-gradient(40% 30% at 8% 4%, var(--blob-a), transparent 70%),
+    radial-gradient(36% 26% at 96% 18%, var(--blob-b), transparent 70%),
+    var(--lilac);
+  background-repeat: no-repeat;
+}
+h1, h2, h3, p, figure, ul { margin: 0; }
+h1, h2 { text-wrap: balance; }
+a { color: var(--grape-deep); font-weight: 700; }
+a:focus-visible, button:focus-visible, .strip:focus-visible { outline: 3px solid var(--grape); outline-offset: 4px; border-radius: 14px; }
+img { display: block; max-width: 100%; height: auto; }
+
+.page { max-width: 1120px; margin: 0 auto; padding: 0 var(--gutter-r) 56px var(--gutter); display: grid; gap: 80px; }
+/* Grid tracks default to their content's min width, so the screenshot strip would widen the page. */
+.page, .hero, .intro, .gallery, .features, .ipad { grid-template-columns: minmax(0, 1fr); }
+.sticker-label {
+  justify-self: start; display: inline-block; padding: 5px 12px; border: var(--edge); border-radius: 999px; background: var(--paper);
+  font-size: 13px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; box-shadow: 0 3px 0 var(--ink); transform: rotate(-2deg);
+}
+h2 { font-size: clamp(30px, 4.6vw, 44px); line-height: 1.08; font-weight: 900; letter-spacing: -.015em; }
+.section-head { display: grid; gap: 12px; max-width: 60ch; }
+.section-head p { color: var(--ink-soft); }
+
+/* Hero */
+.hero { display: grid; gap: 40px; align-items: center; padding-top: 48px; }
+@media (min-width: 920px) { .hero { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); padding-top: 72px; } }
+.intro { display: grid; gap: 18px; justify-items: start; }
+.app-icon { width: 96px; height: 96px; border-radius: 22.37%; border: var(--edge); box-shadow: var(--lift); }
+h1 { font-size: clamp(48px, 8vw, 76px); line-height: 1; font-weight: 900; letter-spacing: -.03em; }
+.subtitle { font-size: clamp(21px, 2.6vw, 26px); font-weight: 800; line-height: 1.25; }
+.subtitle mark { background: linear-gradient(transparent 58%, var(--sunflower) 58% 92%, transparent 92%); color: inherit; padding: 0 2px; }
+.promo { color: var(--ink-soft); max-width: 46ch; }
+.cta { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 18px; margin-top: 4px; }
+.store { border-radius: 12px; }
+.store img { height: 50px; width: auto; }
+.meta { font-size: 15px; color: var(--ink-soft); }
+
+/* Training demo */
+.trainer {
+  background: var(--paper); border: var(--edge); border-radius: 32px; box-shadow: 0 8px 0 var(--ink); padding: 22px 20px 24px;
+  display: grid; gap: 18px; max-width: 460px; width: 100%; justify-self: center; position: relative;
+}
+.tbar { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.pile-name { font-weight: 800; font-size: 15px; display: inline-flex; align-items: center; gap: 8px; }
+.pile-name i { width: 14px; height: 14px; border-radius: 4px; background: var(--sunflower); border: 2px solid var(--ink); }
+.pills { display: flex; gap: 8px; }
+.pill { display: inline-flex; align-items: center; gap: 6px; padding: 5px 11px; border: 2px solid var(--ink); border-radius: 999px; font-size: 14px; font-weight: 800; font-variant-numeric: tabular-nums; background: var(--paper); }
+.progress { height: 12px; border-radius: 999px; border: 2px solid var(--ink); background: var(--lilac); overflow: hidden; }
+.progress b { display: block; height: 100%; width: 0; background: var(--mint); border-right: 2px solid var(--ink); transition: width 300ms ease; }
+.progress b[style*="width: 0"] { border-right: 0; }
+.card-wrap { perspective: 1200px; }
+.fcard {
+  position: relative; width: 100%; aspect-ratio: 3 / 2; border: 0; padding: 0; background: none; cursor: pointer; display: block;
+  transform-style: preserve-3d; transition: transform 450ms cubic-bezier(.3, 1.3, .5, 1); color: inherit; font: inherit;
+}
+.fcard.flipped { transform: rotateY(180deg); }
+.face {
+  position: absolute; inset: 0; border: var(--edge); border-radius: 24px; display: grid; place-content: center; gap: 6px; text-align: center; padding: 16px;
+  backface-visibility: hidden; -webkit-backface-visibility: hidden; box-shadow: 0 6px 0 var(--ink);
+}
+.face.front { background: var(--c, var(--sunflower)); }
+.face.back { background: var(--night); color: var(--paper); transform: rotateY(180deg); }
+.face .word { font-size: clamp(28px, 5vw, 40px); font-weight: 900; letter-spacing: -.01em; }
+.face .side { font-size: 12px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; opacity: .7; }
+.face.back .side { color: var(--lavender); opacity: 1; }
+.stack-hint { position: absolute; inset: 10px -8px -10px 8px; border: var(--edge); border-radius: 24px; background: var(--bubblegum); z-index: -1; transform: rotate(3deg); }
+.card-wrap { position: relative; isolation: isolate; }
+#t-run { display: grid; gap: 16px; }
+#t-run[hidden] { display: none; }
+.prompt { margin-top: 10px; text-align: center; color: var(--ink-soft); font-weight: 700; font-size: 15px; min-height: 1.5em; }
+.actions { display: flex; justify-content: center; align-items: flex-end; gap: 22px; }
+.act { display: grid; justify-items: center; gap: 6px; font-weight: 800; font-size: 14px; color: var(--ink); background: none; border: 0; padding: 0; cursor: pointer; font-family: inherit; }
+.act span { display: grid; place-items: center; width: 58px; height: 58px; border-radius: 50%; border: var(--edge); box-shadow: 0 4px 0 var(--ink); transition: transform 120ms; }
+.act:active span { transform: translateY(3px); box-shadow: 0 1px 0 var(--ink); }
+.act svg { width: 26px; height: 26px; }
+.act.again span { background: var(--bubblegum); }
+.act.flip span { width: 74px; height: 74px; background: var(--grape); color: var(--paper); }
+.act.got span { background: var(--mint); }
+.act:disabled { opacity: .4; cursor: default; }
+.act:disabled span { transform: none; }
+.done { display: grid; gap: 16px; justify-items: center; text-align: center; padding: 8px 0 4px; }
+.done[hidden] { display: none; }
+.cleared { font-size: 30px; font-weight: 900; padding: 8px 18px; border: var(--edge); border-radius: 16px; background: var(--mint); box-shadow: 0 5px 0 var(--ink); transform: rotate(-3deg); }
+.stats { display: flex; gap: 10px; }
+.stat { border: var(--edge); border-radius: 14px; padding: 8px 14px; display: grid; background: var(--paper); box-shadow: 0 3px 0 var(--ink); }
+.stat b { font-size: 22px; font-weight: 900; font-variant-numeric: tabular-nums; }
+.stat:nth-child(2) { background: var(--sunflower); }
+.stat small { font-size: 12px; font-weight: 700; color: var(--ink-soft); }
+.again-btn { font: 800 16px/1 var(--font); color: var(--paper); background: var(--ink); border: 0; border-radius: 14px; padding: 14px 18px; cursor: pointer; box-shadow: 0 4px 0 #000; }
+.confetti { position: absolute; inset: 0; pointer-events: none; overflow: hidden; border-radius: 30px; }
+.confetti i { position: absolute; top: -12px; width: 9px; height: 14px; border-radius: 3px; border: 1.5px solid var(--ink); animation: drop 1.6s cubic-bezier(.3, .6, .6, 1) forwards; }
+@keyframes drop { to { transform: translateY(560px) rotate(540deg); opacity: 0; } }
+.trainer-cap { text-align: center; font-size: 14px; color: var(--ink-soft); margin-top: 14px; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* Gallery */
+.gallery { display: grid; gap: 28px; }
+.strip {
+  display: grid; grid-auto-flow: column; grid-auto-columns: minmax(170px, 230px); gap: 18px; padding: 6px 4px 18px;
+  overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; scrollbar-width: thin; scrollbar-color: var(--grape) transparent;
+}
+.strip img { scroll-snap-align: start; border: var(--edge); border-radius: 26px; box-shadow: var(--lift); }
+
+/* Features */
+.features { display: grid; gap: 28px; }
+.cards { display: grid; gap: 22px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr)); }
+.card { background: var(--paper); border: var(--edge); border-radius: 24px; box-shadow: var(--lift); padding: 22px; display: grid; gap: 10px; align-content: start; }
+.card h3 { font-size: 21px; font-weight: 900; line-height: 1.15; display: flex; align-items: center; gap: 10px; }
+.card h3::before { content: ""; flex: none; width: 20px; height: 26px; border-radius: 6px; border: 2.5px solid var(--ink); background: var(--c); transform: rotate(-8deg); }
+.card p { color: var(--ink-soft); font-size: 16px; }
+.card:nth-child(4n + 1) { --c: var(--sunflower); } .card:nth-child(4n + 2) { --c: var(--mint); }
+.card:nth-child(4n + 3) { --c: var(--bubblegum); } .card:nth-child(4n + 4) { --c: var(--sky); }
+.card.new { background: var(--night); color: var(--paper); }
+.card.new p { color: var(--lavender); }
+.card.new h3::before { background: var(--grape); border-color: var(--paper); }
+kbd { font: 800 13px/1 var(--font); padding: 3px 7px; border: 2px solid currentColor; border-radius: 7px; }
+
+/* iPad */
+.ipad { display: grid; gap: 28px; align-items: center; }
+@media (min-width: 880px) { .ipad { grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: 48px; } }
+.ipad img { border: var(--edge); border-radius: 28px; box-shadow: 0 8px 0 var(--ink); }
+
+/* Premium, privacy, footer */
+.premium { display: grid; gap: 14px; padding: 28px; border: var(--edge); border-radius: 28px; background: var(--sunflower); box-shadow: 0 8px 0 var(--ink); }
+.premium p { max-width: 64ch; }
+.privacy { display: grid; gap: 12px; padding: 28px; border: var(--edge); border-radius: 28px; background: var(--paper); box-shadow: var(--lift); }
+.privacy p { color: var(--ink-soft); max-width: 70ch; }
+.foot { display: flex; flex-wrap: wrap; gap: 8px 20px; font-size: 15px; border-top: 3px solid var(--ink); padding-top: 22px; }
+.foot a { color: var(--ink); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .confetti { display: none; }
+}
+</style>
+</head>
+<body>
+<main class="page">
+
+  <header class="hero">
+    <div class="intro">
+      <img class="app-icon" src="img/icon.png" width="96" height="96" alt="">
+      <span class="sticker-label">iPhone · iPad</span>
+      <h1>Flashcards</h1>
+      <p class="subtitle">Flashcards for <mark>anything</mark>.</p>
+      <p class="promo">Learn vocabulary, capitals, facts, anything, with piles of colorful cards you write yourself. Flip, say the answer out loud, and train a pile in minutes.</p>
+      <div class="cta">
+        <a class="store" href="https://apps.apple.com/app/id1380756510"><img src="../badges/app-store.svg" width="150" height="50" alt="Download on the App Store"></a>
+        <span class="meta">Free for 5 piles of 10 cards. Premium is a one-time purchase.<br>Requires iOS or iPadOS 17 or later.</span>
+      </div>
+    </div>
+
+    <figure>
+      <section class="trainer" id="trainer" aria-label="Try a training run">
+        <div class="tbar">
+          <span class="pile-name"><i aria-hidden="true"></i>Animals in German</span>
+          <span class="pills">
+            <span class="pill" title="Time"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M10 2h4"/></svg><span id="t-time">00:00</span></span>
+            <span class="pill" title="Retries"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2.3 5.7M20 4v7h-7"/></svg><span id="t-retries">0 retries</span></span>
+          </span>
+        </div>
+        <div class="progress" aria-hidden="true"><b id="t-progress"></b></div>
+        <div id="t-run">
+          <div class="card-wrap">
+            <div class="stack-hint" aria-hidden="true"></div>
+            <button class="fcard" id="t-card" type="button" aria-describedby="t-prompt">
+              <span class="face front"><span class="side">Front</span><span class="word" id="t-front">the bird</span></span>
+              <span class="face back"><span class="side">Back</span><span class="word" id="t-back">der Vogel</span></span>
+            </button>
+          </div>
+          <p class="prompt" id="t-prompt">Say the answer out loud, then flip.</p>
+          <div class="actions">
+            <button class="act again" id="t-again" type="button" disabled><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2.3 5.7M20 4v7h-7"/></svg></span>Again</button>
+            <button class="act flip" id="t-flip" type="button"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9h14l-4-4M20 15H6l4 4"/></svg></span>Flip</button>
+            <button class="act got" id="t-got" type="button" disabled><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>Got it</button>
+          </div>
+        </div>
+        <div class="done" id="t-done" hidden>
+          <p class="cleared">Pile cleared!</p>
+          <div class="stats">
+            <span class="stat"><b id="d-known">3</b><small>known</small></span>
+            <span class="stat"><b id="d-time">00:00</b><small>time</small></span>
+            <span class="stat"><b id="d-retries">0</b><small>retries</small></span>
+          </div>
+          <button class="again-btn" id="t-restart" type="button">Shuffle and go again</button>
+        </div>
+        <div class="confetti" id="confetti" aria-hidden="true"></div>
+        <p class="sr" aria-live="polite" id="t-live"></p>
+      </section>
+      <figcaption class="trainer-cap">Try it: a little pile of three. Cards you miss come back later in the same run.</figcaption>
+    </figure>
+  </header>
+
+  <section class="gallery" aria-labelledby="gallery-h">
+    <div class="section-head">
+      <span class="sticker-label">On iPhone</span>
+      <h2 id="gallery-h">A closer look</h2>
+    </div>
+    <div class="strip" tabindex="0" aria-label="Screens on iPhone">
+      <img src="img/iphone-home.webp" width="600" height="1304" loading="lazy" decoding="async" alt="Your piles, ready to train: the home screen with the last pile, the bird, under Pick up where you left off.">
+      <img src="img/iphone-training.webp" width="600" height="1304" loading="lazy" decoding="async" alt="Flip, think, remember: a training card reading der Hund, with Again, Flip and Got it.">
+      <img src="img/iphone-editor.webp" width="600" height="1304" loading="lazy" decoding="async" alt="Translations filled in for you: the card editor with language buttons and la flor, auto-translated.">
+      <img src="img/iphone-pile.webp" width="600" height="1304" loading="lazy" decoding="async" alt="Share piles, synced with iCloud: the Animals pile with its cards and Start training.">
+      <img src="img/iphone-newpile.webp" width="600" height="1304" loading="lazy" decoding="async" alt="A pile for anything you want to learn: a new pile called Spanish, with a row of colors.">
+      <img src="img/iphone-done.webp" width="600" height="1304" loading="lazy" decoding="async" alt="Celebrate every cleared pile: Pile cleared, with 10 known, 34 seconds and 1 retry.">
+    </div>
+  </section>
+
+  <section class="features" aria-labelledby="features-h">
+    <div class="section-head">
+      <span class="sticker-label">How it works</span>
+      <h2 id="features-h">Write it, flip it, know it</h2>
+    </div>
+    <div class="cards">
+      <article class="card">
+        <h3>Write your own piles</h3>
+        <p>Start a pile for anything you want to learn and give it a color. Write the front, flip the card, write the back, and tap Save, next card for the next blank one.</p>
+      </article>
+      <article class="card">
+        <h3>Translation built in</h3>
+        <p>Tap a language above the card, for example ES, and the front is translated into the back for you, in thirteen languages. You can always edit the result.</p>
+      </article>
+      <article class="card">
+        <h3>Train in minutes</h3>
+        <p>Flip, then Got it or Again. Missed cards come back in the same run. The swap button shows the backs first, for training in the other direction.</p>
+      </article>
+      <article class="card">
+        <h3>Pick up where you left off</h3>
+        <p>The home screen shows the pile you worked on last. Example piles in your language, such as animals or capitals, get you started right away.</p>
+      </article>
+      <article class="card">
+        <h3>Synced with iCloud</h3>
+        <p>Signed in to iCloud, your piles sync between iPhone and iPad by themselves. The ⋯ menu shows the sync status.</p>
+      </article>
+      <article class="card">
+        <h3>Share a pile</h3>
+        <p>Send a pile via AirDrop, Messages, Mail or Files. Your friends open it and tap Add to my piles to get their own copy.</p>
+      </article>
+      <article class="card new">
+        <h3>New in 2.1</h3>
+        <p>Fix a typo in seconds: hold a card to edit or delete it. While writing, <kbd>Return</kbd> flips the card, and <kbd>Return</kbd> again saves it.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="ipad" aria-labelledby="ipad-h">
+    <div class="section-head">
+      <span class="sticker-label">On iPad</span>
+      <h2 id="ipad-h">Made for iPad</h2>
+      <p>On iPad, your piles and the open pile sit next to each other. In Split View or a small Stage Manager window, Flashcards switches to the same layout as on iPhone.</p>
+    </div>
+    <img src="img/ipad-split.webp" width="900" height="1200" loading="lazy" decoding="async" alt="Your shelf and your pile, side by side on iPad: the pile shelf on the left and the Animals pile on the right.">
+  </section>
+
+  <section class="premium" aria-labelledby="premium-h">
+    <span class="sticker-label">Free and Premium</span>
+    <h2 id="premium-h">Free for 5 piles of 10 cards</h2>
+    <p>Premium is a one-time purchase that unlocks unlimited piles and cards. There is no subscription, and it is shared on all your devices with the same Apple Account. Example piles don't count towards the free limit.</p>
+  </section>
+
+  <section class="privacy" aria-labelledby="privacy-h">
+    <span class="sticker-label">Privacy</span>
+    <h2 id="privacy-h">No account, no analytics, no ads</h2>
+    <p>Your piles stay on your device and in your own iCloud. When you ask for a translation, the text you want translated is sent to Google's translation service. <a href="PRIVACY">Read the privacy policy</a>.</p>
+  </section>
+
+  <footer class="foot">
+    <a href="SUPPORT">Support</a>
+    <a href="PRIVACY">Privacy policy</a>
+    <a href="https://github.com/ChristianDeckert/AppStore">App Store documents</a>
+  </footer>
+</main>
+
+<script>
+(() => {
+  'use strict';
+  const PILE = [
+    { front: 'the bird', back: 'der Vogel', color: 'var(--sunflower)' },
+    { front: 'the dog', back: 'der Hund', color: 'var(--sky)' },
+    { front: 'the cat', back: 'die Katze', color: 'var(--mint)' },
+  ];
+  const $ = (id) => document.getElementById(id);
+  const card = $('t-card'), flipBtn = $('t-flip'), again = $('t-again'), got = $('t-got');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)');
+  let queue, known, retries, flipped, startedAt, timer;
+
+  const mmss = (ms) => { const s = Math.floor(ms / 1000); return String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0'); };
+  const elapsed = () => (startedAt ? performance.now() - startedAt : 0);
+  const say = (text) => { $('t-live').textContent = text; };
+
+  function shuffle(list) { const a = list.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+
+  function show() {
+    const c = queue[0];
+    flipped = false;
+    card.classList.remove('flipped');
+    card.querySelector('.front').style.setProperty('--c', c.color);
+    $('t-front').textContent = c.front;
+    $('t-back').textContent = c.back;
+    card.setAttribute('aria-label', 'Card: ' + c.front + '. Press to flip.');
+    again.disabled = got.disabled = true;
+    $('t-prompt').textContent = 'Say the answer out loud, then flip.';
+    $('t-progress').style.width = (known / PILE.length * 100) + '%';
+    $('t-retries').textContent = retries + (retries === 1 ? ' retry' : ' retries');
+  }
+
+  function flip() {
+    if (!startedAt) { startedAt = performance.now(); timer = setInterval(() => { $('t-time').textContent = mmss(elapsed()); }, 250); }
+    flipped = !flipped;
+    card.classList.toggle('flipped', flipped);
+    const c = queue[0];
+    card.setAttribute('aria-label', flipped ? 'Back: ' + c.back + '. Press to flip back.' : 'Card: ' + c.front + '. Press to flip.');
+    again.disabled = got.disabled = !flipped;
+    $('t-prompt').textContent = flipped ? 'Did you know it?' : 'Say the answer out loud, then flip.';
+    say(flipped ? 'Back: ' + c.back : 'Front: ' + c.front);
+  }
+
+  function answer(knewIt) {
+    const c = queue.shift();
+    if (knewIt) known++; else { retries++; queue.push(c); }
+    if (queue.length) { show(); say('Next card: ' + queue[0].front); return; }
+    finish();
+  }
+
+  function finish() {
+    clearInterval(timer);
+    const t = mmss(elapsed());
+    $('t-progress').style.width = '100%';
+    $('t-run').hidden = true;
+    $('t-done').hidden = false;
+    $('d-known').textContent = known; $('d-time').textContent = t; $('d-retries').textContent = retries;
+    say('Pile cleared! ' + known + ' known in ' + t + ', ' + retries + (retries === 1 ? ' retry.' : ' retries.'));
+    $('t-restart').focus();
+    if (!reduce.matches) {
+      const box = $('confetti'), colors = ['#FFD84D', '#6EE7B0', '#FF9DBB', '#7CCBFF', '#6C4DF6'];
+      box.replaceChildren();
+      for (let i = 0; i < 28; i++) {
+        const p = document.createElement('i');
+        p.style.left = (Math.random() * 96 + 2) + '%';
+        p.style.background = colors[i % colors.length];
+        p.style.animationDelay = (Math.random() * .4) + 's';
+        box.append(p);
+      }
+    }
+  }
+
+  function start() {
+    queue = shuffle(PILE); known = 0; retries = 0; startedAt = 0; clearInterval(timer);
+    $('t-time').textContent = '00:00';
+    $('t-run').hidden = false; $('t-done').hidden = true; $('confetti').replaceChildren();
+    show();
+  }
+
+  card.addEventListener('click', flip);
+  flipBtn.addEventListener('click', flip);
+  again.addEventListener('click', () => answer(false));
+  got.addEventListener('click', () => answer(true));
+  $('t-restart').addEventListener('click', () => { start(); card.focus(); });
+  queue = PILE.slice(); known = 0; retries = 0;
+  show();
+})();
+</script>
+</body>
+</html>
