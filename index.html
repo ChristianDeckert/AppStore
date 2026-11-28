@@ -76,9 +76,16 @@ html { scroll-behavior: smooth; }
 .jump .to-plugins { background: #17151F; color: #ECEAF4; box-shadow: 0 0 0 1px rgba(255, 255, 255, .12); }
 .jump .to-plugins b { background: #C9B8FF; color: #17151F; }
 
+/* Top row: name and the language switch */
+.topbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-top: max(20px, env(safe-area-inset-top, 0px)); }
+.lang-switch { display: inline-flex; padding: 3px; border-radius: 999px; background: var(--card); box-shadow: 0 0 0 1px var(--line); }
+.lang-switch a { padding: 6px 11px; border-radius: 999px; font: 700 12px/1 var(--font); letter-spacing: .08em; text-decoration: none; color: var(--muted); }
+.lang-switch a:hover { color: var(--ink); }
+.lang-switch a[aria-current] { background: var(--ink); color: var(--bg); }
+
 /* Hero */
-.hero { display: grid; grid-template-columns: minmax(0, 1fr); gap: 36px; align-items: center; padding-top: 64px; }
-@media (min-width: 900px) { .hero { grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); padding-top: 96px; } }
+.hero { display: grid; grid-template-columns: minmax(0, 1fr); gap: 36px; align-items: center; padding-top: 24px; }
+@media (min-width: 900px) { .hero { grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); padding-top: 48px; } }
 .intro { display: grid; gap: 18px; }
 .eyebrow { font-size: 13px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
 h1 { font-size: clamp(40px, 6.6vw, 72px); line-height: 1.02; font-weight: 800; letter-spacing: -.035em; }
@@ -252,14 +259,18 @@ a.status:hover { filter: brightness(1.08); }
 <main>
 <div class="page">
 
+  <div class="topbar">
+    <span class="eyebrow">Christian Deckert</span>
+    <nav class="lang-switch" aria-label="Language" data-i18n-aria="lang.label"><a href="?lang=de" hreflang="de" lang="de" title="Deutsch">DE</a><a href="?lang=en" hreflang="en" lang="en" title="English">EN</a></nav>
+  </div>
+
   <header class="hero">
     <div class="intro">
-      <span class="eyebrow">Christian Deckert</span>
-      <h1>Apps for Apple devices, plugins for herdr.</h1>
-      <p class="lead">Six small apps for iPhone, iPad, Apple TV and Mac, each with a look of its own, and two open-source plugins for the coding-agent app herdr.</p>
-      <nav class="jump" aria-label="On this page">
-        <a class="to-apps" href="#apps"><b>6</b>Apps<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg></a>
-        <a class="to-plugins" href="#plugins"><b>2</b>Plugins for herdr<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg></a>
+      <h1 data-i18n="h1">Apps for Apple devices, plugins for herdr.</h1>
+      <p class="lead" data-i18n="lead">Six small apps for iPhone, iPad, Apple TV and Mac, each with a look of its own, and two open-source plugins for the coding-agent app herdr.</p>
+      <nav class="jump" aria-label="On this page" data-i18n-aria="jump.label">
+        <a class="to-apps" href="#apps"><b>6</b><span data-i18n="jump.apps">Apps</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg></a>
+        <a class="to-plugins" href="#plugins"><b>2</b><span data-i18n="jump.plugins">Plugins for herdr</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg></a>
       </nav>
     </div>
     <div class="shelf" id="shelf" aria-hidden="true">
@@ -274,11 +285,11 @@ a.status:hover { filter: brightness(1.08); }
 
   <section class="zone" id="apps" aria-labelledby="apps-h">
     <div class="zone-head">
-      <h2 class="zone-title" id="apps-h">Apps <span class="count" aria-label="6 apps">6</span></h2>
+      <h2 class="zone-title" id="apps-h">Apps <span class="count" aria-label="6 apps" data-i18n-aria="apps.count">6</span></h2>
       <div class="zone-sub">
-        <span>For iPhone, iPad, Apple TV and Mac.</span>
-        <ul class="promises" aria-label="In every app">
-          <li>No accounts</li><li>No ads</li><li>No analytics</li>
+        <span data-i18n="apps.sub">For iPhone, iPad, Apple TV and Mac.</span>
+        <ul class="promises" aria-label="In every app" data-i18n-aria="promises.label">
+          <li data-i18n="promise.accounts">No accounts</li><li data-i18n="promise.ads">No ads</li><li data-i18n="promise.analytics">No analytics</li>
         </ul>
       </div>
     </div>
@@ -293,11 +304,11 @@ a.status:hover { filter: brightness(1.08); }
         </svg>
         <img class="icon" src="AnalogClock/img/icon-192.webp" width="72" height="72" alt="">
         <h2><a class="go" href="AnalogClock/">Analog Clock</a></h2>
-        <p class="sub">A beautiful clock for the desk, the bedside table or the kitchen shelf, with the weather on the dial.</p>
+        <p class="sub" data-i18n="tile.clock">A beautiful clock for the desk, the bedside table or the kitchen shelf, with the weather on the dial.</p>
         <p class="plat">iPhone · iPad · Apple TV</p>
         <div class="row">
-          <a class="status" href="https://apps.apple.com/app/id957157160"><i></i>On the App Store</a>
-          <span class="docs"><a href="AnalogClock/SUPPORT">Support</a> · <a href="AnalogClock/PRIVACY">Privacy</a></span>
+          <a class="status" href="https://apps.apple.com/app/id957157160"><i></i><span data-i18n="status.live">On the App Store</span></a>
+          <span class="docs"><a href="AnalogClock/SUPPORT" hreflang="en" data-i18n="docs.support">Support</a> · <a href="AnalogClock/PRIVACY" hreflang="en" data-i18n="docs.privacy">Privacy</a></span>
         </div>
       </li>
 
@@ -305,11 +316,11 @@ a.status:hover { filter: brightness(1.08); }
         <div class="art" aria-hidden="true"><b></b><b></b><b></b></div>
         <img class="icon" src="Flashcards/img/icon-192.webp" width="72" height="72" alt="">
         <h2><a class="go" href="Flashcards/">Flashcards</a></h2>
-        <p class="sub">Flashcards for anything: write your own colorful piles, flip, and train a pile in minutes.</p>
+        <p class="sub" data-i18n="tile.flash">Flashcards for anything: write your own colorful piles, flip, and train a pile in minutes.</p>
         <p class="plat">iPhone · iPad</p>
         <div class="row">
-          <a class="status" href="https://apps.apple.com/app/id1380756510"><i></i>On the App Store</a>
-          <span class="docs"><a href="Flashcards/SUPPORT">Support</a> · <a href="Flashcards/PRIVACY">Privacy</a></span>
+          <a class="status" href="https://apps.apple.com/app/id1380756510"><i></i><span data-i18n="status.live">On the App Store</span></a>
+          <span class="docs"><a href="Flashcards/SUPPORT" hreflang="en" data-i18n="docs.support">Support</a> · <a href="Flashcards/PRIVACY" hreflang="en" data-i18n="docs.privacy">Privacy</a></span>
         </div>
       </li>
 
@@ -317,11 +328,11 @@ a.status:hover { filter: brightness(1.08); }
         <div class="art" aria-hidden="true"></div>
         <img class="icon" src="MyMusic/img/icon-192.webp" width="72" height="72" alt="">
         <h2><a class="go" href="MyMusic/">My Music</a></h2>
-        <p class="sub">Your files, your folders. A player for the music you own, coloured by every cover.</p>
+        <p class="sub" data-i18n="tile.music">Your files, your folders. A player for the music you own, coloured by every cover.</p>
         <p class="plat">iPhone · iPad</p>
         <div class="row">
-          <a class="status" href="https://apps.apple.com/app/id1027516877"><i></i>On the App Store</a>
-          <span class="docs"><a href="MyMusic/SUPPORT">Support</a> · <a href="MyMusic/PRIVACY">Privacy</a></span>
+          <a class="status" href="https://apps.apple.com/app/id1027516877"><i></i><span data-i18n="status.live">On the App Store</span></a>
+          <span class="docs"><a href="MyMusic/SUPPORT" hreflang="en" data-i18n="docs.support">Support</a> · <a href="MyMusic/PRIVACY" hreflang="en" data-i18n="docs.privacy">Privacy</a></span>
         </div>
       </li>
 
@@ -329,11 +340,11 @@ a.status:hover { filter: brightness(1.08); }
         <span class="art" aria-hidden="true">GIF</span>
         <img class="icon" src="QuickGif/img/icon-192.webp" width="72" height="72" alt="">
         <h2><a class="go" href="QuickGif/">Quick Gif</a></h2>
-        <p class="sub">Drop a video, get a GIF. A menu-bar converter that opens from a screen corner and stays out of your way.</p>
+        <p class="sub" data-i18n="tile.gif">Drop a video, get a GIF. A menu-bar converter that opens from a screen corner and stays out of your way.</p>
         <p class="plat">Mac</p>
         <div class="row">
-          <span class="status"><i></i>Coming soon</span>
-          <span class="docs"><a href="QuickGif/SUPPORT">Support</a> · <a href="QuickGif/PRIVACY">Privacy</a></span>
+          <span class="status"><i></i><span data-i18n="status.soon">Coming soon</span></span>
+          <span class="docs"><a href="QuickGif/SUPPORT" hreflang="en" data-i18n="docs.support">Support</a> · <a href="QuickGif/PRIVACY" hreflang="en" data-i18n="docs.privacy">Privacy</a></span>
         </div>
       </li>
 
@@ -342,11 +353,11 @@ a.status:hover { filter: brightness(1.08); }
         <div class="art grid" aria-hidden="true"></div>
         <img class="icon" src="Avoid/img/icon-192.webp" width="72" height="72" alt="">
         <h2><a class="go" href="Avoid/">Avoid</a></h2>
-        <p class="sub">One tap. Two walls. Endless blocks. A fast synthwave arcade game about survival.</p>
+        <p class="sub" data-i18n="tile.avoid">One tap. Two walls. Endless blocks. A fast synthwave arcade game about survival.</p>
         <p class="plat">iPhone · iPad</p>
         <div class="row">
-          <span class="status"><i></i>Coming soon</span>
-          <span class="docs"><a href="Avoid/SUPPORT">Support</a> · <a href="Avoid/PRIVACY">Privacy</a></span>
+          <span class="status"><i></i><span data-i18n="status.soon">Coming soon</span></span>
+          <span class="docs"><a href="Avoid/SUPPORT" hreflang="en" data-i18n="docs.support">Support</a> · <a href="Avoid/PRIVACY" hreflang="en" data-i18n="docs.privacy">Privacy</a></span>
         </div>
       </li>
 
@@ -355,11 +366,11 @@ a.status:hover { filter: brightness(1.08); }
         <div class="art tv" aria-hidden="true"></div>
         <img class="icon" src="CRTCam/img/icon-192.webp" width="72" height="72" alt="">
         <h2><a class="go" href="CRTCam/">CRT Retro Cam</a></h2>
-        <p class="sub">Flicker-free CRT TV photos: the shutter syncs to the screen's refresh rate, so no dark bands.</p>
-        <p class="plat">iPhone · Android preview</p>
+        <p class="sub" data-i18n="tile.crt">Flicker-free CRT TV photos: the shutter syncs to the screen's refresh rate, so no dark bands.</p>
+        <p class="plat" data-i18n="plat.crt">iPhone · Android preview</p>
         <div class="row">
-          <a class="status" href="https://testflight.apple.com/join/Wc9429HK"><i></i>Beta on TestFlight</a>
-          <span class="docs"><a href="CRTCam/SUPPORT">Support</a> · <a href="CRTCam/PRIVACY">Privacy</a></span>
+          <a class="status" href="https://testflight.apple.com/join/Wc9429HK"><i></i><span data-i18n="status.beta">Beta on TestFlight</span></a>
+          <span class="docs"><a href="CRTCam/SUPPORT" hreflang="en" data-i18n="docs.support">Support</a> · <a href="CRTCam/PRIVACY" hreflang="en" data-i18n="docs.privacy">Privacy</a></span>
         </div>
       </li>
     </ul>
@@ -369,69 +380,126 @@ a.status:hover { filter: brightness(1.08); }
 <section class="band" id="plugins" aria-labelledby="oss-h">
   <div class="oss">
     <div class="head">
-      <span class="eyebrow">Open source</span>
-      <h2 class="zone-title" id="oss-h">Plugins for herdr <span class="count" aria-label="2 plugins">2</span></h2>
-      <p><a href="https://herdr.dev">herdr</a> is a native app for running coding agents. These two plugins add panels to it. Both are written in zsh, so there is nothing to compile, and the source is on GitHub.</p>
+      <span class="eyebrow" data-i18n="oss.eyebrow">Open source</span>
+      <h2 class="zone-title" id="oss-h"><span data-i18n="oss.h2">Plugins for herdr</span> <span class="count" aria-label="2 plugins" data-i18n-aria="oss.count">2</span></h2>
+      <p data-i18n="oss.intro"><a href="https://herdr.dev">herdr</a> is a native app for running coding agents. These two plugins add panels to it. Both are written in zsh, so there is nothing to compile, and the source is on GitHub.</p>
     </div>
 
     <article class="plugin wide">
       <div class="text">
         <div class="col">
           <h3>Jira Light<code>herdr-jira-light</code></h3>
-          <p>A lightweight Jira pane. Its filters follow the working directory of the tab it sits in: each project gets its own boards and sprints, and switching tabs or directories switches the list.</p>
+          <p data-i18n="jira.p">A lightweight Jira pane. Its filters follow the working directory of the tab it sits in: each project gets its own boards and sprints, and switching tabs or directories switches the list.</p>
           <ul>
-            <li><kbd>b</kbd> browses projects, boards, sprints and the backlog; <kbd>p</kbd> pins what you picked to a directory.</li>
-            <li>Issue details with every field, the description rendered, and sub-tasks, links and comments you can follow.</li>
-            <li><kbd>t</kbd> moves an issue, <kbd>A</kbd> assigns it to you, <kbd>w</kbd> logs work. It changes Jira only when you ask.</li>
-            <li>Works with Jira Server, Data Center and Jira Cloud.</li>
+            <li data-i18n="jira.li1"><kbd>b</kbd> browses projects, boards, sprints and the backlog; <kbd>p</kbd> pins what you picked to a directory.</li>
+            <li data-i18n="jira.li2">Issue details with every field, the description rendered, and sub-tasks, links and comments you can follow.</li>
+            <li data-i18n="jira.li3"><kbd>t</kbd> moves an issue, <kbd>A</kbd> assigns it to you, <kbd>w</kbd> logs work. It changes Jira only when you ask.</li>
+            <li data-i18n="jira.li4">Works with Jira Server, Data Center and Jira Cloud.</li>
           </ul>
         </div>
         <div class="col">
-          <div class="install"><code>curl -fsSL https://raw.githubusercontent.com/ChristianDeckert/herdr-jira-light/main/install.sh | sh</code><button type="button" class="copy">Copy</button></div>
-          <p class="needs">Needs herdr 0.9.4 or later, zsh, curl and jq on macOS or Linux. MIT license.</p>
+          <div class="install"><code>curl -fsSL https://raw.githubusercontent.com/ChristianDeckert/herdr-jira-light/main/install.sh | sh</code><button type="button" class="copy" data-i18n="copy">Copy</button></div>
+          <p class="needs" data-i18n="jira.needs">Needs herdr 0.9.4 or later, zsh, curl and jq on macOS or Linux. MIT license.</p>
           <div class="links">
-            <a class="gh" href="https://github.com/ChristianDeckert/herdr-jira-light"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0a8 8 0 0 0-2.53 15.59c.4.07.55-.17.55-.38v-1.33c-2.23.48-2.7-1.07-2.7-1.07-.36-.92-.89-1.17-.89-1.17-.73-.5.06-.49.06-.49.8.06 1.23.83 1.23.83.72 1.22 1.88.87 2.33.66.07-.52.28-.87.5-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.28.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.2c0 .21.15.46.55.38A8 8 0 0 0 8 0Z"/></svg>View on GitHub</a>
-            <ul class="tags" aria-label="Built with"><li>zsh</li><li>curl</li><li>jq</li></ul>
+            <a class="gh" href="https://github.com/ChristianDeckert/herdr-jira-light"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0a8 8 0 0 0-2.53 15.59c.4.07.55-.17.55-.38v-1.33c-2.23.48-2.7-1.07-2.7-1.07-.36-.92-.89-1.17-.89-1.17-.73-.5.06-.49.06-.49.8.06 1.23.83 1.23.83.72 1.22 1.88.87 2.33.66.07-.52.28-.87.5-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.28.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.2c0 .21.15.46.55.38A8 8 0 0 0 8 0Z"/></svg><span data-i18n="gh">View on GitHub</span></a>
+            <ul class="tags" aria-label="Built with" data-i18n-aria="tags.label"><li>zsh</li><li>curl</li><li>jq</li></ul>
           </div>
         </div>
       </div>
-      <div class="shot"><img src="plugins/jira-light.webp" width="1600" height="645" loading="lazy" decoding="async" alt="Jira Light in herdr: a directory's active sprint with issues in progress, blocked, in review and done on the left, and an issue's details with dates, time tracking and its description on the right."></div>
+      <div class="shot"><img src="plugins/jira-light.webp" width="1600" height="645" loading="lazy" decoding="async" data-i18n-alt="jira.alt" alt="Jira Light in herdr: a directory's active sprint with issues in progress, blocked, in review and done on the left, and an issue's details with dates, time tracking and its description on the right."></div>
     </article>
 
     <article class="plugin flip">
       <div class="text">
         <h3>Cheat sheet<code>herdr-cheatsheet</code></h3>
-        <p>A clickable cheat-sheet panel. It docks on the right of your tabs, follows whatever you're working on, and puts the keys and commands you need one click away.</p>
+        <p data-i18n="cheat.p">A clickable cheat-sheet panel. It docks on the right of your tabs, follows whatever you're working on, and puts the keys and commands you need one click away.</p>
         <ul>
-          <li>Click a row to run it: just recipes, herdr actions, your own bindings, or jump to an agent.</li>
-          <li>The keys of the app running in the tab, from vim and lazygit to Claude Code and 18 more, sent with a click.</li>
-          <li>Fuzzy search for the project's files, opened in a new tab.</li>
-          <li>Ready-made commands for ffmpeg, compression, devtools and package managers, typed at your prompt.</li>
+          <li data-i18n="cheat.li1">Click a row to run it: just recipes, herdr actions, your own bindings, or jump to an agent.</li>
+          <li data-i18n="cheat.li2">The keys of the app running in the tab, from vim and lazygit to Claude Code and 18 more, sent with a click.</li>
+          <li data-i18n="cheat.li3">Fuzzy search for the project's files, opened in a new tab.</li>
+          <li data-i18n="cheat.li4">Ready-made commands for ffmpeg, compression, devtools and package managers, typed at your prompt.</li>
         </ul>
-        <div class="install"><code>curl -fsSL https://raw.githubusercontent.com/ChristianDeckert/herdr-cheatsheet/main/install.sh | sh</code><button type="button" class="copy">Copy</button></div>
-        <p class="needs">Needs herdr 0.9.4 or later, zsh and jq on macOS or Linux; just, fzf and rg are optional. MIT license.</p>
+        <div class="install"><code>curl -fsSL https://raw.githubusercontent.com/ChristianDeckert/herdr-cheatsheet/main/install.sh | sh</code><button type="button" class="copy" data-i18n="copy">Copy</button></div>
+        <p class="needs" data-i18n="cheat.needs">Needs herdr 0.9.4 or later, zsh and jq on macOS or Linux; just, fzf and rg are optional. MIT license.</p>
         <div class="links">
-          <a class="gh" href="https://github.com/ChristianDeckert/herdr-cheatsheet"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0a8 8 0 0 0-2.53 15.59c.4.07.55-.17.55-.38v-1.33c-2.23.48-2.7-1.07-2.7-1.07-.36-.92-.89-1.17-.89-1.17-.73-.5.06-.49.06-.49.8.06 1.23.83 1.23.83.72 1.22 1.88.87 2.33.66.07-.52.28-.87.5-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.28.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.2c0 .21.15.46.55.38A8 8 0 0 0 8 0Z"/></svg>View on GitHub</a>
-          <ul class="tags" aria-label="Built with"><li>zsh</li><li>jq</li><li>fzf</li></ul>
+          <a class="gh" href="https://github.com/ChristianDeckert/herdr-cheatsheet"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0a8 8 0 0 0-2.53 15.59c.4.07.55-.17.55-.38v-1.33c-2.23.48-2.7-1.07-2.7-1.07-.36-.92-.89-1.17-.89-1.17-.73-.5.06-.49.06-.49.8.06 1.23.83 1.23.83.72 1.22 1.88.87 2.33.66.07-.52.28-.87.5-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.28.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.2c0 .21.15.46.55.38A8 8 0 0 0 8 0Z"/></svg><span data-i18n="gh">View on GitHub</span></a>
+          <ul class="tags" aria-label="Built with" data-i18n-aria="tags.label"><li>zsh</li><li>jq</li><li>fzf</li></ul>
         </div>
       </div>
-      <div class="shot"><img src="plugins/cheatsheet.webp" width="640" height="972" loading="lazy" decoding="async" alt="The cheat-sheet panel: the CHEATSHEET logo, a file search field, the agents with their status, and herdr's keys for tabs and panes."></div>
+      <div class="shot"><img src="plugins/cheatsheet.webp" width="640" height="972" loading="lazy" decoding="async" data-i18n-alt="cheat.alt" alt="The cheat-sheet panel: the CHEATSHEET logo, a file search field, the agents with their status, and herdr's keys for tabs and panes."></div>
     </article>
   </div>
 </section>
 
 <div class="page tail">
   <section class="contact" aria-labelledby="contact-h">
-    <h2 id="contact-h">Questions, bugs or ideas?</h2>
-    <p>Write to <a href="mailto:deckert.christian@icloud.com">deckert.christian@icloud.com</a>, or open an issue at <a href="https://github.com/ChristianDeckert/AppStore/issues">github.com/ChristianDeckert/AppStore</a> with your device and system version.</p>
+    <h2 id="contact-h" data-i18n="contact.h2">Questions, bugs or ideas?</h2>
+    <p data-i18n="contact.p">Write to <a href="mailto:deckert.christian@icloud.com">deckert.christian@icloud.com</a>, or open an issue at <a href="https://github.com/ChristianDeckert/AppStore/issues">github.com/ChristianDeckert/AppStore</a> with your device and system version.</p>
   </section>
 
   <footer class="foot">
-    <a href="https://github.com/ChristianDeckert/AppStore">App Store documents on GitHub</a>
+    <a href="https://github.com/ChristianDeckert/AppStore" data-i18n="foot.repo">App Store documents on GitHub</a>
     <span class="legal">© 2026 Christian Deckert · <a href="mailto:deckert.christian@icloud.com">deckert.christian@icloud.com</a></span>
   </footer>
 </div>
 </main>
+<script type="application/json" id="strings-de">
+{
+  "title": "Apps von Christian Deckert",
+  "description": "Analog Clock, Avoid, CRT Retro Cam, Flashcards, My Music und Quick Gif: sechs Apps für iPhone, iPad, Apple TV und Mac von Christian Deckert, dazu Open-Source-Plugins für herdr. Kein Konto, keine Werbung, keine Analyse.",
+  "lang.label": "Sprache",
+  "h1": "Apps für Apple-Geräte, Plugins für herdr.",
+  "lead": "Sechs kleine Apps für iPhone, iPad, Apple TV und Mac, jede mit eigenem Look, dazu zwei Open-Source-Plugins für herdr, die App für Coding-Agents.",
+  "jump.label": "Auf dieser Seite",
+  "jump.apps": "Apps",
+  "jump.plugins": "Plugins für herdr",
+  "apps.count": "6 Apps",
+  "apps.sub": "Für iPhone, iPad, Apple TV und Mac.",
+  "promises.label": "In jeder App",
+  "promise.accounts": "Kein Konto",
+  "promise.ads": "Keine Werbung",
+  "promise.analytics": "Keine Analyse",
+  "tile.clock": "Eine schöne Uhr für den Schreibtisch, den Nachttisch oder das Küchenregal, mit dem Wetter auf dem Zifferblatt.",
+  "tile.flash": "Karteikarten für alles: Schreib eigene bunte Stapel, dreh die Karten um und lern einen Stapel in wenigen Minuten.",
+  "tile.music": "Deine Dateien, deine Ordner. Ein Player für die Musik, die dir gehört, in den Farben jedes Covers.",
+  "tile.gif": "Video rein, GIF raus. Ein Konverter in der Menüleiste, der sich aus einer Bildschirmecke öffnet und dir nicht im Weg steht.",
+  "tile.avoid": "Ein Tipp. Zwei Wände. Endlos Blöcke. Ein schnelles Synthwave-Arcade-Spiel ums Überleben.",
+  "tile.crt": "Röhrenfernseher ohne Flimmern: Der Verschluss läuft synchron zur Bildwiederholrate, also keine dunklen Balken.",
+  "plat.crt": "iPhone · Android-Vorschau",
+  "status.live": "Im App Store",
+  "status.soon": "Demnächst",
+  "status.beta": "Beta auf TestFlight",
+  "docs.support": "Support (EN)",
+  "docs.privacy": "Datenschutz (EN)",
+  "oss.eyebrow": "Open Source",
+  "oss.h2": "Plugins für herdr",
+  "oss.count": "2 Plugins",
+  "oss.intro": "<a href='https://herdr.dev'>herdr</a> ist eine native App, in der Coding-Agents laufen. Diese zwei Plugins fügen ihr Panels hinzu. Beide sind in zsh geschrieben, es gibt also nichts zu kompilieren, und der Quellcode liegt auf GitHub.",
+  "jira.p": "Ein schlanker Jira-Bereich. Seine Filter folgen dem Arbeitsverzeichnis des Tabs, in dem er sitzt: Jedes Projekt bekommt eigene Boards und Sprints, und mit dem Tab oder Verzeichnis wechselt auch die Liste.",
+  "jira.li1": "<kbd>b</kbd> durchsucht Projekte, Boards, Sprints und das Backlog; <kbd>p</kbd> heftet die Auswahl an ein Verzeichnis.",
+  "jira.li2": "Vorgänge mit jedem Feld, gerenderter Beschreibung sowie Unteraufgaben, Links und Kommentaren, denen du folgen kannst.",
+  "jira.li3": "<kbd>t</kbd> verschiebt einen Vorgang, <kbd>A</kbd> weist ihn dir zu, <kbd>w</kbd> bucht Arbeitszeit. Jira ändert sich nur, wenn du es willst.",
+  "jira.li4": "Funktioniert mit Jira Server, Data Center und Jira Cloud.",
+  "copy": "Kopieren",
+  "copied": "Kopiert",
+  "copy.selected": "Markiert, jetzt kopieren",
+  "jira.needs": "Braucht herdr 0.9.4 oder neuer, zsh, curl und jq unter macOS oder Linux. MIT-Lizenz.",
+  "gh": "Auf GitHub ansehen",
+  "tags.label": "Gebaut mit",
+  "jira.alt": "Jira Light in herdr: links der aktive Sprint eines Verzeichnisses mit Vorgängen in Arbeit, blockiert, im Review und erledigt, rechts die Details eines Vorgangs mit Daten, Zeiterfassung und Beschreibung.",
+  "cheat.p": "Ein klickbarer Spickzettel als Seitenleiste. Er dockt rechts an deine Tabs an, folgt dem, woran du gerade arbeitest, und hält die Tasten und Befehle, die du brauchst, einen Klick entfernt bereit.",
+  "cheat.li1": "Ein Klick führt eine Zeile aus: just-Rezepte, herdr-Aktionen, deine eigenen Tastenbelegungen, oder er springt zu einem Agent.",
+  "cheat.li2": "Die Tasten der App, die im Tab läuft, von vim und lazygit bis Claude Code und 18 weiteren, per Klick gesendet.",
+  "cheat.li3": "Fuzzy-Suche in den Dateien des Projekts, geöffnet in einem neuen Tab.",
+  "cheat.li4": "Fertige Befehle für ffmpeg, Komprimierung, Entwicklerwerkzeuge und Paketmanager, direkt an deinen Prompt getippt.",
+  "cheat.needs": "Braucht herdr 0.9.4 oder neuer, zsh und jq unter macOS oder Linux; just, fzf und rg sind optional. MIT-Lizenz.",
+  "cheat.alt": "Der Spickzettel: das CHEATSHEET-Logo, ein Suchfeld für Dateien, die Agents mit ihrem Status und die herdr-Tasten für Tabs und Bereiche.",
+  "contact.h2": "Fragen, Fehler oder Ideen?",
+  "contact.p": "Schreib an <a href='mailto:deckert.christian@icloud.com'>deckert.christian@icloud.com</a> oder eröffne ein Issue auf <a href='https://github.com/ChristianDeckert/AppStore/issues'>github.com/ChristianDeckert/AppStore</a>, mit deinem Gerät und der Systemversion.",
+  "foot.repo": "App-Store-Dokumente auf GitHub"
+}
+</script>
+<script src="i18n.js"></script>
 <script>
 (() => {
   'use strict';
@@ -484,13 +552,13 @@ a.status:hover { filter: brightness(1.08); }
     btn.addEventListener('click', async () => {
       try {
         await navigator.clipboard.writeText(code.textContent);
-        btn.textContent = 'Copied';
+        btn.textContent = I18N.t('copied', 'Copied');
       } catch (err) {
         console.error('Copying the install command failed', err);
         getSelection().selectAllChildren(code);
-        btn.textContent = 'Selected, copy it';
+        btn.textContent = I18N.t('copy.selected', 'Selected, copy it');
       }
-      setTimeout(() => { btn.textContent = 'Copy'; }, 2000);
+      setTimeout(() => { btn.textContent = I18N.t('copy', 'Copy'); }, 2000);
     });
   }
 })();
