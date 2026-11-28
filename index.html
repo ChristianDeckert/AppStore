@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Apps by Christian Deckert</title>
-<meta name="description" content="Analog Clock, Avoid, CRT Retro Cam, Flashcards, My Music and Quick Gif: six apps for iPhone, iPad, Apple TV and Mac by Christian Deckert. No accounts, no ads, no analytics.">
+<meta name="description" content="Analog Clock, Avoid, CRT Retro Cam, Flashcards, My Music and Quick Gif: six apps for iPhone, iPad, Apple TV and Mac by Christian Deckert, plus open-source plugins for herdr. No accounts, no ads, no analytics.">
 <meta name="color-scheme" content="light dark">
 <meta name="theme-color" content="#F5F4F0" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0F0F12" media="(prefers-color-scheme: dark)">
@@ -54,7 +54,27 @@ a { color: inherit; }
 a:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; border-radius: 8px; }
 img { display: block; }
 
+html { scroll-behavior: smooth; }
 .page { max-width: 1160px; margin: 0 auto; padding: 0 var(--gutter-r) 48px var(--gutter); display: grid; grid-template-columns: minmax(0, 1fr); gap: 64px; }
+.page.tail { padding-top: 72px; }
+[id="apps"], [id="plugins"] { scroll-margin-top: 24px; }
+
+/* Each zone opens with its name, a count and a rule running to the edge. */
+.zone { display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px; }
+.zone-head { display: grid; gap: 12px; }
+.zone-title { display: flex; align-items: center; gap: 14px; margin: 0; font-size: clamp(32px, 5vw, 48px); line-height: 1.05; font-weight: 800; letter-spacing: -.03em; }
+.zone-title::after { content: ""; flex: 1; height: 2px; border-radius: 2px; background: var(--line); }
+.zone-title .count { flex: none; font: 700 15px/1 var(--font); letter-spacing: 0; padding: 7px 11px; border-radius: 999px; background: var(--ink); color: var(--bg); }
+.zone-sub { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; color: var(--muted); }
+
+.jump { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 6px; }
+.jump a { display: inline-flex; align-items: center; gap: 10px; padding: 10px 16px 10px 10px; border-radius: 999px; text-decoration: none; font-weight: 650; font-size: 15px; }
+.jump a b { display: grid; place-items: center; min-width: 26px; height: 26px; border-radius: 999px; font-size: 13px; }
+.jump a svg { width: 14px; height: 14px; opacity: .7; }
+.jump .to-apps { background: var(--card); color: var(--ink); box-shadow: 0 0 0 1px var(--line); }
+.jump .to-apps b { background: var(--ink); color: var(--bg); }
+.jump .to-plugins { background: #17151F; color: #ECEAF4; box-shadow: 0 0 0 1px rgba(255, 255, 255, .12); }
+.jump .to-plugins b { background: #C9B8FF; color: #17151F; }
 
 /* Hero */
 .hero { display: grid; grid-template-columns: minmax(0, 1fr); gap: 36px; align-items: center; padding-top: 64px; }
@@ -165,6 +185,55 @@ a.status:hover { filter: brightness(1.08); }
 .t-crt .art.tv::before { content: ""; position: absolute; left: 10px; top: 10px; width: 68px; height: 58px; border-radius: 12px; background: #171512; }
 .t-crt .art.tv::after { content: ""; position: absolute; left: 16px; top: 17px; width: 56px; height: 44px; border-radius: 7px; background: linear-gradient(180deg, #5EB544 0 16.6%, #F9B824 0 33.3%, #F28020 0 50%, #DD3A3C 0 66.6%, #91408F 0 83.3%, #0A96D4 0); opacity: .9; }
 
+/* Open-source plugins: a terminal desk, dark in both themes like the plugins themselves */
+.band {
+  color: #E9E8F0; padding: clamp(56px, 8vw, 96px) 0;
+  background:
+    radial-gradient(60% 50% at 100% 0%, rgba(164, 140, 224, .2), transparent 70%),
+    radial-gradient(50% 40% at 0% 100%, rgba(125, 211, 168, .08), transparent 70%),
+    #17151F;
+  border-block: 1px solid rgba(255, 255, 255, .08);
+}
+.oss { max-width: 1160px; margin: 0 auto; padding: 0 var(--gutter-r) 0 var(--gutter); display: grid; grid-template-columns: minmax(0, 1fr); gap: 36px; }
+.oss .zone-title::after { background: rgba(255, 255, 255, .14); }
+.oss .zone-title .count { background: #C9B8FF; color: #17151F; }
+.oss .head { display: grid; gap: 12px; max-width: 64ch; }
+.oss .eyebrow { color: #A9A6B8; }
+.oss .head p { color: #B9B6C7; }
+.oss a { color: #C9B8FF; }
+.plugin { display: grid; grid-template-columns: minmax(0, 1fr); gap: 24px; align-items: center; padding-top: 32px; border-top: 1px solid rgba(255, 255, 255, .08); }
+@media (min-width: 900px) {
+  .plugin { grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); gap: 40px; }
+  .plugin.flip { grid-template-columns: minmax(0, .7fr) minmax(0, 1.3fr); }
+  .plugin.flip .shot { order: -1; }
+}
+.plugin .text, .plugin .col { display: grid; gap: 14px; align-content: start; }
+@media (min-width: 900px) {
+  .plugin.wide { grid-template-columns: minmax(0, 1fr); }
+  .plugin.wide .text { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 40px; }
+}
+.plugin h3 { margin: 0; font-size: 26px; font-weight: 750; letter-spacing: -.02em; display: grid; gap: 4px; }
+.plugin h3 code { font: 500 14px/1.2 ui-monospace, "SF Mono", Menlo, monospace; color: #9C98AE; letter-spacing: 0; }
+.plugin p { color: #C4C1D2; }
+.plugin ul { margin: 0; padding-left: 1.1em; display: grid; gap: 7px; color: #C4C1D2; }
+.plugin kbd { font: 600 12.5px/1 ui-monospace, "SF Mono", Menlo, monospace; padding: 2px 6px; border-radius: 6px; background: rgba(255, 255, 255, .08); color: #F0EEF8; }
+.plugin .needs { font-size: 14px; color: #9C98AE; }
+.install { display: flex; align-items: stretch; border-radius: 12px; overflow: hidden; background: #0A0B0E; box-shadow: 0 0 0 1px rgba(255, 255, 255, .08); }
+.install code { flex: 1; min-width: 0; overflow-wrap: anywhere; padding: 12px 14px; font: 500 13px/1.5 ui-monospace, "SF Mono", Menlo, monospace; color: #E9E8F0; }
+.install code::before { content: "$ "; color: #7DD3A8; }
+.install button { flex: none; border: 0; border-left: 1px solid rgba(255, 255, 255, .08); background: rgba(255, 255, 255, .05); color: #E9E8F0; font: 600 13px/1 var(--font); padding: 0 14px; cursor: pointer; }
+.install button:hover { background: rgba(255, 255, 255, .1); }
+.install button:focus-visible { outline: 3px solid #C9B8FF; outline-offset: -3px; }
+.plugin .links { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; }
+.gh { display: inline-flex; align-items: center; gap: 8px; padding: 10px 14px; border-radius: 12px; background: #F2F1EE; color: #111217 !important; font-weight: 650; font-size: 14px; text-decoration: none; }
+.gh svg { width: 18px; height: 18px; }
+.plugin .tags { display: flex; flex-wrap: wrap; gap: 6px; list-style: none; padding: 0; }
+.plugin .tags li { font: 600 12px/1 ui-monospace, "SF Mono", Menlo, monospace; padding: 5px 8px; border-radius: 7px; background: rgba(255, 255, 255, .06); color: #B9B6C7; }
+.plugin .shot img { display: block; width: 100%; height: auto; border-radius: 14px; box-shadow: 0 0 0 1px rgba(255, 255, 255, .08), 0 30px 60px -30px rgba(0, 0, 0, .9); }
+.plugin.flip .shot { justify-self: center; width: min(100%, 340px); position: relative; }
+.plugin.flip .shot img { max-height: 520px; object-fit: cover; object-position: top; }
+.plugin.flip .shot::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 90px; border-radius: 0 0 14px 14px; background: linear-gradient(transparent, #17151F); pointer-events: none; }
+
 /* Contact and footer */
 .contact { display: grid; gap: 10px; padding: 30px; border-radius: 28px; background: var(--card); box-shadow: var(--shadow), 0 0 0 1px var(--line); }
 .contact h2 { font-size: clamp(24px, 3.4vw, 32px); font-weight: 750; letter-spacing: -.02em; }
@@ -175,20 +244,23 @@ a.status:hover { filter: brightness(1.08); }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition: none !important; animation: none !important; }
+  html { scroll-behavior: auto; }
 }
 </style>
 </head>
 <body>
-<main class="page">
+<main>
+<div class="page">
 
   <header class="hero">
     <div class="intro">
       <span class="eyebrow">Christian Deckert</span>
-      <h1>Apps for iPhone, iPad, Apple TV and Mac.</h1>
-      <p class="lead">Six small apps, each with a look of its own. Pick one to see what it does.</p>
-      <ul class="promises" aria-label="In every app">
-        <li>No accounts</li><li>No ads</li><li>No analytics</li>
-      </ul>
+      <h1>Apps for Apple devices, plugins for herdr.</h1>
+      <p class="lead">Six small apps for iPhone, iPad, Apple TV and Mac, each with a look of its own, and two open-source plugins for the coding-agent app herdr.</p>
+      <nav class="jump" aria-label="On this page">
+        <a class="to-apps" href="#apps"><b>6</b>Apps<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg></a>
+        <a class="to-plugins" href="#plugins"><b>2</b>Plugins for herdr<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg></a>
+      </nav>
     </div>
     <div class="shelf" id="shelf" aria-hidden="true">
       <a class="slot" href="AnalogClock/" tabindex="-1"><span class="float"><img src="AnalogClock/img/icon-192.webp" width="96" height="96" alt=""></span></a>
@@ -200,87 +272,155 @@ a.status:hover { filter: brightness(1.08); }
     </div>
   </header>
 
-  <ul class="apps" aria-label="Apps">
-    <li class="app t-clock">
-      <svg class="art" viewBox="0 0 200 200" aria-hidden="true">
-        <circle cx="100" cy="100" r="96" fill="#3A3F46"/><circle cx="100" cy="100" r="88" fill="#6A7078"/><circle cx="100" cy="100" r="82" fill="#0D0E11"/>
-        <g stroke="#8A9099" stroke-width="3" stroke-linecap="round"><path d="M100 24v10M176 100h-10M100 176v-10M24 100h10M138 34l-5 8.7M166 62l-8.7 5M166 138l-8.7-5M138 166l-5-8.7M62 166l5-8.7M34 138l8.7-5M34 62l8.7 5M62 34l5 8.7"/></g>
-        <g stroke-linecap="round"><path d="M100 100 66 76" stroke="#E8EAEE" stroke-width="7"/><path d="M100 100 150 64" stroke="#E8EAEE" stroke-width="5"/><path d="M100 118V30" stroke="#E8C15A" stroke-width="2"/></g>
-        <circle cx="100" cy="100" r="4.5" fill="#E8C15A"/>
-      </svg>
-      <img class="icon" src="AnalogClock/img/icon-192.webp" width="72" height="72" alt="">
-      <h2><a class="go" href="AnalogClock/">Analog Clock</a></h2>
-      <p class="sub">A beautiful clock for the desk, the bedside table or the kitchen shelf, with the weather on the dial.</p>
-      <p class="plat">iPhone · iPad · Apple TV</p>
-      <div class="row">
-        <a class="status" href="https://apps.apple.com/app/id957157160"><i></i>On the App Store</a>
-        <span class="docs"><a href="AnalogClock/SUPPORT">Support</a> · <a href="AnalogClock/PRIVACY">Privacy</a></span>
+  <section class="zone" id="apps" aria-labelledby="apps-h">
+    <div class="zone-head">
+      <h2 class="zone-title" id="apps-h">Apps <span class="count" aria-label="6 apps">6</span></h2>
+      <div class="zone-sub">
+        <span>For iPhone, iPad, Apple TV and Mac.</span>
+        <ul class="promises" aria-label="In every app">
+          <li>No accounts</li><li>No ads</li><li>No analytics</li>
+        </ul>
       </div>
-    </li>
+    </div>
 
-    <li class="app t-flash">
-      <div class="art" aria-hidden="true"><b></b><b></b><b></b></div>
-      <img class="icon" src="Flashcards/img/icon-192.webp" width="72" height="72" alt="">
-      <h2><a class="go" href="Flashcards/">Flashcards</a></h2>
-      <p class="sub">Flashcards for anything: write your own colorful piles, flip, and train a pile in minutes.</p>
-      <p class="plat">iPhone · iPad</p>
-      <div class="row">
-        <a class="status" href="https://apps.apple.com/app/id1380756510"><i></i>On the App Store</a>
-        <span class="docs"><a href="Flashcards/SUPPORT">Support</a> · <a href="Flashcards/PRIVACY">Privacy</a></span>
+    <ul class="apps" aria-label="Apps">
+      <li class="app t-clock">
+        <svg class="art" viewBox="0 0 200 200" aria-hidden="true">
+          <circle cx="100" cy="100" r="96" fill="#3A3F46"/><circle cx="100" cy="100" r="88" fill="#6A7078"/><circle cx="100" cy="100" r="82" fill="#0D0E11"/>
+          <g stroke="#8A9099" stroke-width="3" stroke-linecap="round"><path d="M100 24v10M176 100h-10M100 176v-10M24 100h10M138 34l-5 8.7M166 62l-8.7 5M166 138l-8.7-5M138 166l-5-8.7M62 166l5-8.7M34 138l8.7-5M34 62l8.7 5M62 34l5 8.7"/></g>
+          <g stroke-linecap="round"><path d="M100 100 66 76" stroke="#E8EAEE" stroke-width="7"/><path d="M100 100 150 64" stroke="#E8EAEE" stroke-width="5"/><path d="M100 118V30" stroke="#E8C15A" stroke-width="2"/></g>
+          <circle cx="100" cy="100" r="4.5" fill="#E8C15A"/>
+        </svg>
+        <img class="icon" src="AnalogClock/img/icon-192.webp" width="72" height="72" alt="">
+        <h2><a class="go" href="AnalogClock/">Analog Clock</a></h2>
+        <p class="sub">A beautiful clock for the desk, the bedside table or the kitchen shelf, with the weather on the dial.</p>
+        <p class="plat">iPhone · iPad · Apple TV</p>
+        <div class="row">
+          <a class="status" href="https://apps.apple.com/app/id957157160"><i></i>On the App Store</a>
+          <span class="docs"><a href="AnalogClock/SUPPORT">Support</a> · <a href="AnalogClock/PRIVACY">Privacy</a></span>
+        </div>
+      </li>
+
+      <li class="app t-flash">
+        <div class="art" aria-hidden="true"><b></b><b></b><b></b></div>
+        <img class="icon" src="Flashcards/img/icon-192.webp" width="72" height="72" alt="">
+        <h2><a class="go" href="Flashcards/">Flashcards</a></h2>
+        <p class="sub">Flashcards for anything: write your own colorful piles, flip, and train a pile in minutes.</p>
+        <p class="plat">iPhone · iPad</p>
+        <div class="row">
+          <a class="status" href="https://apps.apple.com/app/id1380756510"><i></i>On the App Store</a>
+          <span class="docs"><a href="Flashcards/SUPPORT">Support</a> · <a href="Flashcards/PRIVACY">Privacy</a></span>
+        </div>
+      </li>
+
+      <li class="app t-music">
+        <div class="art" aria-hidden="true"></div>
+        <img class="icon" src="MyMusic/img/icon-192.webp" width="72" height="72" alt="">
+        <h2><a class="go" href="MyMusic/">My Music</a></h2>
+        <p class="sub">Your files, your folders. A player for the music you own, coloured by every cover.</p>
+        <p class="plat">iPhone · iPad</p>
+        <div class="row">
+          <a class="status" href="https://apps.apple.com/app/id1027516877"><i></i>On the App Store</a>
+          <span class="docs"><a href="MyMusic/SUPPORT">Support</a> · <a href="MyMusic/PRIVACY">Privacy</a></span>
+        </div>
+      </li>
+
+      <li class="app t-gif">
+        <span class="art" aria-hidden="true">GIF</span>
+        <img class="icon" src="QuickGif/img/icon-192.webp" width="72" height="72" alt="">
+        <h2><a class="go" href="QuickGif/">Quick Gif</a></h2>
+        <p class="sub">Drop a video, get a GIF. A menu-bar converter that opens from a screen corner and stays out of your way.</p>
+        <p class="plat">Mac</p>
+        <div class="row">
+          <span class="status"><i></i>Coming soon</span>
+          <span class="docs"><a href="QuickGif/SUPPORT">Support</a> · <a href="QuickGif/PRIVACY">Privacy</a></span>
+        </div>
+      </li>
+
+      <li class="app t-avoid">
+        <div class="art sun" aria-hidden="true"></div>
+        <div class="art grid" aria-hidden="true"></div>
+        <img class="icon" src="Avoid/img/icon-192.webp" width="72" height="72" alt="">
+        <h2><a class="go" href="Avoid/">Avoid</a></h2>
+        <p class="sub">One tap. Two walls. Endless blocks. A fast synthwave arcade game about survival.</p>
+        <p class="plat">iPhone · iPad</p>
+        <div class="row">
+          <span class="status"><i></i>Coming soon</span>
+          <span class="docs"><a href="Avoid/SUPPORT">Support</a> · <a href="Avoid/PRIVACY">Privacy</a></span>
+        </div>
+      </li>
+
+      <li class="app t-crt">
+        <div class="art" aria-hidden="true"></div>
+        <div class="art tv" aria-hidden="true"></div>
+        <img class="icon" src="CRTCam/img/icon-192.webp" width="72" height="72" alt="">
+        <h2><a class="go" href="CRTCam/">CRT Retro Cam</a></h2>
+        <p class="sub">Flicker-free CRT TV photos: the shutter syncs to the screen's refresh rate, so no dark bands.</p>
+        <p class="plat">iPhone · Android preview</p>
+        <div class="row">
+          <a class="status" href="https://testflight.apple.com/join/Wc9429HK"><i></i>Beta on TestFlight</a>
+          <span class="docs"><a href="CRTCam/SUPPORT">Support</a> · <a href="CRTCam/PRIVACY">Privacy</a></span>
+        </div>
+      </li>
+    </ul>
+  </section>
+</div>
+
+<section class="band" id="plugins" aria-labelledby="oss-h">
+  <div class="oss">
+    <div class="head">
+      <span class="eyebrow">Open source</span>
+      <h2 class="zone-title" id="oss-h">Plugins for herdr <span class="count" aria-label="2 plugins">2</span></h2>
+      <p><a href="https://herdr.dev">herdr</a> is a native app for running coding agents. These two plugins add panels to it. Both are written in zsh, so there is nothing to compile, and the source is on GitHub.</p>
+    </div>
+
+    <article class="plugin wide">
+      <div class="text">
+        <div class="col">
+          <h3>Jira Light<code>herdr-jira-light</code></h3>
+          <p>A lightweight Jira pane. Its filters follow the working directory of the tab it sits in: each project gets its own boards and sprints, and switching tabs or directories switches the list.</p>
+          <ul>
+            <li><kbd>b</kbd> browses projects, boards, sprints and the backlog; <kbd>p</kbd> pins what you picked to a directory.</li>
+            <li>Issue details with every field, the description rendered, and sub-tasks, links and comments you can follow.</li>
+            <li><kbd>t</kbd> moves an issue, <kbd>A</kbd> assigns it to you, <kbd>w</kbd> logs work. It changes Jira only when you ask.</li>
+            <li>Works with Jira Server, Data Center and Jira Cloud.</li>
+          </ul>
+        </div>
+        <div class="col">
+          <div class="install"><code>curl -fsSL https://raw.githubusercontent.com/ChristianDeckert/herdr-jira-light/main/install.sh | sh</code><button type="button" class="copy">Copy</button></div>
+          <p class="needs">Needs herdr 0.9.4 or later, zsh, curl and jq on macOS or Linux. MIT license.</p>
+          <div class="links">
+            <a class="gh" href="https://github.com/ChristianDeckert/herdr-jira-light"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0a8 8 0 0 0-2.53 15.59c.4.07.55-.17.55-.38v-1.33c-2.23.48-2.7-1.07-2.7-1.07-.36-.92-.89-1.17-.89-1.17-.73-.5.06-.49.06-.49.8.06 1.23.83 1.23.83.72 1.22 1.88.87 2.33.66.07-.52.28-.87.5-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.28.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.2c0 .21.15.46.55.38A8 8 0 0 0 8 0Z"/></svg>View on GitHub</a>
+            <ul class="tags" aria-label="Built with"><li>zsh</li><li>curl</li><li>jq</li></ul>
+          </div>
+        </div>
       </div>
-    </li>
+      <div class="shot"><img src="plugins/jira-light.webp" width="1600" height="645" loading="lazy" decoding="async" alt="Jira Light in herdr: a directory's active sprint with issues in progress, blocked, in review and done on the left, and an issue's details with dates, time tracking and its description on the right."></div>
+    </article>
 
-    <li class="app t-music">
-      <div class="art" aria-hidden="true"></div>
-      <img class="icon" src="MyMusic/img/icon-192.webp" width="72" height="72" alt="">
-      <h2><a class="go" href="MyMusic/">My Music</a></h2>
-      <p class="sub">Your files, your folders. A player for the music you own, coloured by every cover.</p>
-      <p class="plat">iPhone · iPad</p>
-      <div class="row">
-        <a class="status" href="https://apps.apple.com/app/id1027516877"><i></i>On the App Store</a>
-        <span class="docs"><a href="MyMusic/SUPPORT">Support</a> · <a href="MyMusic/PRIVACY">Privacy</a></span>
+    <article class="plugin flip">
+      <div class="text">
+        <h3>Cheat sheet<code>herdr-cheatsheet</code></h3>
+        <p>A clickable cheat-sheet panel. It docks on the right of your tabs, follows whatever you're working on, and puts the keys and commands you need one click away.</p>
+        <ul>
+          <li>Click a row to run it: just recipes, herdr actions, your own bindings, or jump to an agent.</li>
+          <li>The keys of the app running in the tab, from vim and lazygit to Claude Code and 18 more, sent with a click.</li>
+          <li>Fuzzy search for the project's files, opened in a new tab.</li>
+          <li>Ready-made commands for ffmpeg, compression, devtools and package managers, typed at your prompt.</li>
+        </ul>
+        <div class="install"><code>curl -fsSL https://raw.githubusercontent.com/ChristianDeckert/herdr-cheatsheet/main/install.sh | sh</code><button type="button" class="copy">Copy</button></div>
+        <p class="needs">Needs herdr 0.9.4 or later, zsh and jq on macOS or Linux; just, fzf and rg are optional. MIT license.</p>
+        <div class="links">
+          <a class="gh" href="https://github.com/ChristianDeckert/herdr-cheatsheet"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0a8 8 0 0 0-2.53 15.59c.4.07.55-.17.55-.38v-1.33c-2.23.48-2.7-1.07-2.7-1.07-.36-.92-.89-1.17-.89-1.17-.73-.5.06-.49.06-.49.8.06 1.23.83 1.23.83.72 1.22 1.88.87 2.33.66.07-.52.28-.87.5-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.28.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.2c0 .21.15.46.55.38A8 8 0 0 0 8 0Z"/></svg>View on GitHub</a>
+          <ul class="tags" aria-label="Built with"><li>zsh</li><li>jq</li><li>fzf</li></ul>
+        </div>
       </div>
-    </li>
+      <div class="shot"><img src="plugins/cheatsheet.webp" width="640" height="972" loading="lazy" decoding="async" alt="The cheat-sheet panel: the CHEATSHEET logo, a file search field, the agents with their status, and herdr's keys for tabs and panes."></div>
+    </article>
+  </div>
+</section>
 
-    <li class="app t-gif">
-      <span class="art" aria-hidden="true">GIF</span>
-      <img class="icon" src="QuickGif/img/icon-192.webp" width="72" height="72" alt="">
-      <h2><a class="go" href="QuickGif/">Quick Gif</a></h2>
-      <p class="sub">Drop a video, get a GIF. A menu-bar converter that opens from a screen corner and stays out of your way.</p>
-      <p class="plat">Mac</p>
-      <div class="row">
-        <span class="status"><i></i>Coming soon</span>
-        <span class="docs"><a href="QuickGif/SUPPORT">Support</a> · <a href="QuickGif/PRIVACY">Privacy</a></span>
-      </div>
-    </li>
-
-    <li class="app t-avoid">
-      <div class="art sun" aria-hidden="true"></div>
-      <div class="art grid" aria-hidden="true"></div>
-      <img class="icon" src="Avoid/img/icon-192.webp" width="72" height="72" alt="">
-      <h2><a class="go" href="Avoid/">Avoid</a></h2>
-      <p class="sub">One tap. Two walls. Endless blocks. A fast synthwave arcade game about survival.</p>
-      <p class="plat">iPhone · iPad</p>
-      <div class="row">
-        <span class="status"><i></i>Coming soon</span>
-        <span class="docs"><a href="Avoid/SUPPORT">Support</a> · <a href="Avoid/PRIVACY">Privacy</a></span>
-      </div>
-    </li>
-
-    <li class="app t-crt">
-      <div class="art" aria-hidden="true"></div>
-      <div class="art tv" aria-hidden="true"></div>
-      <img class="icon" src="CRTCam/img/icon-192.webp" width="72" height="72" alt="">
-      <h2><a class="go" href="CRTCam/">CRT Retro Cam</a></h2>
-      <p class="sub">Flicker-free CRT TV photos: the shutter syncs to the screen's refresh rate, so no dark bands.</p>
-      <p class="plat">iPhone · Android preview</p>
-      <div class="row">
-        <a class="status" href="https://testflight.apple.com/join/Wc9429HK"><i></i>Beta on TestFlight</a>
-        <span class="docs"><a href="CRTCam/SUPPORT">Support</a> · <a href="CRTCam/PRIVACY">Privacy</a></span>
-      </div>
-    </li>
-  </ul>
-
+<div class="page tail">
   <section class="contact" aria-labelledby="contact-h">
     <h2 id="contact-h">Questions, bugs or ideas?</h2>
     <p>Write to <a href="mailto:deckert.christian@icloud.com">deckert.christian@icloud.com</a>, or open an issue at <a href="https://github.com/ChristianDeckert/AppStore/issues">github.com/ChristianDeckert/AppStore</a> with your device and system version.</p>
@@ -290,6 +430,7 @@ a.status:hover { filter: brightness(1.08); }
     <a href="https://github.com/ChristianDeckert/AppStore">App Store documents on GitHub</a>
     <span class="legal">© 2026 Christian Deckert · <a href="mailto:deckert.christian@icloud.com">deckert.christian@icloud.com</a></span>
   </footer>
+</div>
 </main>
 <script>
 (() => {
@@ -333,6 +474,25 @@ a.status:hover { filter: brightness(1.08); }
   }
   for (const el of slots) el.addEventListener('pointerenter', () => spread(el));
   shelf.addEventListener('pointerleave', settle);
+})();
+</script>
+<script>
+(() => {
+  'use strict';
+  for (const btn of document.querySelectorAll('.install .copy')) {
+    const code = btn.previousElementSibling;
+    btn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(code.textContent);
+        btn.textContent = 'Copied';
+      } catch (err) {
+        console.error('Copying the install command failed', err);
+        getSelection().selectAllChildren(code);
+        btn.textContent = 'Selected, copy it';
+      }
+      setTimeout(() => { btn.textContent = 'Copy'; }, 2000);
+    });
+  }
 })();
 </script>
 </body>
