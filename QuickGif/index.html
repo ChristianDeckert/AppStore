@@ -102,18 +102,28 @@ h1 { font: 800 clamp(48px, 8vw, 80px)/1 var(--font-round); letter-spacing: -.03e
 .meta { font-size: 14px; color: var(--ink-2); }
 .big-icon { width: clamp(150px, 22vw, 240px); justify-self: center; filter: drop-shadow(0 30px 40px rgba(75, 46, 143, .35)); }
 
-/* Story stepper */
+/* Story slideshow */
 .story { display: grid; gap: 18px; }
+.story-bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 16px; }
 .tabs { display: flex; flex-wrap: wrap; gap: 8px; }
 .tab {
+  position: relative; overflow: hidden;
   display: inline-flex; align-items: center; gap: 9px; padding: 9px 14px 9px 9px; border-radius: 999px; cursor: pointer;
   font: 600 14px/1.2 var(--font); color: var(--ink-2); border: 1px solid var(--glass-edge); background: var(--glass);
 }
 .tab span { display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: var(--hairline); color: var(--ink); font: 700 13px/1 var(--font-round); }
 .tab[aria-selected="true"] { color: var(--ink); border-color: var(--accent); }
 .tab[aria-selected="true"] span { background: var(--accent); color: var(--on-accent); }
-.screen { position: relative; border-radius: 18px; overflow: hidden; aspect-ratio: 1440 / 900; padding: 0; }
-.screen img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 400ms ease; }
+.tab .bar { position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: var(--accent); transform-origin: left; transform: scaleX(var(--p, 0)); }
+.controls { display: flex; align-items: center; gap: 6px; }
+.ctl {
+  width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; cursor: pointer;
+  border: 1px solid var(--glass-edge); background: var(--glass); color: var(--ink);
+}
+.ctl svg { width: 18px; height: 18px; }
+.ctl.play { width: 44px; height: 44px; background: var(--accent); color: var(--on-accent); border-color: transparent; }
+.screen { position: relative; border-radius: 18px; overflow: hidden; aspect-ratio: 1440 / 900; padding: 0; touch-action: pan-y; }
+.screen img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 450ms ease; -webkit-user-drag: none; user-select: none; }
 .screen img.on { opacity: 1; }
 .story-cap { font-size: 14px; color: var(--ink-2); }
 
@@ -166,16 +176,23 @@ h1 { font: 800 clamp(48px, 8vw, 80px)/1 var(--font-round); letter-spacing: -.03e
     <img class="big-icon" src="img/icon.png" width="512" height="512" alt="">
   </header>
 
-  <section class="story" aria-labelledby="story-h">
+  <section class="story" id="story" aria-labelledby="story-h" aria-roledescription="slideshow">
     <div class="section-head">
       <span class="eyebrow">How it works</span>
       <h2 id="story-h">Four moves, one GIF</h2>
     </div>
-    <div class="tabs" role="tablist" aria-label="Steps" id="tabs">
-      <button class="tab" role="tab" id="tab-1" aria-controls="screen" aria-selected="true" tabindex="0"><span>1</span>Rest in a corner</button>
-      <button class="tab" role="tab" id="tab-2" aria-controls="screen" aria-selected="false" tabindex="-1"><span>2</span>It peeks out</button>
-      <button class="tab" role="tab" id="tab-3" aria-controls="screen" aria-selected="false" tabindex="-1"><span>3</span>Drop a video</button>
-      <button class="tab" role="tab" id="tab-4" aria-controls="screen" aria-selected="false" tabindex="-1"><span>4</span>Your GIF is ready</button>
+    <div class="story-bar">
+      <div class="tabs" role="tablist" aria-label="Steps" id="tabs">
+        <button class="tab" role="tab" id="tab-1" aria-controls="screen" aria-selected="true" tabindex="0"><span>1</span>Rest in a corner<i class="bar" aria-hidden="true"></i></button>
+        <button class="tab" role="tab" id="tab-2" aria-controls="screen" aria-selected="false" tabindex="-1"><span>2</span>It peeks out<i class="bar" aria-hidden="true"></i></button>
+        <button class="tab" role="tab" id="tab-3" aria-controls="screen" aria-selected="false" tabindex="-1"><span>3</span>Drop a video<i class="bar" aria-hidden="true"></i></button>
+        <button class="tab" role="tab" id="tab-4" aria-controls="screen" aria-selected="false" tabindex="-1"><span>4</span>Your GIF is ready<i class="bar" aria-hidden="true"></i></button>
+      </div>
+      <div class="controls">
+        <button class="ctl" id="prev" type="button" aria-label="Previous step"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+        <button class="ctl play" id="play" type="button" aria-label="Pause the slideshow"><svg id="play-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></svg></button>
+        <button class="ctl" id="next" type="button" aria-label="Next step"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+      </div>
     </div>
     <figure class="screen glass" id="screen" role="tabpanel" aria-labelledby="tab-1">
       <img class="on" src="img/step-01.webp" width="1440" height="900" decoding="async" alt="Step 1: rest the pointer in the bottom-left corner of the screen.">
@@ -183,7 +200,7 @@ h1 { font: 800 clamp(48px, 8vw, 80px)/1 var(--font-round); letter-spacing: -.03e
       <img src="img/step-03.webp" width="1440" height="900" loading="lazy" decoding="async" alt="Step 3: the panel slides in, and an MP4 file is dropped on Drop file here.">
       <img src="img/step-04.webp" width="1440" height="900" loading="lazy" decoding="async" alt="Step 4: that's it, the GIF is ready, with confetti.">
     </figure>
-    <p class="story-cap" id="story-cap">Rest the pointer in the bottom-left corner of the screen for a moment. Pick a different corner, or switch the feature off, in Settings.</p>
+    <p class="story-cap" id="story-cap" aria-live="off">Rest the pointer in the bottom-left corner of the screen for a moment. Pick a different corner, or switch the feature off, in Settings.</p>
   </section>
 
   <section class="features" aria-labelledby="features-h">
@@ -256,38 +273,88 @@ h1 { font: 800 clamp(48px, 8vw, 80px)/1 var(--font-round); letter-spacing: -.03e
     'Then it slides in. Drop a video on it, or click Choose File… inside it.',
     'That’s it: the GIF is saved to your folder, and a preview opens. Drag it into any app, Save As…, or Show in Finder.',
   ];
+  const DURATION = 5000, RESUME_AFTER = 30000;
+  const PAUSE_ICON = '<path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/>';
+  const PLAY_ICON = '<path d="M8 4.8v14.4L19.5 12 8 4.8Z"/>';
+  const $ = (id) => document.getElementById(id);
+  const story = $('story'), screen = $('screen'), playBtn = $('play'), cap = $('story-cap');
   const tabs = [...document.querySelectorAll('.tab')];
-  const imgs = [...document.querySelectorAll('.screen img')];
-  const screen = document.getElementById('screen');
+  const imgs = [...screen.querySelectorAll('img')];
   const reduce = matchMedia('(prefers-reduced-motion: reduce)');
-  let current = 0, auto = null;
+  // playing: advances on its own; held: paused by an interaction, plays again after RESUME_AFTER
+  // without further input; stopped: paused with the button, stays paused until Play.
+  let mode = reduce.matches ? 'stopped' : 'playing';
+  let current = 0, elapsed = 0, last = null, inView = false, resumeTimer = 0;
 
   function select(i, focus) {
     current = (i + tabs.length) % tabs.length;
-    tabs.forEach((t, n) => { t.setAttribute('aria-selected', String(n === current)); t.tabIndex = n === current ? 0 : -1; });
+    elapsed = 0;
+    tabs.forEach((t, n) => { t.setAttribute('aria-selected', String(n === current)); t.tabIndex = n === current ? 0 : -1; t.style.setProperty('--p', 0); });
     imgs.forEach((im, n) => im.classList.toggle('on', n === current));
     screen.setAttribute('aria-labelledby', tabs[current].id);
-    document.getElementById('story-cap').textContent = CAPTIONS[current];
+    cap.textContent = CAPTIONS[current];
     if (focus) tabs[current].focus();
   }
-  const stop = () => { clearInterval(auto); auto = false; };
+
+  function render() {
+    const playing = mode === 'playing';
+    playBtn.setAttribute('aria-label', playing ? 'Pause the slideshow' : 'Play the slideshow');
+    playBtn.title = mode === 'held' ? 'Paused while you look around. Plays on after 30 seconds without input.' : '';
+    $('play-icon').innerHTML = playing ? PAUSE_ICON : PLAY_ICON;
+    cap.setAttribute('aria-live', playing ? 'off' : 'polite');
+  }
+
+  function hold() {
+    if (mode === 'stopped') return;
+    mode = 'held';
+    clearTimeout(resumeTimer);
+    resumeTimer = setTimeout(() => { if (mode === 'held') { mode = 'playing'; render(); } }, RESUME_AFTER);
+    render();
+  }
+
+  function tick(now) {
+    const running = mode === 'playing' && inView && !document.hidden;
+    if (running && last !== null) elapsed += now - last;
+    last = running ? now : null;
+    if (elapsed >= DURATION) select(current + 1);
+    tabs[current].style.setProperty('--p', Math.min(1, elapsed / DURATION).toFixed(3));
+    requestAnimationFrame(tick);
+  }
+
+  playBtn.addEventListener('click', () => {
+    clearTimeout(resumeTimer);
+    mode = mode === 'playing' ? 'stopped' : 'playing';
+    render();
+  });
+  $('prev').addEventListener('click', () => select(current - 1));
+  $('next').addEventListener('click', () => select(current + 1));
   tabs.forEach((t, n) => {
-    t.addEventListener('click', () => { stop(); select(n); });
+    t.addEventListener('click', () => select(n));
     t.addEventListener('keydown', (e) => {
       const step = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[e.key];
-      if (step) { e.preventDefault(); stop(); select(current + step, true); }
-      if (e.key === 'Home') { e.preventDefault(); stop(); select(0, true); }
-      if (e.key === 'End') { e.preventDefault(); stop(); select(tabs.length - 1, true); }
+      if (step) { e.preventDefault(); select(current + step, true); }
+      if (e.key === 'Home') { e.preventDefault(); select(0, true); }
+      if (e.key === 'End') { e.preventDefault(); select(tabs.length - 1, true); }
     });
   });
-  if (!reduce.matches) {
-    const io = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting && !auto && auto !== false) auto = setInterval(() => select(current + 1), 3200);
-      else if (!entry.isIntersecting && auto) { clearInterval(auto); auto = null; }
-    }, { threshold: .5 });
-    io.observe(screen);
-    screen.addEventListener('pointerdown', stop);
-  }
+
+  const fromUser = (e) => !playBtn.contains(e.target);
+  story.addEventListener('pointerdown', (e) => { if (fromUser(e)) hold(); });
+  story.addEventListener('keydown', (e) => { if (fromUser(e)) hold(); });
+  story.addEventListener('focusin', (e) => { if (fromUser(e) && e.target.matches(':focus-visible')) hold(); });
+
+  let swipeX = null;
+  screen.addEventListener('pointerdown', (e) => { swipeX = e.clientX; });
+  screen.addEventListener('pointerup', (e) => {
+    if (swipeX === null) return;
+    const dx = e.clientX - swipeX; swipeX = null;
+    if (Math.abs(dx) > 40) select(current + (dx < 0 ? 1 : -1));
+  });
+  screen.addEventListener('pointercancel', () => { swipeX = null; });
+
+  new IntersectionObserver(([entry]) => { inView = entry.isIntersecting; }, { threshold: .5 }).observe(screen);
+  render();
+  requestAnimationFrame(tick);
 })();
 </script>
 </body>
