@@ -1,0 +1,406 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>My Music</title>
+<meta name="description" content="My Music plays the music files you own on iPhone and iPad, from your own real folders, with a player coloured by every cover. No streaming, no account.">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0B0B0F">
+<meta property="og:type" content="website">
+<meta property="og:title" content="My Music">
+<meta property="og:description" content="Your music. Your folders. No subscription. A player for the music files you own, on iPhone and iPad.">
+<meta property="og:url" content="https://christiandeckert.github.io/AppStore/MyMusic/">
+<meta property="og:image" content="https://christiandeckert.github.io/AppStore/MyMusic/img/icon.png">
+<meta name="twitter:card" content="summary">
+<link rel="icon" type="image/png" href="img/favicon.png">
+<link rel="apple-touch-icon" href="img/icon.png">
+<style>
+:root {
+  /* Design tokens from MyMusicKit (DesignSystem/Tokens/Colors.swift) and the icon's ring. */
+  --bg: #0B0B0F;
+  --surface: #16161C;
+  --raised: #20202A;
+  --line: #2A2A35;
+  --text: #F4F3EF;
+  --text-2: #A2A1AB;
+  --accent: #FF7A45;
+  --ring-a: #FF4F7A; --ring-b: #FF7A45; --ring-c: #FFD08A;
+  --glow-a: #B8324F; --glow-b: #2A0E16;
+  --fav: #FF8FA3;
+  --font: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, "Segoe UI", Roboto, sans-serif;
+  --gutter: max(16px, env(safe-area-inset-left, 0px));
+  --gutter-r: max(16px, env(safe-area-inset-right, 0px));
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--text); font: 400 16px/1.55 var(--font); }
+.glow { position: fixed; inset: 0; pointer-events: none; z-index: -1; transition: background 800ms ease;
+  background: radial-gradient(70% 50% at 75% 0%, color-mix(in srgb, var(--glow-a) 55%, transparent), transparent 70%), radial-gradient(60% 50% at 0% 30%, color-mix(in srgb, var(--glow-b) 80%, transparent), transparent 70%); }
+h1, h2, h3, p, figure, ul, blockquote { margin: 0; }
+h1, h2 { text-wrap: balance; }
+a { color: var(--accent); transition: color 600ms; }
+a:focus-visible, button:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; border-radius: 10px; }
+img { display: block; max-width: 100%; height: auto; }
+
+.page { max-width: 1120px; margin: 0 auto; padding: 0 var(--gutter-r) 56px var(--gutter); display: grid; gap: 88px; }
+/* Grid tracks default to their content's min width, so wide children would widen the page. */
+.page, .hero, .intro, .rows, .row, .more { grid-template-columns: minmax(0, 1fr); }
+.eyebrow { font-size: 13px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--accent); transition: color 600ms; }
+h2 { font-size: clamp(28px, 4.4vw, 42px); line-height: 1.1; font-weight: 700; letter-spacing: -.02em; }
+.section-head { display: grid; gap: 10px; max-width: 60ch; }
+.section-head p, .row p { color: var(--text-2); }
+
+/* Hero */
+.hero { display: grid; gap: 40px; align-items: center; padding-top: 48px; }
+@media (min-width: 920px) { .hero { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); padding-top: 72px; } }
+.intro { display: grid; gap: 18px; justify-items: start; }
+.app-id { display: flex; align-items: center; gap: 16px; }
+.app-icon { width: 92px; height: 92px; border-radius: 22.37%; box-shadow: 0 0 0 1px rgba(255, 255, 255, .08), 0 0 50px -10px rgba(255, 94, 122, .6); }
+.platforms { font-size: 13px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--text-2); }
+h1 { font-size: clamp(48px, 8vw, 76px); line-height: 1; font-weight: 800; letter-spacing: -.035em; }
+.subtitle { font-size: clamp(21px, 2.6vw, 26px); line-height: 1.25; font-weight: 650; }
+.subtitle span { background: linear-gradient(90deg, var(--ring-a), var(--ring-b), var(--ring-c)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.promo { color: var(--text-2); max-width: 46ch; }
+.cta { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 18px; margin-top: 4px; }
+.store img { height: 48px; width: auto; }
+.meta { font-size: 14px; color: var(--text-2); }
+
+/* Player */
+.player {
+  width: 100%; max-width: 440px; justify-self: center; display: grid; gap: 16px; padding: 22px 22px 24px; border-radius: 34px;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--glow-a) 30%, var(--surface)), var(--surface) 70%);
+  box-shadow: 0 0 0 1px var(--line), 0 40px 90px -30px color-mix(in srgb, var(--glow-a) 70%, transparent);
+  transition: background 800ms ease, box-shadow 800ms ease;
+}
+.from { text-align: center; display: grid; gap: 2px; }
+.from small { font-size: 11px; font-weight: 600; letter-spacing: .1em; color: var(--text-2); }
+.from b { font-size: 14px; font-weight: 600; }
+.ring-wrap { position: relative; touch-action: none; }
+.ring-wrap svg { display: block; width: 100%; height: auto; cursor: grab; }
+.ring-wrap svg:active { cursor: grabbing; }
+.ring-wrap input { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+.bars line { stroke: var(--accent); stroke-linecap: round; stroke-width: 2.6; transition: stroke 600ms; }
+.track { stroke: rgba(255, 255, 255, .12); }
+.knob { fill: #fff; filter: drop-shadow(0 0 6px rgba(255, 255, 255, .6)); }
+.ring-wrap input:focus-visible ~ svg .knob { stroke: var(--accent); stroke-width: 4; }
+.song { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; }
+.song div { display: grid; min-width: 0; }
+.song b { font-size: 24px; font-weight: 700; letter-spacing: -.01em; }
+.song span { color: var(--text-2); }
+.heart { width: 24px; height: 24px; color: var(--fav); flex: none; margin-bottom: 4px; }
+.times { display: flex; justify-content: space-between; font-size: 13px; color: var(--text-2); font-variant-numeric: tabular-nums; margin-top: -8px; }
+.controls { display: flex; align-items: center; justify-content: space-between; padding: 0 6px; }
+.controls .icon { width: 26px; height: 26px; color: var(--text); opacity: .85; }
+.play { width: 66px; height: 66px; border-radius: 50%; border: 0; background: var(--text); color: var(--bg); display: grid; place-items: center; cursor: pointer; }
+.play svg { width: 28px; height: 28px; }
+.covers { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+.cover-btn { display: inline-flex; align-items: center; gap: 9px; padding: 6px 13px 6px 6px; border-radius: 12px; border: 1px solid var(--line); background: var(--raised); color: var(--text-2); font: 600 14px/1 var(--font); cursor: pointer; }
+.cover-btn i { width: 30px; height: 30px; border-radius: 7px; background: var(--art); flex: none; }
+.cover-btn[aria-pressed="true"] { color: var(--text); border-color: var(--accent); }
+.player-cap { text-align: center; font-size: 14px; color: var(--text-2); margin-top: 14px; }
+
+/* Rows */
+.rows { display: grid; gap: 80px; }
+.row { display: grid; gap: 28px; align-items: center; }
+@media (min-width: 860px) {
+  .row { grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: 56px; }
+  .row:nth-child(even) .text { order: 2; }
+}
+.row .text { display: grid; gap: 14px; max-width: 52ch; }
+.row ul { padding-left: 1.1em; display: grid; gap: 8px; color: var(--text-2); }
+.pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; max-width: 520px; justify-self: center; width: 100%; }
+.pair img, .solo img { border-radius: 28px; box-shadow: 0 0 0 1px var(--line), 0 30px 60px -28px rgba(0, 0, 0, .9); }
+.pair img:nth-child(2) { margin-top: 36px; }
+
+/* More */
+.more { display: grid; gap: 28px; }
+.cards { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr)); }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 22px; padding: 22px; display: grid; gap: 10px; align-content: start; }
+.card h3 { font-size: 18px; font-weight: 650; }
+.card p { color: var(--text-2); font-size: 15px; }
+.formats { display: flex; flex-wrap: wrap; gap: 6px; list-style: none; padding: 0; }
+.formats li { font-size: 12px; font-weight: 650; letter-spacing: .04em; padding: 4px 8px; border-radius: 7px; background: var(--raised); color: var(--text); }
+.ipad { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); }
+.ipad img { border-radius: 24px; box-shadow: 0 0 0 1px var(--line); }
+
+.note { display: grid; gap: 14px; padding: 30px; border-radius: 28px; background: var(--surface); border: 1px solid var(--line); }
+.note blockquote { font-size: clamp(18px, 2.2vw, 21px); line-height: 1.5; color: var(--text); max-width: 68ch; }
+.note cite { font-style: normal; color: var(--text-2); }
+
+.privacy { display: grid; gap: 10px; padding: 28px; border-radius: 24px; border: 1px solid var(--line); background: linear-gradient(135deg, var(--raised), var(--bg)); }
+.privacy p { color: var(--text-2); max-width: 70ch; }
+.foot { display: flex; flex-wrap: wrap; gap: 8px 20px; font-size: 14px; color: var(--text-2); border-top: 1px solid var(--line); padding-top: 24px; }
+.foot a { color: var(--text-2); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+</style>
+</head>
+<body>
+<div class="glow" aria-hidden="true"></div>
+<main class="page">
+
+  <header class="hero">
+    <div class="intro">
+      <div class="app-id">
+        <img class="app-icon" src="img/icon.png" width="92" height="92" alt="">
+        <span class="platforms">iPhone · iPad</span>
+      </div>
+      <h1>My Music</h1>
+      <p class="subtitle"><span>Your files, your folders.</span><br>No subscription.</p>
+      <p class="promo">A beautiful player for the music you own: albums you ripped years ago, DJ mixes, live recordings, your own demos, even concert videos. Bring them in from your Mac, your PC or the Files app, and they appear exactly the way you organised them.</p>
+      <div class="cta">
+        <a class="store" href="https://apps.apple.com/app/id1027516877"><img src="../badges/app-store.svg" width="144" height="48" alt="Download on the App Store"></a>
+        <span class="meta">Free for 25 files. Premium is a one-time purchase.<br>Requires iOS or iPadOS 18 or later.</span>
+      </div>
+    </div>
+
+    <figure>
+      <section class="player" id="player" aria-label="Try the player">
+        <p class="from"><small>PLAYING FROM</small><b>Festival Sets 2026</b></p>
+        <div class="ring-wrap" id="ring-wrap">
+          <input type="range" id="seek" min="0" max="1000" value="300" aria-label="Position in the song">
+          <svg id="ring" viewBox="0 0 300 300" aria-hidden="true">
+            <defs>
+              <linearGradient id="prog" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="var(--ring-a)"/><stop offset=".5" stop-color="var(--ring-b)"/><stop offset="1" stop-color="var(--ring-c)"/>
+              </linearGradient>
+              <linearGradient id="art" x1="0" y1="0" x2="0" y2="1">
+                <stop id="art-0" offset="0" stop-color="#3B1E5A"/><stop id="art-1" offset=".55" stop-color="#E0607E"/><stop id="art-2" offset="1" stop-color="#FFB36B"/>
+              </linearGradient>
+              <clipPath id="cover-clip"><circle cx="150" cy="150" r="86"/></clipPath>
+            </defs>
+            <g class="bars" id="bars"></g>
+            <circle class="track" cx="150" cy="150" r="136" fill="none" stroke-width="3"/>
+            <circle id="progress" cx="150" cy="150" r="136" fill="none" stroke="url(#prog)" stroke-width="4" stroke-linecap="round" transform="rotate(-90 150 150)"/>
+            <g clip-path="url(#cover-clip)">
+              <rect x="64" y="64" width="172" height="172" fill="url(#art)"/>
+              <circle id="art-sun" cx="150" cy="196" r="46" fill="#FFE3A3"/>
+              <rect id="art-ground" x="64" y="204" width="172" height="40" fill="#1B1030"/>
+            </g>
+            <circle class="knob" id="knob" cx="150" cy="14" r="9"/>
+          </svg>
+        </div>
+        <div class="song">
+          <div><b id="title">Sunrise Set</b><span id="artist">Halden</span></div>
+          <svg class="heart" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.3C.9 8.2 3 4.5 6.6 4.5c2.2 0 3.7 1.2 5.4 3 1.7-1.8 3.2-3 5.4-3 3.6 0 5.7 3.7 4.2 7.2C19.5 16.4 12 21 12 21Z"/></svg>
+        </div>
+        <div class="times"><span id="elapsed">0:00</span><span id="remaining">-0:00</span></div>
+        <div class="controls">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 3h5v5M4 20 21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/></svg>
+          <svg class="icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M11 6v12L2.5 12 11 6Zm10 0v12l-8.5-6L21 6Z"/></svg>
+          <button class="play" id="play" type="button" aria-label="Pause"><svg id="play-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg></button>
+          <svg class="icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13 6v12l8.5-6L13 6ZM3 6v12l8.5-6L3 6Z"/></svg>
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 2l4 4-4 4M3 11V9a3 3 0 0 1 3-3h15M7 22l-4-4 4-4M21 13v2a3 3 0 0 1-3 3H3"/></svg>
+        </div>
+        <div class="covers" role="group" aria-label="Cover" id="covers"></div>
+      </section>
+      <figcaption class="player-cap">Drag the ring to scrub, or pick another cover and watch the colours follow. This demo is silent; in the app the bars follow the real music.</figcaption>
+    </figure>
+  </header>
+
+  <section class="rows" aria-label="Features">
+    <article class="row">
+      <div class="text">
+        <span class="eyebrow">Real folders, not a database</span>
+        <h2>Your folders are the library</h2>
+        <p>The folders in My Music are the real folders on your device, the same ones you see in the Files app and in Finder.</p>
+        <ul>
+          <li>Drag whole folders in from your Mac or PC, import them from iCloud Drive or anywhere in Files, or share files to it from other apps.</li>
+          <li>Rename, move or delete in the app or in Files, and the library keeps up by itself.</li>
+          <li>Albums are recognised automatically; playlists are there when you want a mix across folders.</li>
+        </ul>
+      </div>
+      <div class="pair">
+        <img src="img/iphone-library.webp" width="600" height="1304" loading="lazy" decoding="async" alt="The Library: Recently played covers, Favourites, Most played, Recently added and playlists.">
+        <img src="img/iphone-festival-sets.webp" width="600" height="1304" loading="lazy" decoding="async" alt="The Festival Sets 2026 folder with its sets, Play and Shuffle.">
+      </div>
+    </article>
+    <article class="row">
+      <div class="text">
+        <span class="eyebrow">A player that looks like your music</span>
+        <h2>Coloured by every cover</h2>
+        <ul>
+          <li>Colours taken from the cover tint the whole player and follow every song.</li>
+          <li>Three live visualizers, Bars ring, Spectrum and Wave, react to what is playing.</li>
+          <li>Scrub by dragging a ring around the cover, like the hand of a clock.</li>
+          <li>Up Next, shuffle, repeat, a sleep timer, gapless playback, AirPlay, lock screen and Control Center.</li>
+          <li>Picks up where you left off, down to the second.</li>
+        </ul>
+      </div>
+      <div class="pair">
+        <img src="img/iphone-player.webp" width="600" height="1304" loading="lazy" decoding="async" alt="The player for Sunrise Set by Halden: the Bars ring visualizer around a sunset cover, tinted in its colours.">
+        <img src="img/iphone-wave.webp" width="600" height="1304" loading="lazy" decoding="async" alt="The Wave visualizer under the cover.">
+      </div>
+    </article>
+    <article class="row">
+      <div class="text">
+        <span class="eyebrow">A library that stays tidy</span>
+        <h2>Tags and covers, written into your files</h2>
+        <ul>
+          <li>Edit title, artist, album, track number and cover, saved straight into your MP3 and M4A files so every app sees them.</li>
+          <li>Find covers in Apple's iTunes catalogue, or pick one from Photos or Files, for one song or a whole folder at once.</li>
+          <li>Long-press a song for Play next, Play later, Share, Move and more. Every move can be undone.</li>
+          <li>Search everything, or pull down inside a folder to search just that folder.</li>
+        </ul>
+      </div>
+      <div class="pair">
+        <img src="img/iphone-album.webp" width="600" height="1304" loading="lazy" decoding="async" alt="The album Copper Sky by Idris Vale, sorted by track number.">
+        <img src="img/iphone-menu.webp" width="600" height="1304" loading="lazy" decoding="async" alt="A song's long-press menu: Play next, Play later, Share, Add to playlist, Favourite, Move, Edit details, Update artwork and Delete.">
+      </div>
+    </article>
+  </section>
+
+  <section class="more" aria-labelledby="more-h">
+    <div class="section-head">
+      <span class="eyebrow">And also</span>
+      <h2 id="more-h">Videos for listening, and room on iPad</h2>
+    </div>
+    <div class="ipad">
+      <img src="img/ipad-festival-sets.webp" width="900" height="1200" loading="lazy" decoding="async" alt="My Music on iPad: the Festival Sets folder on the left and the player on the right.">
+      <img src="img/ipad-album-wave.webp" width="900" height="1200" loading="lazy" decoding="async" alt="My Music on iPad: the Copper Sky album beside the player with the Wave visualizer.">
+    </div>
+    <div class="cards">
+      <article class="card">
+        <h3>Videos, for listening</h3>
+        <p>MP4, M4V and MOV videos play as audio, like any song, with their embedded artwork or a frame from the video as the cover. Ideal for the live set that only exists as a video.</p>
+      </article>
+      <article class="card">
+        <h3>Made for iPad</h3>
+        <p>Your library on the left and the player on the right, with Up Next beside it in landscape.</p>
+      </article>
+      <article class="card">
+        <h3>Free for 25 files</h3>
+        <p>Every feature included. Premium, a one-time in-app purchase, removes the limit for good. Bought Premium for an earlier version? It's still yours.</p>
+      </article>
+      <article class="card">
+        <h3>Plays</h3>
+        <ul class="formats"><li>MP3</li><li>M4A</li><li>Apple Lossless</li><li>M4B</li><li>AAC</li><li>WAV</li><li>AIFF</li><li>CAF</li><li>FLAC</li><li>MP4</li><li>M4V</li><li>MOV</li></ul>
+        <p>Videos play as audio.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="note" aria-labelledby="note-h">
+    <span class="eyebrow" id="note-h">A note from the developer</span>
+    <blockquote>I built My Music for myself. I collect festival sets and live cuts, recordings no streaming service will ever offer, and I want them on my phone exactly as they sit on my Mac: one folder per festival, one per artist. So My Music does the opposite of other players: your folders are the library. I first released it in 2015, and version 2 is rebuilt from the ground up.</blockquote>
+    <cite>– Christian</cite>
+  </section>
+
+  <section class="privacy" aria-labelledby="privacy-h">
+    <span class="eyebrow">Privacy</span>
+    <h2 id="privacy-h">No account, no ads, no analytics, no tracking</h2>
+    <p>Everything plays offline. Apart from purchases, which Apple's App Store handles, the only time My Music goes online is when you search for a cover. <a href="PRIVACY">Read the privacy policy</a>.</p>
+  </section>
+
+  <footer class="foot">
+    <a href="SUPPORT">Support</a>
+    <a href="PRIVACY">Privacy policy</a>
+    <a href="https://github.com/ChristianDeckert/AppStore">App Store documents</a>
+  </footer>
+</main>
+
+<script>
+(() => {
+  'use strict';
+  const COVERS = [
+    { title: 'Sunrise Set', artist: 'Halden', length: 4359, art: ['#3B1E5A', '#E0607E', '#FFB36B'], sun: '#FFE3A3', ground: '#1B1030',
+      tint: { accent: '#FF7A45', a: '#FF4F7A', b: '#FF7A45', c: '#FFD08A', glowA: '#B8324F', glowB: '#2A0E16' } },
+    { title: 'Copper Sky', artist: 'Idris Vale', length: 209, art: ['#FF9A5A', '#F0603F', '#B8322A'], sun: '#FFC98A', ground: '#5A1712',
+      tint: { accent: '#FF9A5A', a: '#FF6B4A', b: '#FF9A5A', c: '#FFD3A0', glowA: '#A8401F', glowB: '#2A100A' } },
+    { title: 'Glass Harbor', artist: 'Nova Lindqvist', length: 191, art: ['#0E2F36', '#1E7F7A', '#7FE3D4'], sun: '#D9FFF6', ground: '#0A2226',
+      tint: { accent: '#7FE3D4', a: '#3FB8C9', b: '#7FE3D4', c: '#D9FFF6', glowA: '#1E6E68', glowB: '#08201F' } },
+  ];
+  const $ = (id) => document.getElementById(id);
+  const root = document.documentElement.style;
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)');
+  const N = 96, R0 = 98, CIRC = 2 * Math.PI * 136;
+  const bars = [];
+  for (let i = 0; i < N; i++) {
+    const l = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    const a = i / N * 2 * Math.PI;
+    l.dataset.cos = Math.cos(a); l.dataset.sin = Math.sin(a);
+    $('bars').append(l); bars.push(l);
+  }
+  $('progress').setAttribute('stroke-dasharray', CIRC);
+
+  let cover = COVERS[0], pos = cover.length * 0.3, playing = true, last = performance.now(), dragging = false;
+  const fmt = (s) => { s = Math.max(0, Math.floor(s)); const h = Math.floor(s / 3600), m = Math.floor(s / 60) % 60, x = String(s % 60).padStart(2, '0'); return h ? `${h}:${String(m).padStart(2, '0')}:${x}` : `${m}:${x}`; };
+
+  function drawBars(t) {
+    for (let i = 0; i < N; i++) {
+      const e = playing ? (0.5 + 0.5 * Math.sin(t * 2.1 + i * 0.37)) * (0.55 + 0.45 * Math.sin(t * 5.3 - i * 0.91)) * (0.6 + 0.4 * Math.sin(t * 1.3 + i * 0.13)) : 0.08;
+      const len = 4 + Math.max(0, e) * 24;
+      const c = +bars[i].dataset.cos, s = +bars[i].dataset.sin;
+      bars[i].setAttribute('x1', 150 + c * R0); bars[i].setAttribute('y1', 150 + s * R0);
+      bars[i].setAttribute('x2', 150 + c * (R0 + len)); bars[i].setAttribute('y2', 150 + s * (R0 + len));
+      bars[i].setAttribute('opacity', (0.35 + 0.65 * Math.min(1, e + 0.1)).toFixed(2));
+    }
+  }
+  function drawPos() {
+    const f = pos / cover.length;
+    $('progress').setAttribute('stroke-dashoffset', CIRC * (1 - f));
+    const a = f * 2 * Math.PI - Math.PI / 2;
+    $('knob').setAttribute('cx', 150 + 136 * Math.cos(a)); $('knob').setAttribute('cy', 150 + 136 * Math.sin(a));
+    $('elapsed').textContent = fmt(pos); $('remaining').textContent = '-' + fmt(cover.length - pos);
+    $('seek').value = String(Math.round(f * 1000));
+    $('seek').setAttribute('aria-valuetext', fmt(pos) + ' of ' + fmt(cover.length));
+  }
+  function frame(now) {
+    const dt = (now - last) / 1000; last = now;
+    if (playing && !dragging) { pos = (pos + dt) % cover.length; }
+    drawPos();
+    if (!reduce.matches) drawBars(now / 1000);
+    requestAnimationFrame(frame);
+  }
+
+  function setCover(c) {
+    cover = c; pos = Math.min(pos, c.length * 0.3);
+    $('title').textContent = c.title; $('artist').textContent = c.artist;
+    $('art-0').setAttribute('stop-color', c.art[0]); $('art-1').setAttribute('stop-color', c.art[1]); $('art-2').setAttribute('stop-color', c.art[2]);
+    $('art-sun').setAttribute('fill', c.sun); $('art-ground').setAttribute('fill', c.ground);
+    const t = c.tint;
+    root.setProperty('--accent', t.accent); root.setProperty('--ring-a', t.a); root.setProperty('--ring-b', t.b); root.setProperty('--ring-c', t.c);
+    root.setProperty('--glow-a', t.glowA); root.setProperty('--glow-b', t.glowB);
+    for (const b of $('covers').children) b.setAttribute('aria-pressed', String(b.dataset.title === c.title));
+    drawPos();
+  }
+  for (const c of COVERS) {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'cover-btn'; b.dataset.title = c.title;
+    b.innerHTML = '<i aria-hidden="true"></i>';
+    b.firstChild.style.setProperty('--art', `linear-gradient(180deg, ${c.art[0]}, ${c.art[1]} 55%, ${c.art[2]})`);
+    b.append(c.title);
+    b.addEventListener('click', () => setCover(c));
+    $('covers').append(b);
+  }
+
+  const svg = $('ring');
+  const fromPointer = (e) => {
+    const r = svg.getBoundingClientRect();
+    const a = Math.atan2(e.clientY - (r.top + r.height / 2), e.clientX - (r.left + r.width / 2)) + Math.PI / 2;
+    pos = ((a < 0 ? a + 2 * Math.PI : a) / (2 * Math.PI)) * cover.length;
+    drawPos();
+  };
+  svg.addEventListener('pointerdown', (e) => { dragging = true; svg.setPointerCapture(e.pointerId); fromPointer(e); });
+  svg.addEventListener('pointermove', (e) => { if (dragging) fromPointer(e); });
+  const end = () => { dragging = false; };
+  svg.addEventListener('pointerup', end); svg.addEventListener('pointercancel', end);
+  $('seek').addEventListener('input', () => { pos = Number($('seek').value) / 1000 * cover.length; drawPos(); });
+
+  $('play').addEventListener('click', () => {
+    playing = !playing;
+    $('play').setAttribute('aria-label', playing ? 'Pause' : 'Play');
+    $('play-icon').innerHTML = playing ? '<path d="M6 4h4v16H6zM14 4h4v16h-4z"/>' : '<path d="M7 4.5v15l12.5-7.5L7 4.5Z"/>';
+    if (reduce.matches) drawBars(0);
+  });
+
+  setCover(COVERS[0]);
+  drawBars(0);
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
