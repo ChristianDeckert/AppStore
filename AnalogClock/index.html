@@ -62,6 +62,11 @@ h2 { font-size: clamp(26px, 4vw, 36px); line-height: 1.15; font-weight: 700; let
 .site-head .home:hover { color: var(--ink); }
 .site-head .home svg { width: 16px; height: 16px; color: var(--gold); }
 .site-head .here { display: inline-flex; align-items: center; gap: 9px; min-width: 0; font-size: 14px; font-weight: 650; color: var(--ink); white-space: nowrap; }
+.site-head .lang-switch { margin-left: auto; display: inline-flex; padding: 3px; border-radius: 999px; background: var(--card); box-shadow: 0 0 0 1px var(--line); }
+.site-head .lang-switch a { padding: 5px 9px; border-radius: 999px; font-size: 12px; font-weight: 700; letter-spacing: .08em; text-decoration: none; color: var(--label); }
+.site-head .lang-switch a:hover { color: var(--ink); }
+.site-head .lang-switch a[aria-current] { background: var(--gold); color: var(--graphite); }
+@media (max-width: 420px) { .site-head .here-name { display: none; } }
 .site-head .here img { width: 26px; height: 26px; border-radius: 22.37%; box-shadow: 0 0 0 1px rgba(255, 255, 255, .08); }
 
 /* Hero */
@@ -165,8 +170,9 @@ h1 { font-size: clamp(40px, 7vw, 64px); line-height: 1; font-weight: 800; letter
 <body>
 <header class="site-head">
   <div class="bar">
-    <a class="home" href="../"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>All apps</a>
-    <span class="here"><img src="img/icon-192.webp" width="26" height="26" alt="">Analog Clock</span>
+    <a class="home" href="../"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg><span data-i18n="nav.all">All apps</span></a>
+    <nav class="lang-switch" aria-label="Language" data-i18n-aria="lang.label"><a href="?lang=de" hreflang="de" lang="de" title="Deutsch">DE</a><a href="?lang=en" hreflang="en" lang="en" title="English">EN</a></nav>
+    <span class="here"><img src="img/icon-192.webp" width="26" height="26" alt=""><span class="here-name">Analog Clock</span></span>
   </div>
 </header>
 <main class="page">
@@ -178,11 +184,11 @@ h1 { font-size: clamp(40px, 7vw, 64px); line-height: 1; font-weight: 800; letter
         <span class="eyebrow">iPhone · iPad · Apple TV</span>
       </div>
       <h1>Analog Clock</h1>
-      <p class="subtitle">A beautiful clock for the desk, the bedside table or the kitchen shelf.</p>
-      <p class="promo">Turn an iPhone, iPad or Apple TV into a full-screen analog clock, with designs from classic watches to playful scenes for kids, the weather on the dial and a night mode that dims the face after dark.</p>
+      <p class="subtitle" data-i18n="subtitle">A beautiful clock for the desk, the bedside table or the kitchen shelf.</p>
+      <p class="promo" data-i18n="promo">Turn an iPhone, iPad or Apple TV into a full-screen analog clock, with designs from classic watches to playful scenes for kids, the weather on the dial and a night mode that dims the face after dark.</p>
       <div class="cta">
-        <a class="store" href="https://apps.apple.com/app/id957157160"><img src="../badges/app-store.svg" width="144" height="48" alt="Download on the App Store"></a>
-        <span class="meta">One purchase for iPhone, iPad and Apple TV.<br>Requires iOS, iPadOS or tvOS 17 or later.</span>
+        <a class="store" href="https://apps.apple.com/app/id957157160"><img src="../badges/app-store.svg" width="144" height="48" alt="Download on the App Store" data-i18n-alt="badge.alt"></a>
+        <span class="meta" data-i18n="meta">One purchase for iPhone, iPad and Apple TV.<br>Requires iOS, iPadOS or tvOS 17 or later.</span>
       </div>
     </div>
 
@@ -211,54 +217,54 @@ h1 { font-size: clamp(40px, 7vw, 64px); line-height: 1; font-weight: 800; letter
         </svg>
         <span class="name" id="design-name">Aviator · Timepieces</span>
       </div>
-      <div class="swatches" role="group" aria-label="Clock design" id="swatches"></div>
-      <p class="hint">Five of the 43 designs, drawn live with your time. The app has them all, and a Studio to make your own.</p>
+      <div class="swatches" role="group" aria-label="Clock design" data-i18n-aria="swatches.label" id="swatches"></div>
+      <p class="hint" data-i18n="hint">Five of the 43 designs, drawn live with your time. The app has them all, and a Studio to make your own.</p>
     </div>
   </header>
 
   <section class="gallery" aria-labelledby="gallery-h">
     <div class="section-head">
-      <span class="eyebrow">Gallery</span>
-      <h2 id="gallery-h">43 designs in four collections</h2>
-      <p>Timepieces such as Aviator, Tide and Nightlife. Pop styles such as Neon Drive, Sakura Pop and Pixel Arcade. Playful scenes for kids such as Space Cadet, Under the Sea and Dino Jungle. And video backgrounds. The original faces from the first version are still there.</p>
+      <span class="eyebrow" data-i18n="gallery.eyebrow">Gallery</span>
+      <h2 id="gallery-h" data-i18n="gallery.h2">43 designs in four collections</h2>
+      <p data-i18n="gallery.p">Timepieces such as Aviator, Tide and Nightlife. Pop styles such as Neon Drive, Sakura Pop and Pixel Arcade. Playful scenes for kids such as Space Cadet, Under the Sea and Dino Jungle. And video backgrounds. The original faces from the first version are still there.</p>
     </div>
-    <div class="strip" tabindex="0" aria-label="Designs on iPhone">
-      <figure><img src="img/iphone-aviator.webp" width="600" height="1304" loading="lazy" decoding="async" alt="The Aviator design: a graphite dial with silver numerals, white hands, two subdials and a gold second hand."><figcaption><b>Aviator</b><span>Timepieces</span></figcaption></figure>
-      <figure><img src="img/iphone-neondrive.webp" width="600" height="1304" loading="lazy" decoding="async" alt="The Neon Drive design: a cyan dial over a purple synthwave city and a pink grid."><figcaption><b>Neon Drive</b><span>Pop</span></figcaption></figure>
-      <figure><img src="img/iphone-nightlife.webp" width="600" height="1304" loading="lazy" decoding="async" alt="The Nightlife design: a plum dial with Roman numerals in a copper frame."><figcaption><b>Nightlife</b><span>Timepieces</span></figcaption></figure>
-      <figure><img src="img/iphone-sakurapop.webp" width="600" height="1304" loading="lazy" decoding="async" alt="The Sakura Pop design: a cream dial in a pink frame with falling cherry blossoms."><figcaption><b>Sakura Pop</b><span>Pop</span></figcaption></figure>
-      <figure><img src="img/iphone-spacecadet.webp" width="600" height="1304" loading="lazy" decoding="async" alt="The Space Cadet design: a blue dial among stars, a planet and the moon."><figcaption><b>Space Cadet</b><span>Playful</span></figcaption></figure>
-      <figure><img src="img/iphone-tide.webp" width="600" height="1304" loading="lazy" decoding="async" alt="The Tide design: a black diver's dial with luminous dots and a red second hand."><figcaption><b>Tide</b><span>Timepieces</span></figcaption></figure>
-      <figure><img src="img/iphone-underthesea.webp" width="600" height="1304" loading="lazy" decoding="async" alt="The Under the Sea design: a teal dial with jellyfish, fish and bubbles."><figcaption><b>Under the Sea</b><span>Playful</span></figcaption></figure>
-      <figure><img src="img/iphone-videofiji.webp" width="600" height="1304" loading="lazy" decoding="async" alt="A video design: a glass dial over a palm tree against a blue sky."><figcaption><b>Fiji Islands</b><span>Videos</span></figcaption></figure>
+    <div class="strip" tabindex="0" aria-label="Designs on iPhone" data-i18n-aria="strip.label">
+      <figure><img src="img/iphone-aviator.webp" width="600" height="1304" loading="lazy" decoding="async" data-i18n-alt="alt.aviator" alt="The Aviator design: a graphite dial with silver numerals, white hands, two subdials and a gold second hand."><figcaption><b>Aviator</b><span data-i18n="group.timepieces">Timepieces</span></figcaption></figure>
+      <figure><img src="img/iphone-neondrive.webp" width="600" height="1304" loading="lazy" decoding="async" data-i18n-alt="alt.neondrive" alt="The Neon Drive design: a cyan dial over a purple synthwave city and a pink grid."><figcaption><b>Neon Drive</b><span>Pop</span></figcaption></figure>
+      <figure><img src="img/iphone-nightlife.webp" width="600" height="1304" loading="lazy" decoding="async" data-i18n-alt="alt.nightlife" alt="The Nightlife design: a plum dial with Roman numerals in a copper frame."><figcaption><b>Nightlife</b><span data-i18n="group.timepieces">Timepieces</span></figcaption></figure>
+      <figure><img src="img/iphone-sakurapop.webp" width="600" height="1304" loading="lazy" decoding="async" data-i18n-alt="alt.sakurapop" alt="The Sakura Pop design: a cream dial in a pink frame with falling cherry blossoms."><figcaption><b>Sakura Pop</b><span>Pop</span></figcaption></figure>
+      <figure><img src="img/iphone-spacecadet.webp" width="600" height="1304" loading="lazy" decoding="async" data-i18n-alt="alt.spacecadet" alt="The Space Cadet design: a blue dial among stars, a planet and the moon."><figcaption><b data-i18n="name.spacecadet">Space Cadet</b><span data-i18n="group.playful">Playful</span></figcaption></figure>
+      <figure><img src="img/iphone-tide.webp" width="600" height="1304" loading="lazy" decoding="async" data-i18n-alt="alt.tide" alt="The Tide design: a black diver's dial with luminous dots and a red second hand."><figcaption><b>Tide</b><span data-i18n="group.timepieces">Timepieces</span></figcaption></figure>
+      <figure><img src="img/iphone-underthesea.webp" width="600" height="1304" loading="lazy" decoding="async" data-i18n-alt="alt.underthesea" alt="The Under the Sea design: a teal dial with jellyfish, fish and bubbles."><figcaption><b data-i18n="name.underthesea">Under the Sea</b><span data-i18n="group.playful">Playful</span></figcaption></figure>
+      <figure><img src="img/iphone-videofiji.webp" width="600" height="1304" loading="lazy" decoding="async" data-i18n-alt="alt.fiji" alt="A video design: a glass dial over a palm tree against a blue sky."><figcaption><b data-i18n="name.fiji">Fiji Islands</b><span>Videos</span></figcaption></figure>
     </div>
   </section>
 
   <section class="features" aria-labelledby="features-h">
     <div class="section-head">
-      <span class="eyebrow">Features</span>
-      <h2 id="features-h">Make it yours, keep it on all day</h2>
+      <span class="eyebrow" data-i18n="features.eyebrow">Features</span>
+      <h2 id="features-h" data-i18n="features.h2">Make it yours, keep it on all day</h2>
     </div>
     <div class="cards">
       <article class="card">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3v2M21 12h-2M12 21v-2M3 12h2"/><path d="M12 12l4-3"/><path d="M12 12V7"/></svg>
-        <h3>The Studio</h3>
-        <p>Change everything: dial colour and texture, frame and bezel, hands, numerals, markers, date window and subdials. Add a photo or a video as background, drifting shapes, ticking and morning sounds, and save as many designs of your own as you like.</p>
+        <h3 data-i18n="studio.h3">The Studio</h3>
+        <p data-i18n="studio.p">Change everything: dial colour and texture, frame and bezel, hands, numerals, markers, date window and subdials. Add a photo or a video as background, drifting shapes, ticking and morning sounds, and save as many designs of your own as you like.</p>
       </article>
       <article class="card">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 18h10a4 4 0 0 0 .5-7.97A6 6 0 0 0 6.1 11.5 3.25 3.25 0 0 0 7 18Z"/></svg>
-        <h3>Weather on the dial</h3>
-        <p>The current weather sits on the dial or in the bar at the top, depending on the design, with an hourly forecast one tap away. It comes from Apple Weather.</p>
+        <h3 data-i18n="weather.h3">Weather on the dial</h3>
+        <p data-i18n="weather.p">The current weather sits on the dial or in the bar at the top, depending on the design, with an hourly forecast one tap away. It comes from Apple Weather.</p>
       </article>
       <article class="card">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z"/></svg>
-        <h3>Day and night</h3>
-        <p>Night mode dims the face at the hour you choose, with its own background if you like, and a morning sound can greet the new day. A screensaver spares displays that show the clock all day.</p>
+        <h3 data-i18n="night.h3">Day and night</h3>
+        <p data-i18n="night.p">Night mode dims the face at the hour you choose, with its own background if you like, and a morning sound can greet the new day. A screensaver spares displays that show the clock all day.</p>
       </article>
       <article class="card">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="4.5"/><circle cx="12" cy="12" r="4"/><path d="M12 12V9.5"/></svg>
-        <h3>An icon to match</h3>
-        <p>The app icon changes to match the design you pick, on iPhone, iPad and Apple TV.</p>
+        <h3 data-i18n="icon.h3">An icon to match</h3>
+        <p data-i18n="icon.p">The app icon changes to match the design you pick, on iPhone, iPad and Apple TV.</p>
       </article>
     </div>
   </section>
@@ -266,43 +272,101 @@ h1 { font-size: clamp(40px, 7vw, 64px); line-height: 1; font-weight: 800; letter
   <section class="device" aria-labelledby="tv-h">
     <div class="section-head">
       <span class="eyebrow">Apple TV</span>
-      <h2 id="tv-h">The big screen in the living room</h2>
-      <p>Swipe down into the clock and the tab bar hides, so only the clock is on screen. Press Select for the hourly forecast. The Apple TV app comes with the same purchase.</p>
+      <h2 id="tv-h" data-i18n="tv.h2">The big screen in the living room</h2>
+      <p data-i18n="tv.p">Swipe down into the clock and the tab bar hides, so only the clock is on screen. Press Select for the hourly forecast. The Apple TV app comes with the same purchase.</p>
     </div>
-    <div class="banner"><img src="img/hero.webp" width="1600" height="497" loading="lazy" decoding="async" alt="The Analog Clock wordmark next to a wall of nine designs on Apple TV."></div>
+    <div class="banner"><img src="img/hero.webp" width="1600" height="497" loading="lazy" decoding="async" data-i18n-alt="alt.banner" alt="The Analog Clock wordmark next to a wall of nine designs on Apple TV."></div>
     <div class="tv-row">
-      <img src="img/tv-spacecadet.webp" width="960" height="540" loading="lazy" decoding="async" alt="Space Cadet on Apple TV.">
-      <img src="img/tv-neondrive.webp" width="960" height="540" loading="lazy" decoding="async" alt="Neon Drive on Apple TV.">
-      <img src="img/tv-underthesea.webp" width="960" height="540" loading="lazy" decoding="async" alt="Under the Sea on Apple TV.">
+      <img src="img/tv-spacecadet.webp" width="960" height="540" loading="lazy" decoding="async" alt="Space Cadet on Apple TV." data-i18n-alt="alt.tv.spacecadet">
+      <img src="img/tv-neondrive.webp" width="960" height="540" loading="lazy" decoding="async" alt="Neon Drive on Apple TV." data-i18n-alt="alt.tv.neondrive">
+      <img src="img/tv-underthesea.webp" width="960" height="540" loading="lazy" decoding="async" alt="Under the Sea on Apple TV." data-i18n-alt="alt.tv.underthesea">
     </div>
   </section>
 
   <section class="device" aria-labelledby="ipad-h">
     <div class="section-head">
       <span class="eyebrow">iPad</span>
-      <h2 id="ipad-h">A clock on the kitchen shelf</h2>
-      <p>Tap the clock to show the controls; they fade away again after a few seconds. In the Gallery, touch and hold a design to customize it.</p>
+      <h2 id="ipad-h" data-i18n="ipad.h2">A clock on the kitchen shelf</h2>
+      <p data-i18n="ipad.p">Tap the clock to show the controls; they fade away again after a few seconds. In the Gallery, touch and hold a design to customize it.</p>
     </div>
     <div class="ipad-row">
-      <img src="img/ipad-nightlife.webp" width="900" height="1200" loading="lazy" decoding="async" alt="Nightlife on iPad.">
-      <img src="img/ipad-sakurapop.webp" width="900" height="1200" loading="lazy" decoding="async" alt="Sakura Pop on iPad.">
+      <img src="img/ipad-nightlife.webp" width="900" height="1200" loading="lazy" decoding="async" alt="Nightlife on iPad." data-i18n-alt="alt.ipad.nightlife">
+      <img src="img/ipad-sakurapop.webp" width="900" height="1200" loading="lazy" decoding="async" alt="Sakura Pop on iPad." data-i18n-alt="alt.ipad.sakurapop">
     </div>
   </section>
 
   <section class="privacy" aria-labelledby="privacy-h">
-    <span class="eyebrow">Privacy</span>
-    <h2 id="privacy-h">No account, no analytics, no ads</h2>
-    <p>The weather needs your approximate location, and YouTube video designs load from YouTube. That is all. <a href="PRIVACY">Read the privacy policy</a>.</p>
+    <span class="eyebrow" data-i18n="privacy.eyebrow">Privacy</span>
+    <h2 id="privacy-h" data-i18n="privacy.h2">No account, no analytics, no ads</h2>
+    <p data-i18n="privacy.p">The weather needs your approximate location, and YouTube video designs load from YouTube. That is all. <a href="PRIVACY" hreflang="en">Read the privacy policy</a>.</p>
   </section>
 
   <footer class="foot">
-    <a href="SUPPORT">Support</a>
-    <a href="PRIVACY">Privacy policy</a>
-    <a href="../">All apps</a>
+    <a href="SUPPORT" hreflang="en" data-i18n="foot.support">Support</a>
+    <a href="PRIVACY" hreflang="en" data-i18n="foot.privacy">Privacy policy</a>
+    <a href="../" data-i18n="nav.all">All apps</a>
     <span class="legal">© 2026 Christian Deckert · <a href="mailto:deckert.christian@icloud.com">deckert.christian@icloud.com</a></span>
   </footer>
 </main>
 
+<script type="application/json" id="strings-de">
+{
+  "description": "Analog Clock macht aus iPhone, iPad oder Apple TV eine Analoguhr im Vollbild, mit Designs von klassischen Uhren bis zu verspielten Szenen für Kinder, dem Wetter auf dem Zifferblatt und einem Nachtmodus.",
+  "nav.all": "Alle Apps",
+  "lang.label": "Sprache",
+  "subtitle": "Eine schöne Uhr für den Schreibtisch, den Nachttisch oder das Küchenregal.",
+  "promo": "Mach aus iPhone, iPad oder Apple TV eine Analoguhr im Vollbild, mit Designs von klassischen Uhren bis zu verspielten Szenen für Kinder, dem Wetter auf dem Zifferblatt und einem Nachtmodus, der das Zifferblatt abends abdunkelt.",
+  "badge.alt": "Laden im App Store",
+  "meta": "Ein Kauf für iPhone, iPad und Apple TV.<br>Erfordert iOS, iPadOS oder tvOS 17 oder neuer.",
+  "swatches.label": "Design der Uhr",
+  "hint": "Fünf der 43 Designs, live mit deiner Uhrzeit gezeichnet. In der App findest du alle, dazu ein Studio für eigene Designs.",
+  "clock.aria": "Eine Analoguhr mit der aktuellen Uhrzeit im Design {design}",
+  "group.timepieces": "Zeitmesser",
+  "group.pop": "Pop",
+  "group.playful": "Verspielt",
+  "gallery.eyebrow": "Galerie",
+  "gallery.h2": "43 Designs in vier Sammlungen",
+  "gallery.p": "Zeitmesser wie Aviator, Tide und Nightlife. Pop-Stile wie Neon Drive, Sakura Pop und Pixel Arcade. Verspielte Szenen für Kinder wie Weltraumkadett, Unter dem Meer und Dino-Dschungel. Und Video-Hintergründe. Die Zifferblätter der ersten Version sind weiterhin dabei.",
+  "strip.label": "Designs auf dem iPhone",
+  "alt.aviator": "Das Design Aviator: ein Zifferblatt in Graphit mit silbernen Ziffern, weißen Zeigern, zwei Hilfszifferblättern und goldenem Sekundenzeiger.",
+  "alt.neondrive": "Das Design Neon Drive: ein cyanfarbenes Zifferblatt über einer violetten Synthwave-Stadt und einem pinken Raster.",
+  "alt.nightlife": "Das Design Nightlife: ein pflaumenfarbenes Zifferblatt mit römischen Ziffern in einem Kupferrahmen.",
+  "alt.sakurapop": "Das Design Sakura Pop: ein cremefarbenes Zifferblatt in einem rosa Rahmen mit fallenden Kirschblüten.",
+  "alt.spacecadet": "Das Design Weltraumkadett: ein blaues Zifferblatt zwischen Sternen, einem Planeten und dem Mond.",
+  "alt.tide": "Das Design Tide: ein schwarzes Taucherzifferblatt mit Leuchtpunkten und rotem Sekundenzeiger.",
+  "alt.underthesea": "Das Design Unter dem Meer: ein petrolfarbenes Zifferblatt mit Quallen, Fischen und Blasen.",
+  "alt.fiji": "Ein Video-Design: ein gläsernes Zifferblatt vor einer Palme und blauem Himmel.",
+  "name.spacecadet": "Weltraumkadett",
+  "name.underthesea": "Unter dem Meer",
+  "name.fiji": "Fidschi-Inseln",
+  "features.eyebrow": "Funktionen",
+  "features.h2": "Mach sie zu deiner, lass sie den ganzen Tag laufen",
+  "studio.h3": "Das Studio",
+  "studio.p": "Ändere alles: Farbe und Textur des Zifferblatts, Rahmen und Lünette, Zeiger, Ziffern, Markierungen, Datumsfenster und Hilfszifferblätter. Nimm ein Foto oder Video als Hintergrund, schwebende Formen, Tick- und Morgentöne, und sichere so viele eigene Designs, wie du willst.",
+  "weather.h3": "Wetter auf dem Zifferblatt",
+  "weather.p": "Das aktuelle Wetter steht je nach Design auf dem Zifferblatt oder in der Leiste oben, die Stundenvorhersage ist einen Tipp entfernt. Es kommt von Apple Wetter.",
+  "night.h3": "Tag und Nacht",
+  "night.p": "Der Nachtmodus dunkelt das Zifferblatt zur gewählten Stunde ab, auf Wunsch mit eigenem Hintergrund, und ein Morgenton kann den neuen Tag begrüßen. Ein Bildschirmschoner schont Displays, auf denen die Uhr den ganzen Tag läuft.",
+  "icon.h3": "Ein passendes Symbol",
+  "icon.p": "Das App-Symbol passt sich dem gewählten Design an, auf iPhone, iPad und Apple TV.",
+  "tv.h2": "Der große Bildschirm im Wohnzimmer",
+  "tv.p": "Wisch nach unten in die Uhr, und die Tab-Leiste verschwindet, sodass nur noch die Uhr zu sehen ist. „Auswählen“ zeigt die Stundenvorhersage. Die App für Apple TV ist im selben Kauf enthalten.",
+  "alt.banner": "Der Schriftzug Analog Clock neben einer Wand aus neun Designs auf dem Apple TV.",
+  "alt.tv.spacecadet": "Weltraumkadett auf dem Apple TV.",
+  "alt.tv.neondrive": "Neon Drive auf dem Apple TV.",
+  "alt.tv.underthesea": "Unter dem Meer auf dem Apple TV.",
+  "ipad.h2": "Eine Uhr fürs Küchenregal",
+  "ipad.p": "Tipp auf die Uhr, um die Bedienelemente zu zeigen; nach ein paar Sekunden blenden sie sich wieder aus. In der Galerie hältst du ein Design gedrückt, um es anzupassen.",
+  "alt.ipad.nightlife": "Nightlife auf dem iPad.",
+  "alt.ipad.sakurapop": "Sakura Pop auf dem iPad.",
+  "privacy.eyebrow": "Datenschutz",
+  "privacy.h2": "Kein Konto, keine Analyse, keine Werbung",
+  "privacy.p": "Das Wetter braucht deinen ungefähren Standort, und YouTube-Video-Designs laden von YouTube. Das ist alles. <a href='PRIVACY' hreflang='en'>Datenschutzerklärung lesen (EN)</a>.",
+  "foot.support": "Support (EN)",
+  "foot.privacy": "Datenschutzerklärung (EN)"
+}
+</script>
+<script src="../i18n.js"></script>
 <script>
 (() => {
   'use strict';
@@ -314,6 +378,7 @@ h1 { font-size: clamp(40px, 7vw, 64px); line-height: 1; font-weight: 800; letter
     { id: 'sakura', name: 'Sakura Pop', group: 'Pop', bg: '#FFE4ED', frame: '#FFB7C9', bezel: '#FFB7C9', face: '#FFFDF8', tick: '#FF8FAB', num: '#7A4A57', hand: '#7A4A57', second: '#28B48C', numerals: 'quarters', style: 'rounded', subdials: false, date: true, label: '#B0566F' },
     { id: 'tide', name: 'Tide', group: 'Timepieces', bg: '#101215', frame: '#2E333B', bezel: '#2E333B', face: '#0B0C0E', tick: '#F4F1DE', num: '#F4F1DE', hand: '#C6CBD4', second: '#C93B33', numerals: 'none', style: 'arabic', subdials: false, date: true, label: '#8A9099' },
   ];
+  const GROUP = { Timepieces: I18N.t('group.timepieces', 'Timepieces'), Pop: I18N.t('group.pop', 'Pop') };
   const ROMAN = { 12: 'XII', 3: 'III', 6: 'VI', 9: 'IX' };
   const NS = 'http://www.w3.org/2000/svg';
   const $ = (id) => document.getElementById(id);
@@ -355,8 +420,8 @@ h1 { font-size: clamp(40px, 7vw, 64px); line-height: 1; font-weight: 800; letter
     drawNumerals(d);
     $('subdials').style.display = d.subdials ? '' : 'none';
     $('date').style.display = d.date ? '' : 'none';
-    $('design-name').textContent = d.name + ' · ' + d.group;
-    svg.setAttribute('aria-label', 'An analog clock showing the current time in the ' + d.name + ' design');
+    $('design-name').textContent = d.name + ' · ' + GROUP[d.group];
+    svg.setAttribute('aria-label', I18N.t('clock.aria', 'An analog clock showing the current time in the {design} design').replace('{design}', d.name));
     for (const b of $('swatches').children) b.setAttribute('aria-pressed', String(b.dataset.id === d.id));
   }
 
