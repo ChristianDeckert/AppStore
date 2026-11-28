@@ -82,6 +82,11 @@ h2 { font-size: clamp(30px, 4.6vw, 44px); line-height: 1.08; font-weight: 900; l
 .site-head .home svg { width: 16px; height: 16px; color: var(--grape); }
 .site-head .here { display: inline-flex; align-items: center; gap: 9px; min-width: 0; font-size: 18px; font-weight: 900; letter-spacing: -.01em; white-space: nowrap; }
 .site-head .here img { width: 30px; height: 30px; border-radius: 22.37%; border: 2.5px solid var(--ink); }
+.lang-switch { margin-left: auto; display: inline-flex; padding: 3px; border: 2.5px solid var(--ink); border-radius: 999px; background: var(--paper); box-shadow: 0 3px 0 var(--ink); }
+.lang-switch a { padding: 5px 9px; border-radius: 999px; font-size: 12px; font-weight: 900; letter-spacing: .04em; color: var(--ink-soft); text-decoration: none; }
+.lang-switch a:hover { color: var(--ink); }
+.lang-switch a[aria-current] { background: var(--grape); color: var(--paper); }
+@media (max-width: 420px) { .site-head .here-name { display: none; } }
 
 /* Hero */
 .hero { display: grid; gap: 40px; align-items: center; padding-top: 32px; }
@@ -138,6 +143,7 @@ h1 { font-size: clamp(48px, 8vw, 76px); line-height: 1; font-weight: 900; letter
 .act.again span { background: var(--bubblegum); }
 .act.flip span { width: 74px; height: 74px; background: var(--grape); color: var(--paper); }
 .act.got span { background: var(--mint); }
+.act b { font-weight: inherit; }
 .act:disabled { opacity: .4; cursor: default; }
 .act:disabled span { transform: none; }
 .done { display: grid; gap: 16px; justify-items: center; text-align: center; padding: 8px 0 4px; }
@@ -200,8 +206,9 @@ kbd { font: 800 13px/1 var(--font); padding: 3px 7px; border: 2px solid currentC
 <body>
 <header class="site-head">
   <div class="bar">
-    <a class="home" href="../"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>All apps</a>
-    <span class="here"><img src="img/icon-192.webp" width="30" height="30" alt="">Flashcards</span>
+    <a class="home" href="../"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg><span data-i18n="nav.all">All apps</span></a>
+    <nav class="lang-switch" aria-label="Language" data-i18n-aria="lang.label"><a href="?lang=de" hreflang="de" lang="de" title="Deutsch">DE</a><a href="?lang=en" hreflang="en" lang="en" title="English">EN</a></nav>
+    <span class="here"><img src="img/icon-192.webp" width="30" height="30" alt=""><span class="here-name">Flashcards</span></span>
   </div>
 </header>
 <main class="page">
@@ -211,21 +218,21 @@ kbd { font: 800 13px/1 var(--font); padding: 3px 7px; border: 2px solid currentC
       <img class="app-icon" src="img/icon.png" width="96" height="96" alt="">
       <span class="sticker-label">iPhone · iPad</span>
       <h1>Flashcards</h1>
-      <p class="subtitle">Flashcards for <mark>anything</mark>.</p>
-      <p class="promo">Learn vocabulary, capitals, facts, anything, with piles of colorful cards you write yourself. Flip, say the answer out loud, and train a pile in minutes.</p>
+      <p class="subtitle" data-i18n="hero.subtitle">Flashcards for <mark>anything</mark>.</p>
+      <p class="promo" data-i18n="hero.promo">Learn vocabulary, capitals, facts, anything, with piles of colorful cards you write yourself. Flip, say the answer out loud, and train a pile in minutes.</p>
       <div class="cta">
-        <a class="store" href="https://apps.apple.com/app/id1380756510"><img src="../badges/app-store.svg" width="150" height="50" alt="Download on the App Store"></a>
-        <span class="meta">Free for 5 piles of 10 cards. Premium is a one-time purchase.<br>Requires iOS or iPadOS 17 or later.</span>
+        <a class="store" href="https://apps.apple.com/app/id1380756510"><img src="../badges/app-store.svg" width="150" height="50" data-i18n-alt="badge.alt" alt="Download on the App Store"></a>
+        <span class="meta" data-i18n="hero.meta">Free for 5 piles of 10 cards. Premium is a one-time purchase.<br>Requires iOS or iPadOS 17 or later.</span>
       </div>
     </div>
 
     <figure>
-      <section class="trainer" id="trainer" aria-label="Try a training run">
+      <section class="trainer" id="trainer" aria-label="Try a training run" data-i18n-aria="trainer.aria">
         <div class="tbar">
-          <span class="pile-name"><i aria-hidden="true"></i>Animals in German</span>
+          <span class="pile-name"><i aria-hidden="true"></i><span data-i18n="trainer.pile">Animals in German</span></span>
           <span class="pills">
-            <span class="pill" title="Time"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M10 2h4"/></svg><span id="t-time">00:00</span></span>
-            <span class="pill" title="Retries"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2.3 5.7M20 4v7h-7"/></svg><span id="t-retries">0 retries</span></span>
+            <span class="pill" title="Time" data-i18n-title="trainer.timeTitle"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M10 2h4"/></svg><span id="t-time">00:00</span></span>
+            <span class="pill" title="Retries" data-i18n-title="trainer.retriesTitle"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2.3 5.7M20 4v7h-7"/></svg><span id="t-retries">0 retries</span></span>
           </span>
         </div>
         <div class="progress" aria-hidden="true"><b id="t-progress"></b></div>
@@ -233,122 +240,207 @@ kbd { font: 800 13px/1 var(--font); padding: 3px 7px; border: 2px solid currentC
           <div class="card-wrap">
             <div class="stack-hint" aria-hidden="true"></div>
             <button class="fcard" id="t-card" type="button" aria-describedby="t-prompt">
-              <span class="face front"><span class="side">Front</span><span class="word" id="t-front">the bird</span></span>
-              <span class="face back"><span class="side">Back</span><span class="word" id="t-back">der Vogel</span></span>
+              <span class="face front"><span class="side" data-i18n="trainer.front">Front</span><span class="word" id="t-front">the bird</span></span>
+              <span class="face back"><span class="side" data-i18n="trainer.back">Back</span><span class="word" id="t-back">der Vogel</span></span>
             </button>
           </div>
           <p class="prompt" id="t-prompt">Say the answer out loud, then flip.</p>
           <div class="actions">
-            <button class="act again" id="t-again" type="button" disabled><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2.3 5.7M20 4v7h-7"/></svg></span>Again</button>
-            <button class="act flip" id="t-flip" type="button"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9h14l-4-4M20 15H6l4 4"/></svg></span>Flip</button>
-            <button class="act got" id="t-got" type="button" disabled><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>Got it</button>
+            <button class="act again" id="t-again" type="button" disabled><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2.3 5.7M20 4v7h-7"/></svg></span><b data-i18n="trainer.again">Again</b></button>
+            <button class="act flip" id="t-flip" type="button"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9h14l-4-4M20 15H6l4 4"/></svg></span><b data-i18n="trainer.flip">Flip</b></button>
+            <button class="act got" id="t-got" type="button" disabled><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><b data-i18n="trainer.got">Got it</b></button>
           </div>
         </div>
         <div class="done" id="t-done" hidden>
-          <p class="cleared">Pile cleared!</p>
+          <p class="cleared" data-i18n="trainer.cleared">Pile cleared!</p>
           <div class="stats">
-            <span class="stat"><b id="d-known">3</b><small>known</small></span>
-            <span class="stat"><b id="d-time">00:00</b><small>time</small></span>
-            <span class="stat"><b id="d-retries">0</b><small>retries</small></span>
+            <span class="stat"><b id="d-known">3</b><small data-i18n="trainer.known">known</small></span>
+            <span class="stat"><b id="d-time">00:00</b><small data-i18n="trainer.time">time</small></span>
+            <span class="stat"><b id="d-retries">0</b><small data-i18n="trainer.retries">retries</small></span>
           </div>
-          <button class="again-btn" id="t-restart" type="button">Shuffle and go again</button>
+          <button class="again-btn" id="t-restart" type="button" data-i18n="trainer.restart">Shuffle and go again</button>
         </div>
         <div class="confetti" id="confetti" aria-hidden="true"></div>
         <p class="sr" aria-live="polite" id="t-live"></p>
       </section>
-      <figcaption class="trainer-cap">Try it: a little pile of three. Cards you miss come back later in the same run.</figcaption>
+      <figcaption class="trainer-cap" data-i18n="trainer.cap">Try it: a little pile of three. Cards you miss come back later in the same run.</figcaption>
     </figure>
   </header>
 
   <section class="gallery" aria-labelledby="gallery-h">
     <div class="section-head">
-      <span class="sticker-label">On iPhone</span>
-      <h2 id="gallery-h">A closer look</h2>
+      <span class="sticker-label" data-i18n="gallery.label">On iPhone</span>
+      <h2 id="gallery-h" data-i18n="gallery.h2">A closer look</h2>
     </div>
-    <div class="strip" tabindex="0" aria-label="Screens on iPhone">
-      <img src="img/iphone-home.webp" width="600" height="1304" loading="lazy" decoding="async" alt="Your piles, ready to train: the home screen with the last pile, the bird, under Pick up where you left off.">
-      <img src="img/iphone-training.webp" width="600" height="1304" loading="lazy" decoding="async" alt="Flip, think, remember: a training card reading der Hund, with Again, Flip and Got it.">
-      <img src="img/iphone-editor.webp" width="600" height="1304" loading="lazy" decoding="async" alt="Translations filled in for you: the card editor with language buttons and la flor, auto-translated.">
-      <img src="img/iphone-pile.webp" width="600" height="1304" loading="lazy" decoding="async" alt="Share piles, synced with iCloud: the Animals pile with its cards and Start training.">
-      <img src="img/iphone-newpile.webp" width="600" height="1304" loading="lazy" decoding="async" alt="A pile for anything you want to learn: a new pile called Spanish, with a row of colors.">
-      <img src="img/iphone-done.webp" width="600" height="1304" loading="lazy" decoding="async" alt="Celebrate every cleared pile: Pile cleared, with 10 known, 34 seconds and 1 retry.">
+    <div class="strip" tabindex="0" aria-label="Screens on iPhone" data-i18n-aria="gallery.aria">
+      <img src="img/iphone-home.webp" data-i18n-src="img/de/iphone-home.webp" width="600" height="1304" loading="lazy" decoding="async" data-i18n-alt="shot.home" alt="Your piles, ready to train: the home screen with the last pile, the bird, under Pick up where you left off.">
+      <img src="img/iphone-training.webp" data-i18n-src="img/de/iphone-training.webp" width="600" height="1304" loading="lazy" decoding="async" data-i18n-alt="shot.training" alt="Flip, think, remember: a training card reading der Hund, with Again, Flip and Got it.">
+      <img src="img/iphone-editor.webp" data-i18n-src="img/de/iphone-editor.webp" width="600" height="1304" loading="lazy" decoding="async" data-i18n-alt="shot.editor" alt="Translations filled in for you: the card editor with language buttons and la flor, auto-translated.">
+      <img src="img/iphone-pile.webp" data-i18n-src="img/de/iphone-pile.webp" width="600" height="1304" loading="lazy" decoding="async" data-i18n-alt="shot.pile" alt="Share piles, synced with iCloud: the Animals pile with its cards and Start training.">
+      <img src="img/iphone-newpile.webp" data-i18n-src="img/de/iphone-newpile.webp" width="600" height="1304" loading="lazy" decoding="async" data-i18n-alt="shot.newpile" alt="A pile for anything you want to learn: a new pile called Spanish, with a row of colors.">
+      <img src="img/iphone-done.webp" data-i18n-src="img/de/iphone-done.webp" width="600" height="1304" loading="lazy" decoding="async" data-i18n-alt="shot.done" alt="Celebrate every cleared pile: Pile cleared, with 10 known, 34 seconds and 1 retry.">
     </div>
   </section>
 
   <section class="features" aria-labelledby="features-h">
     <div class="section-head">
-      <span class="sticker-label">How it works</span>
-      <h2 id="features-h">Write it, flip it, know it</h2>
+      <span class="sticker-label" data-i18n="features.label">How it works</span>
+      <h2 id="features-h" data-i18n="features.h2">Write it, flip it, know it</h2>
     </div>
     <div class="cards">
       <article class="card">
-        <h3>Write your own piles</h3>
-        <p>Start a pile for anything you want to learn and give it a color. Write the front, flip the card, write the back, and tap Save, next card for the next blank one.</p>
+        <h3 data-i18n="card1.h3">Write your own piles</h3>
+        <p data-i18n="card1.p">Start a pile for anything you want to learn and give it a color. Write the front, flip the card, write the back, and tap Save, next card for the next blank one.</p>
       </article>
       <article class="card">
-        <h3>Translation built in</h3>
-        <p>Tap a language above the card, for example ES, and the front is translated into the back for you, in thirteen languages. You can always edit the result.</p>
+        <h3 data-i18n="card2.h3">Translation built in</h3>
+        <p data-i18n="card2.p">Tap a language above the card, for example ES, and the front is translated into the back for you, in thirteen languages. You can always edit the result.</p>
       </article>
       <article class="card">
-        <h3>Train in minutes</h3>
-        <p>Flip, then Got it or Again. Missed cards come back in the same run. The swap button shows the backs first, for training in the other direction.</p>
+        <h3 data-i18n="card3.h3">Train in minutes</h3>
+        <p data-i18n="card3.p">Flip, then Got it or Again. Missed cards come back in the same run. The swap button shows the backs first, for training in the other direction.</p>
       </article>
       <article class="card">
-        <h3>Pick up where you left off</h3>
-        <p>The home screen shows the pile you worked on last. Example piles in your language, such as animals or capitals, get you started right away.</p>
+        <h3 data-i18n="card4.h3">Pick up where you left off</h3>
+        <p data-i18n="card4.p">The home screen shows the pile you worked on last. Example piles in your language, such as animals or capitals, get you started right away.</p>
       </article>
       <article class="card">
-        <h3>Synced with iCloud</h3>
-        <p>Signed in to iCloud, your piles sync between iPhone and iPad by themselves. The ⋯ menu shows the sync status.</p>
+        <h3 data-i18n="card5.h3">Synced with iCloud</h3>
+        <p data-i18n="card5.p">Signed in to iCloud, your piles sync between iPhone and iPad by themselves. The ⋯ menu shows the sync status.</p>
       </article>
       <article class="card">
-        <h3>Share a pile</h3>
-        <p>Send a pile via AirDrop, Messages, Mail or Files. Your friends open it and tap Add to my piles to get their own copy.</p>
+        <h3 data-i18n="card6.h3">Share a pile</h3>
+        <p data-i18n="card6.p">Send a pile via AirDrop, Messages, Mail or Files. Your friends open it and tap Add to my piles to get their own copy.</p>
       </article>
       <article class="card new">
-        <h3>New in 2.1</h3>
-        <p>Fix a typo in seconds: hold a card to edit or delete it. While writing, <kbd>Return</kbd> flips the card, and <kbd>Return</kbd> again saves it.</p>
+        <h3 data-i18n="card7.h3">New in 2.1</h3>
+        <p data-i18n="card7.p">Fix a typo in seconds: hold a card to edit or delete it. While writing, <kbd>Return</kbd> flips the card, and <kbd>Return</kbd> again saves it.</p>
       </article>
     </div>
   </section>
 
   <section class="ipad" aria-labelledby="ipad-h">
     <div class="section-head">
-      <span class="sticker-label">On iPad</span>
-      <h2 id="ipad-h">Made for iPad</h2>
-      <p>On iPad, your piles and the open pile sit next to each other. In Split View or a small Stage Manager window, Flashcards switches to the same layout as on iPhone.</p>
+      <span class="sticker-label" data-i18n="ipad.label">On iPad</span>
+      <h2 id="ipad-h" data-i18n="ipad.h2">Made for iPad</h2>
+      <p data-i18n="ipad.p">On iPad, your piles and the open pile sit next to each other. In Split View or a small Stage Manager window, Flashcards switches to the same layout as on iPhone.</p>
     </div>
-    <img src="img/ipad-split.webp" width="900" height="1200" loading="lazy" decoding="async" alt="Your shelf and your pile, side by side on iPad: the pile shelf on the left and the Animals pile on the right.">
+    <img src="img/ipad-split.webp" data-i18n-src="img/de/ipad-split.webp" width="900" height="1200" loading="lazy" decoding="async" data-i18n-alt="ipad.alt" alt="Your shelf and your pile, side by side on iPad: the pile shelf on the left and the Animals pile on the right.">
   </section>
 
   <section class="premium" aria-labelledby="premium-h">
-    <span class="sticker-label">Free and Premium</span>
-    <h2 id="premium-h">Free for 5 piles of 10 cards</h2>
-    <p>Premium is a one-time purchase that unlocks unlimited piles and cards. There is no subscription, and it is shared on all your devices with the same Apple Account. Example piles don't count towards the free limit.</p>
+    <span class="sticker-label" data-i18n="premium.label">Free and Premium</span>
+    <h2 id="premium-h" data-i18n="premium.h2">Free for 5 piles of 10 cards</h2>
+    <p data-i18n="premium.p">Premium is a one-time purchase that unlocks unlimited piles and cards. There is no subscription, and it is shared on all your devices with the same Apple Account. Example piles don't count towards the free limit.</p>
   </section>
 
   <section class="privacy" aria-labelledby="privacy-h">
-    <span class="sticker-label">Privacy</span>
-    <h2 id="privacy-h">No account, no analytics, no ads</h2>
-    <p>Your piles stay on your device and in your own iCloud. When you ask for a translation, the text you want translated is sent to Google's translation service. <a href="PRIVACY">Read the privacy policy</a>.</p>
+    <span class="sticker-label" data-i18n="privacy.label">Privacy</span>
+    <h2 id="privacy-h" data-i18n="privacy.h2">No account, no analytics, no ads</h2>
+    <p data-i18n="privacy.p">Your piles stay on your device and in your own iCloud. When you ask for a translation, the text you want translated is sent to Google's translation service. <a href="PRIVACY">Read the privacy policy</a>.</p>
   </section>
 
   <footer class="foot">
-    <a href="SUPPORT">Support</a>
-    <a href="PRIVACY">Privacy policy</a>
-    <a href="../">All apps</a>
+    <a href="SUPPORT" hreflang="en" data-i18n="foot.support">Support</a>
+    <a href="PRIVACY" hreflang="en" data-i18n="foot.privacy">Privacy policy</a>
+    <a href="../" data-i18n="nav.all">All apps</a>
     <span class="legal">© 2026 Christian Deckert · <a href="mailto:deckert.christian@icloud.com">deckert.christian@icloud.com</a></span>
   </footer>
 </main>
 
+<script type="application/json" id="strings-de">
+{
+  "title": "Flashcards",
+  "description": "Mit Flashcards lernst du alles – Vokabeln, Hauptstädte, Fakten – mit bunten Karteikarten, die du selbst schreibst, auf iPhone und iPad.",
+  "lang.label": "Sprache",
+  "nav.all": "Alle Apps",
+  "hero.subtitle": "Karteikarten für <mark>alles</mark>.",
+  "hero.promo": "Lerne Vokabeln, Hauptstädte, Fakten, einfach alles, mit bunten Karteikarten, die du selbst schreibst. Umdrehen, die Antwort laut sagen, und ein Stapel sitzt in wenigen Minuten.",
+  "badge.alt": "Laden im App Store",
+  "hero.meta": "Kostenlos für 5 Stapel mit je 10 Karten. Premium ist ein einmaliger Kauf.<br>Erfordert iOS oder iPadOS 17 oder neuer.",
+  "trainer.aria": "Probier eine Lernrunde",
+  "trainer.pile": "Tiere auf Englisch",
+  "trainer.timeTitle": "Zeit",
+  "trainer.retriesTitle": "Wiederholungen",
+  "trainer.front": "Vorderseite",
+  "trainer.back": "Rückseite",
+  "trainer.again": "Nochmal",
+  "trainer.flip": "Umdrehen",
+  "trainer.got": "Gewusst",
+  "trainer.cleared": "Stapel geschafft!",
+  "trainer.known": "gewusst",
+  "trainer.time": "Zeit",
+  "trainer.retries": "Wiederholungen",
+  "trainer.restart": "Mischen und nochmal",
+  "trainer.cap": "Probier’s aus: ein kleiner Stapel mit drei Karten. Karten, die du nicht wusstest, kommen in derselben Runde wieder.",
+  "pile.birdFront": "der Vogel",
+  "pile.birdBack": "the bird",
+  "pile.dogFront": "der Hund",
+  "pile.dogBack": "the dog",
+  "pile.catFront": "die Katze",
+  "pile.catBack": "the cat",
+  "rt.retry1": "1 Wiederholung",
+  "rt.retriesN": "{n} Wiederholungen",
+  "rt.prompt": "Sag die Antwort laut, dann dreh um.",
+  "rt.cardAria": "Karte: {w}. Zum Umdrehen drücken.",
+  "rt.backAria": "Rückseite: {w}. Zum Zurückdrehen drücken.",
+  "rt.knewIt": "Hast du es gewusst?",
+  "rt.sayFront": "Vorderseite: {w}",
+  "rt.sayBack": "Rückseite: {w}",
+  "rt.next": "Nächste Karte: {w}",
+  "rt.cleared": "Stapel geschafft! {k} gewusst in {time}, {r}.",
+  "gallery.label": "Auf dem iPhone",
+  "gallery.h2": "Genauer hingeschaut",
+  "gallery.aria": "Bildschirme auf dem iPhone",
+  "shot.home": "Deine Stapel, bereit zum Lernen: der Startbildschirm mit dem Stapel Tiere und der Karte „das Kaninchen“ unter „Mach weiter, wo du aufgehört hast“.",
+  "shot.training": "Umdrehen, überlegen, merken: eine Lernkarte mit „the fish“ und „der Fisch“, darunter Nochmal, Umdrehen und Gewusst.",
+  "shot.editor": "Die Übersetzung kommt von selbst: der Karteneditor mit Sprachtasten und „la flor“, automatisch übersetzt als „Die Blume“.",
+  "shot.pile": "Stapel teilen, über iCloud synchron: der Stapel Tiere mit seinen Karten und Training starten.",
+  "shot.newpile": "Ein Stapel für alles, was du lernen willst: ein neuer Stapel namens Spanisch mit einer Reihe Farben.",
+  "shot.done": "Jeden geschafften Stapel feiern: Stapel geschafft, mit 10 gewusst, 00:55 Zeit und einer Wiederholung.",
+  "features.label": "So funktioniert’s",
+  "features.h2": "Schreiben, umdrehen, wissen",
+  "card1.h3": "Eigene Stapel anlegen",
+  "card1.p": "Lege einen Stapel für alles an, was du lernen willst, und gib ihm eine Farbe. Schreib die Vorderseite, dreh die Karte um, schreib die Rückseite und tippe auf „Speichern & weiter“ für die nächste leere Karte.",
+  "card2.h3": "Übersetzung eingebaut",
+  "card2.p": "Tippe über der Karte auf eine Sprache, zum Beispiel ES, und die Vorderseite wird für dich auf die Rückseite übersetzt, in dreizehn Sprachen. Das Ergebnis kannst du immer noch ändern.",
+  "card3.h3": "In wenigen Minuten lernen",
+  "card3.p": "Umdrehen, dann „Gewusst“ oder „Nochmal“. Karten, die du nicht wusstest, kommen in derselben Runde wieder. Mit der Tausch-Taste siehst du zuerst die Rückseiten und lernst in die andere Richtung.",
+  "card4.h3": "Mach weiter, wo du aufgehört hast",
+  "card4.p": "Der Startbildschirm zeigt den Stapel, an dem du zuletzt gelernt hast. Beispielstapel in deiner Sprache, etwa Tiere oder Hauptstädte, helfen dir beim Einstieg.",
+  "card5.h3": "Mit iCloud synchron",
+  "card5.p": "Bist du bei iCloud angemeldet, gleichen sich deine Stapel zwischen iPhone und iPad von selbst ab. Das ⋯-Menü zeigt, ob sie synchron sind.",
+  "card6.h3": "Stapel teilen",
+  "card6.p": "Schick einen Stapel per AirDrop, Nachrichten, Mail oder Dateien. Deine Freunde öffnen ihn und tippen auf „Zu meinen Stapeln hinzufügen“, um eine eigene Kopie zu bekommen.",
+  "card7.h3": "Neu in 2.1",
+  "card7.p": "Tippfehler in Sekunden beheben: Halte eine Karte gedrückt, um sie zu ändern oder zu löschen. Beim Schreiben dreht <kbd>Return</kbd> die Karte um, ein zweites <kbd>Return</kbd> speichert sie.",
+  "ipad.label": "Auf dem iPad",
+  "ipad.h2": "Fürs iPad gemacht",
+  "ipad.p": "Auf dem iPad liegen deine Stapel und der geöffnete Stapel nebeneinander. In Split View oder einem kleinen Stage-Manager-Fenster wechselt Flashcards zum gleichen Layout wie auf dem iPhone.",
+  "ipad.alt": "Regal und Stapel nebeneinander auf dem iPad: links das Regal mit deinen Stapeln, rechts der Stapel Tiere mit seinen Karten.",
+  "premium.label": "Kostenlos und Premium",
+  "premium.h2": "Kostenlos für 5 Stapel mit je 10 Karten",
+  "premium.p": "Premium ist ein einmaliger Kauf, der unbegrenzt viele Stapel und Karten freischaltet. Es gibt kein Abo, und der Kauf gilt auf all deinen Geräten mit demselben Apple Account. Beispielstapel zählen nicht zum kostenlosen Limit.",
+  "privacy.label": "Datenschutz",
+  "privacy.h2": "Kein Konto, keine Analyse, keine Werbung",
+  "privacy.p": "Deine Stapel bleiben auf deinem Gerät und in deiner eigenen iCloud. Wenn du eine Übersetzung anforderst, wird der zu übersetzende Text an den Übersetzungsdienst von Google gesendet. <a href='PRIVACY' hreflang='en'>Datenschutzerklärung lesen (EN)</a>.",
+  "foot.support": "Support (EN)",
+  "foot.privacy": "Datenschutzerklärung (EN)"
+}
+</script>
+<script src="../i18n.js"></script>
 <script>
 (() => {
   'use strict';
+  const t = I18N.t;
   const PILE = [
-    { front: 'the bird', back: 'der Vogel', color: 'var(--sunflower)' },
-    { front: 'the dog', back: 'der Hund', color: 'var(--sky)' },
-    { front: 'the cat', back: 'die Katze', color: 'var(--mint)' },
+    { front: t('pile.birdFront', 'the bird'), back: t('pile.birdBack', 'der Vogel'), color: 'var(--sunflower)' },
+    { front: t('pile.dogFront', 'the dog'), back: t('pile.dogBack', 'der Hund'), color: 'var(--sky)' },
+    { front: t('pile.catFront', 'the cat'), back: t('pile.catBack', 'die Katze'), color: 'var(--mint)' },
   ];
+  const fill = (text, values) => text.replace(/\{(\w+)\}/g, (_, k) => values[k]);
+  const retriesText = (n) => (n === 1 ? t('rt.retry1', '1 retry') : fill(t('rt.retriesN', '{n} retries'), { n }));
+  const SAY_PROMPT = t('rt.prompt', 'Say the answer out loud, then flip.');
   const $ = (id) => document.getElementById(id);
   const card = $('t-card'), flipBtn = $('t-flip'), again = $('t-again'), got = $('t-got');
   const reduce = matchMedia('(prefers-reduced-motion: reduce)');
@@ -367,11 +459,11 @@ kbd { font: 800 13px/1 var(--font); padding: 3px 7px; border: 2px solid currentC
     card.querySelector('.front').style.setProperty('--c', c.color);
     $('t-front').textContent = c.front;
     $('t-back').textContent = c.back;
-    card.setAttribute('aria-label', 'Card: ' + c.front + '. Press to flip.');
+    card.setAttribute('aria-label', fill(t('rt.cardAria', 'Card: {w}. Press to flip.'), { w: c.front }));
     again.disabled = got.disabled = true;
-    $('t-prompt').textContent = 'Say the answer out loud, then flip.';
+    $('t-prompt').textContent = SAY_PROMPT;
     $('t-progress').style.width = (known / PILE.length * 100) + '%';
-    $('t-retries').textContent = retries + (retries === 1 ? ' retry' : ' retries');
+    $('t-retries').textContent = retriesText(retries);
   }
 
   function flip() {
@@ -379,27 +471,27 @@ kbd { font: 800 13px/1 var(--font); padding: 3px 7px; border: 2px solid currentC
     flipped = !flipped;
     card.classList.toggle('flipped', flipped);
     const c = queue[0];
-    card.setAttribute('aria-label', flipped ? 'Back: ' + c.back + '. Press to flip back.' : 'Card: ' + c.front + '. Press to flip.');
+    card.setAttribute('aria-label', flipped ? fill(t('rt.backAria', 'Back: {w}. Press to flip back.'), { w: c.back }) : fill(t('rt.cardAria', 'Card: {w}. Press to flip.'), { w: c.front }));
     again.disabled = got.disabled = !flipped;
-    $('t-prompt').textContent = flipped ? 'Did you know it?' : 'Say the answer out loud, then flip.';
-    say(flipped ? 'Back: ' + c.back : 'Front: ' + c.front);
+    $('t-prompt').textContent = flipped ? t('rt.knewIt', 'Did you know it?') : SAY_PROMPT;
+    say(fill(flipped ? t('rt.sayBack', 'Back: {w}') : t('rt.sayFront', 'Front: {w}'), { w: flipped ? c.back : c.front }));
   }
 
   function answer(knewIt) {
     const c = queue.shift();
     if (knewIt) known++; else { retries++; queue.push(c); }
-    if (queue.length) { show(); say('Next card: ' + queue[0].front); return; }
+    if (queue.length) { show(); say(fill(t('rt.next', 'Next card: {w}'), { w: queue[0].front })); return; }
     finish();
   }
 
   function finish() {
     clearInterval(timer);
-    const t = mmss(elapsed());
+    const time = mmss(elapsed());
     $('t-progress').style.width = '100%';
     $('t-run').hidden = true;
     $('t-done').hidden = false;
-    $('d-known').textContent = known; $('d-time').textContent = t; $('d-retries').textContent = retries;
-    say('Pile cleared! ' + known + ' known in ' + t + ', ' + retries + (retries === 1 ? ' retry.' : ' retries.'));
+    $('d-known').textContent = known; $('d-time').textContent = time; $('d-retries').textContent = retries;
+    say(fill(t('rt.cleared', 'Pile cleared! {k} known in {time}, {r}.'), { k: known, time, r: retriesText(retries) }));
     $('t-restart').focus();
     if (!reduce.matches) {
       const box = $('confetti'), colors = ['#FFD84D', '#6EE7B0', '#FF9DBB', '#7CCBFF', '#6C4DF6'];
