@@ -1,0 +1,372 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Analog Clock</title>
+<meta name="description" content="Analog Clock turns an iPhone, iPad or Apple TV into a full-screen analog clock, with designs from classic watches to playful scenes for kids, the weather on the dial and a night mode.">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0A0B0D">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Analog Clock">
+<meta property="og:description" content="A beautiful clock for the desk, the bedside table or the kitchen shelf, on iPhone, iPad and Apple TV.">
+<meta property="og:url" content="https://christiandeckert.github.io/AppStore/AnalogClock/">
+<meta property="og:image" content="https://christiandeckert.github.io/AppStore/AnalogClock/img/icon.png">
+<meta name="twitter:card" content="summary">
+<link rel="icon" type="image/png" href="img/favicon.png">
+<link rel="apple-touch-icon" href="img/icon.png">
+<style>
+:root {
+  /* The Aviator design, the app's default face and the source of its icon. */
+  --night: #0A0B0D;
+  --graphite: #14161A;
+  --card: #15171B;
+  --line: #262A31;
+  --steel: #3A3F46;
+  --silver: #8A9099;
+  --label: #A3A9B2;
+  --ink: #EDEFF3;
+  --gold: #E8C15A;
+  --font: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, "Segoe UI", Roboto, sans-serif;
+  --font-round: ui-rounded, "SF Pro Rounded", -apple-system, system-ui, sans-serif;
+  --font-roman: "Trajan Pro", "Cinzel", "Times New Roman", Georgia, serif;
+  --gutter: max(16px, env(safe-area-inset-left, 0px));
+  --gutter-r: max(16px, env(safe-area-inset-right, 0px));
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--night); color: var(--ink); font: 400 16px/1.55 var(--font); }
+h1, h2, h3, p, figure { margin: 0; }
+h1, h2 { text-wrap: balance; }
+a { color: var(--gold); }
+a:focus-visible, button:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; border-radius: 10px; }
+img { display: block; max-width: 100%; height: auto; }
+
+.page { max-width: 1120px; margin: 0 auto; padding: 0 var(--gutter-r) 56px var(--gutter); display: grid; gap: 72px; }
+/* Grid tracks default to their content's min width, so the screenshot strip would widen the page. */
+.page, .hero, .intro, .studio, .gallery, .features, .device { grid-template-columns: minmax(0, 1fr); }
+.eyebrow { font-size: 12px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: var(--silver); }
+.section-head { display: grid; gap: 8px; max-width: 62ch; }
+h2 { font-size: clamp(26px, 4vw, 36px); line-height: 1.15; font-weight: 700; letter-spacing: -.02em; }
+.section-head p { color: var(--label); }
+
+/* Hero */
+.hero { display: grid; gap: 40px; align-items: center; padding-top: 48px; }
+@media (min-width: 900px) { .hero { grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); padding-top: 72px; } }
+.intro { display: grid; gap: 18px; justify-items: start; }
+.app-id { display: flex; align-items: center; gap: 16px; }
+.app-icon { width: 88px; height: 88px; border-radius: 22.37%; box-shadow: 0 0 0 1px rgba(255, 255, 255, .08), 0 18px 36px -12px rgba(0, 0, 0, .8); }
+h1 { font-size: clamp(40px, 7vw, 64px); line-height: 1; font-weight: 800; letter-spacing: -.035em; }
+.subtitle { font-size: clamp(19px, 2.4vw, 23px); line-height: 1.35; font-weight: 600; color: var(--ink); max-width: 30ch; }
+.promo { color: var(--label); max-width: 46ch; }
+.cta { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 18px; margin-top: 6px; }
+.store img { height: 48px; width: auto; }
+.meta { font-size: 14px; color: var(--silver); }
+
+/* The live clock */
+.studio { display: grid; gap: 16px; }
+.screen {
+  --bg: #14161A;
+  position: relative; aspect-ratio: 4 / 3; border-radius: 28px; display: grid; place-items: center; overflow: hidden;
+  background: radial-gradient(120% 90% at 30% 10%, rgba(255, 255, 255, .07), transparent 55%), var(--bg);
+  box-shadow: 0 0 0 1px var(--line), 0 40px 80px -30px rgba(0, 0, 0, .9);
+  transition: background-color 500ms ease;
+}
+.screen svg { position: absolute; inset: 8% 0; margin: auto; height: 84%; width: auto; aspect-ratio: 1; overflow: visible; }
+.screen .name { position: absolute; left: 18px; top: 16px; font-size: 12px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--name, var(--silver)); }
+.dial-frame { fill: var(--frame); transition: fill 500ms; }
+.dial-bezel { fill: var(--bezel); transition: fill 500ms; }
+.dial-face { fill: var(--face); transition: fill 500ms; }
+.ticks line { stroke: var(--tick); transition: stroke 500ms; }
+.numerals text { fill: var(--num); font-family: var(--font); font-weight: 700; font-size: 17px; text-anchor: middle; dominant-baseline: central; transition: fill 500ms; }
+.numerals[data-style="rounded"] text { font-family: var(--font-round); font-weight: 800; font-size: 19px; }
+.numerals[data-style="roman"] text { font-family: var(--font-roman); font-weight: 400; font-size: 15px; letter-spacing: .02em; }
+.lume circle { fill: var(--tick); }
+.subdials circle.sd { fill: var(--sub-face); stroke: var(--sub-ring); stroke-width: 1; }
+.subdials line { stroke: var(--second); stroke-width: 1.4; stroke-linecap: round; }
+.date rect { fill: var(--face); stroke: var(--second); stroke-width: 1; }
+.date text { fill: var(--num); font: 700 9px var(--font); text-anchor: middle; dominant-baseline: central; }
+.hand { stroke-linecap: round; transition: stroke 500ms; }
+.hand.h, .hand.m { stroke: var(--hand); }
+.hand.s { stroke: var(--second); }
+.cap { fill: var(--second); }
+.shadowed { filter: drop-shadow(0 2px 2px rgba(0, 0, 0, .45)); }
+
+.swatches { display: flex; flex-wrap: wrap; gap: 10px; }
+.swatch {
+  display: inline-flex; align-items: center; gap: 9px; padding: 7px 14px 7px 7px; border-radius: 999px;
+  border: 1px solid var(--line); background: var(--card); color: var(--label); font: 600 14px/1 var(--font); cursor: pointer;
+  transition: border-color 200ms, color 200ms;
+  -webkit-tap-highlight-color: transparent;
+}
+.swatch:hover { color: var(--ink); }
+.swatch[aria-pressed="true"] { border-color: var(--gold); color: var(--ink); }
+.swatch i { width: 26px; height: 26px; border-radius: 50%; background: var(--f); box-shadow: inset 0 0 0 4px var(--r); position: relative; flex: none; }
+.swatch i::after { content: ""; position: absolute; left: 50%; top: 4px; width: 2px; height: 10px; margin-left: -1px; border-radius: 1px; background: var(--s); transform-origin: 50% 9px; transform: rotate(40deg); }
+.hint { font-size: 14px; color: var(--silver); }
+
+/* Gallery */
+.strip {
+  display: grid; grid-auto-flow: column; grid-auto-columns: minmax(150px, 200px); gap: 16px;
+  overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; padding: 4px 2px 14px;
+  scrollbar-width: thin; scrollbar-color: var(--steel) transparent;
+}
+.strip figure { scroll-snap-align: start; display: grid; gap: 10px; }
+.strip img { border-radius: 22px; box-shadow: 0 0 0 1px var(--line); background: var(--graphite); }
+.strip figcaption { display: grid; gap: 1px; padding-left: 4px; }
+.strip figcaption b { font-size: 15px; font-weight: 600; }
+.strip figcaption span { font-size: 13px; color: var(--silver); }
+.gallery { display: grid; gap: 24px; }
+
+/* Features */
+.features { display: grid; gap: 28px; }
+.cards { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr)); }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 22px; padding: 22px; display: grid; gap: 10px; align-content: start; }
+.card svg { width: 30px; height: 30px; color: var(--gold); }
+.card h3 { font-size: 18px; font-weight: 650; letter-spacing: -.01em; }
+.card p { color: var(--label); font-size: 15px; }
+
+/* Apple TV and iPad */
+.device { display: grid; gap: 24px; }
+.banner { border-radius: 24px; overflow: hidden; box-shadow: 0 0 0 1px var(--line); background: var(--graphite); }
+.tv-row { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); }
+.tv-row img { border-radius: 16px; box-shadow: 0 0 0 1px var(--line); }
+.ipad-row { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); max-width: 760px; }
+.ipad-row img { border-radius: 24px; box-shadow: 0 0 0 1px var(--line); }
+
+/* Privacy and footer */
+@media (max-width: 560px) { .screen .name { display: none; } }
+
+.privacy { display: grid; gap: 10px; padding: 28px; border-radius: 24px; background: linear-gradient(135deg, var(--graphite), var(--night)); border: 1px solid var(--line); }
+.privacy p { color: var(--label); max-width: 70ch; }
+.foot { display: flex; flex-wrap: wrap; gap: 8px 20px; font-size: 14px; color: var(--silver); border-top: 1px solid var(--line); padding-top: 24px; }
+.foot a { color: var(--label); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
+}
+</style>
+</head>
+<body>
+<main class="page">
+
+  <header class="hero">
+    <div class="intro">
+      <div class="app-id">
+        <img class="app-icon" src="img/icon.png" width="88" height="88" alt="">
+        <span class="eyebrow">iPhone · iPad · Apple TV</span>
+      </div>
+      <h1>Analog Clock</h1>
+      <p class="subtitle">A beautiful clock for the desk, the bedside table or the kitchen shelf.</p>
+      <p class="promo">Turn an iPhone, iPad or Apple TV into a full-screen analog clock, with designs from classic watches to playful scenes for kids, the weather on the dial and a night mode that dims the face after dark.</p>
+      <div class="cta">
+        <a class="store" href="https://apps.apple.com/app/id957157160"><img src="../badges/app-store.svg" width="144" height="48" alt="Download on the App Store"></a>
+        <span class="meta">One purchase for iPhone, iPad and Apple TV.<br>Requires iOS, iPadOS or tvOS 17 or later.</span>
+      </div>
+    </div>
+
+    <div class="studio">
+      <div class="screen" id="screen">
+        <svg id="clock" viewBox="0 0 200 200" role="img" aria-label="An analog clock showing the current time in the Aviator design">
+          <circle class="dial-frame" cx="100" cy="100" r="98"/>
+          <circle class="dial-bezel" cx="100" cy="100" r="92"/>
+          <circle class="dial-face" cx="100" cy="100" r="86"/>
+          <g class="ticks" id="ticks"></g>
+          <g class="lume" id="lume"></g>
+          <g class="numerals" id="numerals"></g>
+          <g class="subdials" id="subdials">
+            <circle class="sd" cx="70" cy="100" r="13"/>
+            <circle class="sd" cx="100" cy="130" r="13"/>
+            <line id="sd1" x1="70" y1="100" x2="70" y2="90"/>
+            <line id="sd2" x1="100" y1="130" x2="100" y2="120"/>
+          </g>
+          <g class="date" id="date"><rect x="133" y="93" width="15" height="14" rx="2"/><text id="date-text" x="140.5" y="100.5">1</text></g>
+          <g class="shadowed">
+            <line class="hand h" id="hand-h" x1="100" y1="108" x2="100" y2="54" stroke-width="6"/>
+            <line class="hand m" id="hand-m" x1="100" y1="110" x2="100" y2="26" stroke-width="4.2"/>
+            <line class="hand s" id="hand-s" x1="100" y1="120" x2="100" y2="20" stroke-width="1.4"/>
+            <circle class="cap" cx="100" cy="100" r="3.6"/>
+          </g>
+        </svg>
+        <span class="name" id="design-name">Aviator · Timepieces</span>
+      </div>
+      <div class="swatches" role="group" aria-label="Clock design" id="swatches"></div>
+      <p class="hint">Five of the 43 designs, drawn live with your time. The app has them all, and a Studio to make your own.</p>
+    </div>
+  </header>
+
+  <section class="gallery" aria-labelledby="gallery-h">
+    <div class="section-head">
+      <span class="eyebrow">Gallery</span>
+      <h2 id="gallery-h">43 designs in four collections</h2>
+      <p>Timepieces such as Aviator, Tide and Nightlife. Pop styles such as Neon Drive, Sakura Pop and Pixel Arcade. Playful scenes for kids such as Space Cadet, Under the Sea and Dino Jungle. And video backgrounds. The original faces from the first version are still there.</p>
+    </div>
+    <div class="strip" tabindex="0" aria-label="Designs on iPhone">
+      <figure><img src="img/iphone-aviator.webp" width="600" height="1304" loading="lazy" decoding="async" alt="The Aviator design: a graphite dial with silver numerals, white hands, two subdials and a gold second hand."><figcaption><b>Aviator</b><span>Timepieces</span></figcaption></figure>
+      <figure><img src="img/iphone-neondrive.webp" width="600" height="1304" loading="lazy" decoding="async" alt="The Neon Drive design: a cyan dial over a purple synthwave city and a pink grid."><figcaption><b>Neon Drive</b><span>Pop</span></figcaption></figure>
+      <figure><img src="img/iphone-nightlife.webp" width="600" height="1304" loading="lazy" decoding="async" alt="The Nightlife design: a plum dial with Roman numerals in a copper frame."><figcaption><b>Nightlife</b><span>Timepieces</span></figcaption></figure>
+      <figure><img src="img/iphone-sakurapop.webp" width="600" height="1304" loading="lazy" decoding="async" alt="The Sakura Pop design: a cream dial in a pink frame with falling cherry blossoms."><figcaption><b>Sakura Pop</b><span>Pop</span></figcaption></figure>
+      <figure><img src="img/iphone-spacecadet.webp" width="600" height="1304" loading="lazy" decoding="async" alt="The Space Cadet design: a blue dial among stars, a planet and the moon."><figcaption><b>Space Cadet</b><span>Playful</span></figcaption></figure>
+      <figure><img src="img/iphone-tide.webp" width="600" height="1304" loading="lazy" decoding="async" alt="The Tide design: a black diver's dial with luminous dots and a red second hand."><figcaption><b>Tide</b><span>Timepieces</span></figcaption></figure>
+      <figure><img src="img/iphone-underthesea.webp" width="600" height="1304" loading="lazy" decoding="async" alt="The Under the Sea design: a teal dial with jellyfish, fish and bubbles."><figcaption><b>Under the Sea</b><span>Playful</span></figcaption></figure>
+      <figure><img src="img/iphone-videofiji.webp" width="600" height="1304" loading="lazy" decoding="async" alt="A video design: a glass dial over a palm tree against a blue sky."><figcaption><b>Fiji Islands</b><span>Videos</span></figcaption></figure>
+    </div>
+  </section>
+
+  <section class="features" aria-labelledby="features-h">
+    <div class="section-head">
+      <span class="eyebrow">Features</span>
+      <h2 id="features-h">Make it yours, keep it on all day</h2>
+    </div>
+    <div class="cards">
+      <article class="card">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3v2M21 12h-2M12 21v-2M3 12h2"/><path d="M12 12l4-3"/><path d="M12 12V7"/></svg>
+        <h3>The Studio</h3>
+        <p>Change everything: dial colour and texture, frame and bezel, hands, numerals, markers, date window and subdials. Add a photo or a video as background, drifting shapes, ticking and morning sounds, and save as many designs of your own as you like.</p>
+      </article>
+      <article class="card">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 18h10a4 4 0 0 0 .5-7.97A6 6 0 0 0 6.1 11.5 3.25 3.25 0 0 0 7 18Z"/></svg>
+        <h3>Weather on the dial</h3>
+        <p>The current weather sits on the dial or in the bar at the top, depending on the design, with an hourly forecast one tap away. It comes from Apple Weather.</p>
+      </article>
+      <article class="card">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z"/></svg>
+        <h3>Day and night</h3>
+        <p>Night mode dims the face at the hour you choose, with its own background if you like, and a morning sound can greet the new day. A screensaver spares displays that show the clock all day.</p>
+      </article>
+      <article class="card">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="4.5"/><circle cx="12" cy="12" r="4"/><path d="M12 12V9.5"/></svg>
+        <h3>An icon to match</h3>
+        <p>The app icon changes to match the design you pick, on iPhone, iPad and Apple TV.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="device" aria-labelledby="tv-h">
+    <div class="section-head">
+      <span class="eyebrow">Apple TV</span>
+      <h2 id="tv-h">The big screen in the living room</h2>
+      <p>Swipe down into the clock and the tab bar hides, so only the clock is on screen. Press Select for the hourly forecast. The Apple TV app comes with the same purchase.</p>
+    </div>
+    <div class="banner"><img src="img/hero.webp" width="1600" height="497" loading="lazy" decoding="async" alt="The Analog Clock wordmark next to a wall of nine designs on Apple TV."></div>
+    <div class="tv-row">
+      <img src="img/tv-spacecadet.webp" width="960" height="540" loading="lazy" decoding="async" alt="Space Cadet on Apple TV.">
+      <img src="img/tv-neondrive.webp" width="960" height="540" loading="lazy" decoding="async" alt="Neon Drive on Apple TV.">
+      <img src="img/tv-underthesea.webp" width="960" height="540" loading="lazy" decoding="async" alt="Under the Sea on Apple TV.">
+    </div>
+  </section>
+
+  <section class="device" aria-labelledby="ipad-h">
+    <div class="section-head">
+      <span class="eyebrow">iPad</span>
+      <h2 id="ipad-h">A clock on the kitchen shelf</h2>
+      <p>Tap the clock to show the controls; they fade away again after a few seconds. In the Gallery, touch and hold a design to customize it.</p>
+    </div>
+    <div class="ipad-row">
+      <img src="img/ipad-nightlife.webp" width="900" height="1200" loading="lazy" decoding="async" alt="Nightlife on iPad.">
+      <img src="img/ipad-sakurapop.webp" width="900" height="1200" loading="lazy" decoding="async" alt="Sakura Pop on iPad.">
+    </div>
+  </section>
+
+  <section class="privacy" aria-labelledby="privacy-h">
+    <span class="eyebrow">Privacy</span>
+    <h2 id="privacy-h">No account, no analytics, no ads</h2>
+    <p>The weather needs your approximate location, and YouTube video designs load from YouTube. That is all. <a href="PRIVACY">Read the privacy policy</a>.</p>
+  </section>
+
+  <footer class="foot">
+    <a href="SUPPORT">Support</a>
+    <a href="PRIVACY">Privacy policy</a>
+    <a href="https://github.com/ChristianDeckert/AppStore">App Store documents</a>
+  </footer>
+</main>
+
+<script>
+(() => {
+  'use strict';
+
+  const DESIGNS = [
+    { id: 'aviator', name: 'Aviator', group: 'Timepieces', bg: '#14161A', frame: '#3A3F46', bezel: '#6A7078', face: '#0D0E11', tick: '#8A9099', num: '#EDEFF3', hand: '#E8EAEE', second: '#E8C15A', numerals: 'all', style: 'arabic', subdials: true, date: false, label: '#8A9099' },
+    { id: 'neon', name: 'Neon Drive', group: 'Pop', bg: '#1B1440', frame: '#67E8F9', bezel: '#67E8F9', face: '#241A4D', tick: '#67E8F9', num: '#9BE8FF', hand: '#EFE6FF', second: '#FF3D9A', numerals: 'quarters', style: 'rounded', subdials: false, date: true, label: '#67E8F9' },
+    { id: 'nightlife', name: 'Nightlife', group: 'Timepieces', bg: '#121014', frame: '#B87550', bezel: '#B87550', face: '#743154', tick: '#F6EFEA', num: '#F4D9C6', hand: '#EFC5A6', second: '#F4D9C6', numerals: 'quarters', style: 'roman', subdials: false, date: false, label: '#B87550' },
+    { id: 'sakura', name: 'Sakura Pop', group: 'Pop', bg: '#FFE4ED', frame: '#FFB7C9', bezel: '#FFB7C9', face: '#FFFDF8', tick: '#FF8FAB', num: '#7A4A57', hand: '#7A4A57', second: '#28B48C', numerals: 'quarters', style: 'rounded', subdials: false, date: true, label: '#B0566F' },
+    { id: 'tide', name: 'Tide', group: 'Timepieces', bg: '#101215', frame: '#2E333B', bezel: '#2E333B', face: '#0B0C0E', tick: '#F4F1DE', num: '#F4F1DE', hand: '#C6CBD4', second: '#C93B33', numerals: 'none', style: 'arabic', subdials: false, date: true, label: '#8A9099' },
+  ];
+  const ROMAN = { 12: 'XII', 3: 'III', 6: 'VI', 9: 'IX' };
+  const NS = 'http://www.w3.org/2000/svg';
+  const $ = (id) => document.getElementById(id);
+  const svg = $('clock'), screen = $('screen');
+  const el = (name, attrs) => { const n = document.createElementNS(NS, name); for (const k in attrs) n.setAttribute(k, attrs[k]); return n; };
+  const polar = (deg, r) => { const a = (deg - 90) * Math.PI / 180; return [100 + r * Math.cos(a), 100 + r * Math.sin(a)]; };
+
+  for (let i = 0; i < 60; i++) {
+    const hour = i % 5 === 0;
+    const [x1, y1] = polar(i * 6, hour ? 72 : 78);
+    const [x2, y2] = polar(i * 6, 84);
+    $('ticks').append(el('line', { x1, y1, x2, y2, 'stroke-width': hour ? 2.6 : 1, 'stroke-linecap': 'round' }));
+  }
+
+  function drawNumerals(d) {
+    const g = $('numerals'), lume = $('lume');
+    g.replaceChildren(); lume.replaceChildren();
+    g.dataset.style = d.style;
+    if (d.numerals === 'none') {
+      for (let h = 1; h <= 12; h++) { const [x, y] = polar(h * 30, 64); lume.append(el('circle', { cx: x, cy: y, r: h % 3 === 0 ? 3.6 : 2.6 })); }
+      return;
+    }
+    const hours = d.numerals === 'all' ? [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] : [12, 3, 6, 9];
+    for (const h of hours) {
+      if (d.date && h === 3) continue;
+      const [x, y] = polar(h * 30, 58);
+      const t = el('text', { x, y });
+      t.textContent = d.style === 'roman' ? ROMAN[h] : String(h);
+      g.append(t);
+    }
+  }
+
+  function apply(d) {
+    const s = svg.style;
+    for (const k of ['frame', 'bezel', 'face', 'tick', 'num', 'hand', 'second']) s.setProperty('--' + k, d[k]);
+    s.setProperty('--sub-face', '#08090B'); s.setProperty('--sub-ring', '#4A505A');
+    screen.style.setProperty('--bg', d.bg);
+    screen.style.setProperty('--name', d.label);
+    drawNumerals(d);
+    $('subdials').style.display = d.subdials ? '' : 'none';
+    $('date').style.display = d.date ? '' : 'none';
+    $('design-name').textContent = d.name + ' · ' + d.group;
+    svg.setAttribute('aria-label', 'An analog clock showing the current time in the ' + d.name + ' design');
+    for (const b of $('swatches').children) b.setAttribute('aria-pressed', String(b.dataset.id === d.id));
+  }
+
+  for (const d of DESIGNS) {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'swatch'; b.dataset.id = d.id;
+    b.innerHTML = '<i aria-hidden="true"></i>';
+    b.append(d.name);
+    const i = b.firstChild;
+    i.style.setProperty('--f', d.face); i.style.setProperty('--r', d.frame); i.style.setProperty('--s', d.second);
+    b.addEventListener('click', () => apply(d));
+    $('swatches').append(b);
+  }
+
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)');
+  const set = (id, deg, cx = 100, cy = 100) => $(id).setAttribute('transform', `rotate(${deg} ${cx} ${cy})`);
+  function tick() {
+    const now = new Date();
+    const ms = reduce.matches ? 0 : now.getMilliseconds();
+    const s = now.getSeconds() + ms / 1000;
+    const m = now.getMinutes() + s / 60;
+    const h = (now.getHours() % 12) + m / 60;
+    set('hand-s', s * 6); set('hand-m', m * 6); set('hand-h', h * 30);
+    set('sd1', s * 6, 70, 100); set('sd2', (now.getHours() + m / 60) * 15, 100, 130);
+    $('date-text').textContent = now.getDate();
+  }
+  function loop() { tick(); requestAnimationFrame(loop); }
+  function stepper() { tick(); setTimeout(stepper, 1000 - new Date().getMilliseconds()); }
+
+  apply(DESIGNS[0]);
+  if (reduce.matches) stepper(); else loop();
+})();
+</script>
+</body>
+</html>
