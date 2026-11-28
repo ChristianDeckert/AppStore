@@ -2,6 +2,8 @@
 
 Public documents for apps by Christian Deckert, linked from their App Store listings.
 
+Website: https://christiandeckert.github.io/AppStore/ · Contact: deckert.christian@icloud.com
+
 | App | Website | Documents | App Store |
 |---|---|---|---|
 | Analog Clock (iOS, iPadOS, tvOS) | [Website](https://christiandeckert.github.io/AppStore/AnalogClock/) | [Support](AnalogClock/SUPPORT.md) · [Privacy policy](AnalogClock/PRIVACY.md) | [App Store](https://apps.apple.com/app/id957157160) |
