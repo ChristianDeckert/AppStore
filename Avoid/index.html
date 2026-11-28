@@ -72,6 +72,11 @@ h2 { font: 900 clamp(30px, 5vw, 46px)/1.02 var(--font-black); font-stretch: cond
 .site-head .home:hover { color: var(--ink); }
 .site-head .home svg { width: 16px; height: 16px; color: var(--pink); }
 .site-head .here { display: inline-flex; align-items: center; gap: 9px; min-width: 0; font: 300 19px/1 var(--font-light); letter-spacing: .02em; color: var(--ink); white-space: nowrap; }
+.site-head .lang-switch { margin-left: auto; display: inline-flex; padding: 3px; border-radius: 999px; background: rgba(255, 255, 255, .05); box-shadow: 0 0 0 1px var(--line); }
+.site-head .lang-switch a { padding: 5px 9px; border-radius: 999px; font: 900 12px/1 var(--font-black); font-stretch: condensed; letter-spacing: .1em; text-decoration: none; color: var(--label); }
+.site-head .lang-switch a:hover { color: var(--ink); }
+.site-head .lang-switch a[aria-current] { background: var(--pink); color: var(--night); }
+@media (max-width: 420px) { .site-head .here-name { display: none; } }
 .site-head .here img { width: 26px; height: 26px; border-radius: 22.37%; box-shadow: 0 0 12px -2px rgba(255, 46, 170, .6); }
 
 /* Hero */
@@ -213,8 +218,9 @@ h1 .sq { width: .32em; height: .32em; background: var(--ink); box-shadow: 0 0 18
 <body>
 <header class="site-head">
   <div class="bar">
-    <a class="home" href="../"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>All apps</a>
-    <span class="here"><img src="img/icon-192.webp" width="26" height="26" alt="">Avoid</span>
+    <a class="home" href="../"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg><span data-i18n="nav.all">All apps</span></a>
+    <nav class="lang-switch" aria-label="Language" data-i18n-aria="lang.label"><a href="?lang=de" hreflang="de" lang="de" title="Deutsch">DE</a><a href="?lang=en" hreflang="en" lang="en" title="English">EN</a></nav>
+    <span class="here"><img src="img/icon-192.webp" width="26" height="26" alt=""><span class="here-name">Avoid</span></span>
   </div>
 </header>
 <main class="page">
@@ -226,119 +232,174 @@ h1 .sq { width: .32em; height: .32em; background: var(--ink); box-shadow: 0 0 18
         <span class="platforms">iPhone · iPad</span>
       </div>
       <h1><span class="sq" aria-hidden="true"></span>Avoid<span class="sq" aria-hidden="true"></span></h1>
-      <p class="tagline"><span>One tap.</span> <span>Two walls.</span> <span>Endless blocks.</span></p>
-      <p class="promo">A fast arcade game about survival: blocks rain down a neon synthwave lane, and you switch walls to dodge them for as long as you can. Easy to learn, hard to put down.</p>
+      <p class="tagline"><span data-i18n="tag1">One tap.</span> <span data-i18n="tag2">Two walls.</span> <span data-i18n="tag3">Endless blocks.</span></p>
+      <p class="promo" data-i18n="promo">A fast arcade game about survival: blocks rain down a neon synthwave lane, and you switch walls to dodge them for as long as you can. Easy to learn, hard to put down.</p>
       <div class="cta">
-        <span class="soon"><i aria-hidden="true"></i>Coming soon to the App Store</span>
-        <span class="meta">No ads. No account. One optional upgrade.<br>Requires iOS or iPadOS 17 or later.</span>
+        <span class="soon"><i aria-hidden="true"></i><span data-i18n="soon">Coming soon to the App Store</span></span>
+        <span class="meta" data-i18n="meta">No ads. No account. One optional upgrade.<br>Requires iOS or iPadOS 17 or later.</span>
       </div>
     </div>
 
     <figure>
-      <div class="stage" role="img" aria-label="Hard mode: blocks fall down two neon lanes toward a striped retro sun, and two glowing cyan players switch walls to dodge them.">
+      <div class="stage" role="img" data-i18n-aria="stage.aria" aria-label="Hard mode: blocks fall down two neon lanes toward a striped retro sun, and two glowing cyan players switch walls to dodge them.">
         <div class="sky"><div class="stars"></div><div class="sun"></div><div class="skyline"></div></div>
         <div class="floor"><div class="plane"></div></div>
         <div class="horizon"></div>
         <div class="divider"></div>
         <div class="lane a"><i class="block r"></i><i class="block l second"></i><i class="player"></i></div>
         <div class="lane b"><i class="block r"></i><i class="block l second"></i><i class="player"></i></div>
-        <span class="mode">hard</span>
+        <span class="mode" data-i18n="stage.mode">hard</span>
         <span class="score" id="score" aria-hidden="true">0.0</span>
       </div>
-      <figcaption class="stage-cap">Hard mode: two lanes, one for each thumb.</figcaption>
+      <figcaption class="stage-cap" data-i18n="stage.cap">Hard mode: two lanes, one for each thumb.</figcaption>
     </figure>
   </header>
 
-  <section class="rows" aria-label="How to play">
+  <section class="rows" aria-label="How to play" data-i18n-aria="rows.label">
     <article class="row">
       <div class="text">
-        <span class="label">One tap to dodge</span>
-        <h2>Tap. You're on the other wall.</h2>
-        <p>Tap anywhere to jump to the other wall and out of the way of the falling blocks. Hold to wait in the middle of the lane, and drag to choose which wall you land on.</p>
-        <p>Dodge a block at the very last moment for a near miss: it earns you extra time.</p>
+        <span class="label" data-i18n="row1.label">One tap to dodge</span>
+        <h2 data-i18n="row1.h2">Tap. You're on the other wall.</h2>
+        <p data-i18n="row1.p1">Tap anywhere to jump to the other wall and out of the way of the falling blocks. Hold to wait in the middle of the lane, and drag to choose which wall you land on.</p>
+        <p data-i18n="row1.p2">Dodge a block at the very last moment for a near miss: it earns you extra time.</p>
       </div>
-      <figure class="shot"><img src="img/iphone-easy.webp" width="600" height="1304" loading="lazy" decoding="async" alt="Easy mode on iPhone: one neon lane, white blocks falling toward the player, and the time 95.0 at the top."></figure>
+      <figure class="shot"><img src="img/iphone-easy.webp" width="600" height="1304" loading="lazy" decoding="async" data-i18n-alt="alt.easy" alt="Easy mode on iPhone: one neon lane, white blocks falling toward the player, and the time 95.0 at the top."></figure>
     </article>
     <article class="row">
       <div class="text">
-        <span class="label">Two lanes, one brain</span>
-        <h2>Hard mode splits the screen</h2>
-        <p>Easy has one lane. Hard has two lanes side by side, one for each thumb. Test your multitasking, or hand one lane to a friend and survive together.</p>
+        <span class="label" data-i18n="row2.label">Two lanes, one brain</span>
+        <h2 data-i18n="row2.h2">Hard mode splits the screen</h2>
+        <p data-i18n="row2.p">Easy has one lane. Hard has two lanes side by side, one for each thumb. Test your multitasking, or hand one lane to a friend and survive together.</p>
       </div>
-      <figure class="shot"><img src="img/iphone-hard.webp" width="600" height="1304" loading="lazy" decoding="async" alt="Hard mode on iPhone: two lanes with blocks, a row of wall blocks and glowing power-ups."></figure>
+      <figure class="shot"><img src="img/iphone-hard.webp" width="600" height="1304" loading="lazy" decoding="async" data-i18n-alt="alt.hard" alt="Hard mode on iPhone: two lanes with blocks, a row of wall blocks and glowing power-ups."></figure>
     </article>
     <article class="row">
       <div class="text">
-        <span class="label">It only gets faster</span>
-        <h2>Your score is the time you last</h2>
-        <p>Blocks fall faster and the patterns get denser the longer you survive, and every run is a new random field. Tap the title to start, and the row below it to switch between easy and hard.</p>
+        <span class="label" data-i18n="row3.label">It only gets faster</span>
+        <h2 data-i18n="row3.h2">Your score is the time you last</h2>
+        <p data-i18n="row3.p">Blocks fall faster and the patterns get denser the longer you survive, and every run is a new random field. Tap the title to start, and the row below it to switch between easy and hard.</p>
       </div>
-      <figure class="shot"><img src="img/iphone-menu.webp" width="600" height="1304" loading="lazy" decoding="async" alt="The title screen: the Avoid tile with the best time 120.4, the hard mode row, and buttons for the shop, credits and Game Center."></figure>
+      <figure class="shot"><img src="img/iphone-menu.webp" width="600" height="1304" loading="lazy" decoding="async" data-i18n-alt="alt.menu" alt="The title screen: the Avoid tile with the best time 120.4, the hard mode row, and buttons for the shop, credits and Game Center."></figure>
     </article>
   </section>
 
   <section class="more" aria-labelledby="more-h">
     <div class="section-head">
-      <span class="label">More</span>
-      <h2 id="more-h">Neon, power-ups and a leaderboard</h2>
+      <span class="label" data-i18n="more.label">More</span>
+      <h2 id="more-h" data-i18n="more.h2">Neon, power-ups and a leaderboard</h2>
     </div>
     <div class="cards">
       <article class="card">
         <h3>Power-ups</h3>
-        <p>Glowing circles fall between the blocks. Catch one with your player to use it, plus a few that turn the game upside down.</p>
+        <p data-i18n="powerups.p">Glowing circles fall between the blocks. Catch one with your player to use it, plus a few that turn the game upside down.</p>
         <ul class="chips">
-          <li style="--c: var(--slow)">Slow motion</li>
-          <li style="--c: var(--shield)">Shield</li>
-          <li style="--c: var(--shock)">Shockwave</li>
+          <li style="--c: var(--slow)" data-i18n="chip.slow">Slow motion</li>
+          <li style="--c: var(--shield)" data-i18n="chip.shield">Shield</li>
+          <li style="--c: var(--shock)" data-i18n="chip.shock">Shockwave</li>
         </ul>
-        <p>Shockwave charges collect on the red fire button. Firing one clears the whole field.</p>
+        <p data-i18n="powerups.p2">Shockwave charges collect on the red fire button. Firing one clears the whole field.</p>
       </article>
       <article class="card">
-        <h3>A synthwave world</h3>
-        <p>Glowing lanes, a striped retro sun and a city skyline that pulses to 13 chiptune and synthwave tracks by independent artists.</p>
+        <h3 data-i18n="world.h3">A synthwave world</h3>
+        <p data-i18n="world.p">Glowing lanes, a striped retro sun and a city skyline that pulses to 13 chiptune and synthwave tracks by independent artists.</p>
       </article>
       <article class="card">
-        <h3>Compete</h3>
-        <p>Game Center leaderboards for easy and hard, and ten survival achievements, from 15 to 150 seconds on hard. Sign in to Game Center and your best times come back after a reinstall.</p>
+        <h3 data-i18n="compete.h3">Compete</h3>
+        <p data-i18n="compete.p">Game Center leaderboards for easy and hard, and ten survival achievements, from 15 to 150 seconds on hard. Sign in to Game Center and your best times come back after a reinstall.</p>
       </article>
       <article class="card">
-        <h3>Smooth and responsive</h3>
-        <p>Runs at your display's full refresh rate, up to 120 Hz on ProMotion, with haptic feedback on iPhone. After a call, a 3-2-1 countdown brings you right back.</p>
+        <h3 data-i18n="smooth.h3">Smooth and responsive</h3>
+        <p data-i18n="smooth.p">Runs at your display's full refresh rate, up to 120 Hz on ProMotion, with haptic feedback on iPhone. After a call, a 3-2-1 countdown brings you right back.</p>
       </article>
     </div>
   </section>
 
   <section class="upgrade" aria-labelledby="upgrade-h">
-    <img src="img/invincible.webp" width="480" height="480" loading="lazy" decoding="async" alt="A glowing yellow shield over the neon grid.">
+    <img src="img/invincible.webp" width="480" height="480" loading="lazy" decoding="async" alt="A glowing yellow shield over the neon grid." data-i18n-alt="alt.shield">
     <div class="text">
-      <span class="label">The one upgrade</span>
-      <h2 id="upgrade-h">Invincible start</h2>
-      <p>The shop in the menu sells one optional upgrade: every game begins with a shield that absorbs your first hit. Buy it once and keep it on all your devices with the same Apple Account.</p>
+      <span class="label" data-i18n="upgrade.label">The one upgrade</span>
+      <h2 id="upgrade-h" data-i18n="upgrade.h2">Invincible start</h2>
+      <p data-i18n="upgrade.p">The shop in the menu sells one optional upgrade: every game begins with a shield that absorbs your first hit. Buy it once and keep it on all your devices with the same Apple Account.</p>
     </div>
   </section>
 
   <section class="ipad" aria-labelledby="ipad-h">
     <div class="section-head">
       <span class="label">iPad</span>
-      <h2 id="ipad-h">Bigger lanes, same reflexes</h2>
+      <h2 id="ipad-h" data-i18n="ipad.h2">Bigger lanes, same reflexes</h2>
     </div>
-    <img src="img/ipad-hard.webp" width="900" height="1200" loading="lazy" decoding="async" alt="Hard mode on iPad: two wide neon lanes under the retro sun.">
+    <img src="img/ipad-hard.webp" width="900" height="1200" loading="lazy" decoding="async" data-i18n-alt="alt.ipad" alt="Hard mode on iPad: two wide neon lanes under the retro sun.">
   </section>
 
   <section class="privacy" aria-labelledby="privacy-h">
-    <span class="label">Privacy</span>
-    <h2 id="privacy-h">No account, no analytics, no ads</h2>
-    <p>Avoid collects nothing and has no servers of its own. Scores and achievements go to Apple's Game Center only if you are signed in, and the one optional purchase goes through Apple's App Store. <a href="PRIVACY">Read the privacy policy</a>.</p>
+    <span class="label" data-i18n="privacy.label">Privacy</span>
+    <h2 id="privacy-h" data-i18n="privacy.h2">No account, no analytics, no ads</h2>
+    <p data-i18n="privacy.p">Avoid collects nothing and has no servers of its own. Scores and achievements go to Apple's Game Center only if you are signed in, and the one optional purchase goes through Apple's App Store. <a href="PRIVACY" hreflang="en">Read the privacy policy</a>.</p>
   </section>
 
   <footer class="foot">
-    <a href="SUPPORT">Support</a>
-    <a href="PRIVACY">Privacy policy</a>
-    <a href="../">All apps</a>
+    <a href="SUPPORT" hreflang="en" data-i18n="foot.support">Support</a>
+    <a href="PRIVACY" hreflang="en" data-i18n="foot.privacy">Privacy policy</a>
+    <a href="../" data-i18n="nav.all">All apps</a>
     <span class="legal">© 2026 Christian Deckert · <a href="mailto:deckert.christian@icloud.com">deckert.christian@icloud.com</a></span>
   </footer>
 </main>
 
+<script type="application/json" id="strings-de">
+{
+  "description": "Avoid ist ein Arcade-Spiel mit einem Tipp: Blöcke stürzen eine Neon-Synthwave-Bahn hinunter, und du wechselst die Wand, um ihnen so lange wie möglich auszuweichen.",
+  "nav.all": "Alle Apps",
+  "lang.label": "Sprache",
+  "tag1": "Ein Tipp.",
+  "tag2": "Zwei Wände.",
+  "tag3": "Endlos Blöcke.",
+  "promo": "Ein schnelles Arcade-Spiel ums Überleben: Blöcke stürzen eine Neon-Synthwave-Bahn hinunter, und du wechselst die Wand, um ihnen so lange wie möglich auszuweichen. Schnell gelernt, schwer wegzulegen.",
+  "soon": "Demnächst im App Store",
+  "meta": "Keine Werbung. Kein Konto. Ein optionales Upgrade.<br>Erfordert iOS oder iPadOS 17 oder neuer.",
+  "stage.aria": "Schwerer Modus: Blöcke fallen zwei Neonbahnen hinunter, die zu einer gestreiften Retro-Sonne führen, und zwei leuchtende cyanfarbene Spielfiguren wechseln die Wand, um ihnen auszuweichen.",
+  "stage.mode": "schwer",
+  "stage.cap": "Schwerer Modus: zwei Bahnen, eine pro Daumen.",
+  "rows.label": "So wird gespielt",
+  "row1.label": "Ein Tipp zum Ausweichen",
+  "row1.h2": "Tipp. Schon bist du an der anderen Wand.",
+  "row1.p1": "Tippe irgendwo, um zur anderen Wand zu springen, weg von den fallenden Blöcken. Halte gedrückt, um in der Mitte der Bahn zu warten, und ziehe zur Seite, um die Wand zu wählen.",
+  "row1.p2": "Weichst du einem Block im allerletzten Moment aus, ist das ein Beinahe-Treffer: Er bringt dir Extrazeit.",
+  "alt.easy": "Einfacher Modus auf dem iPhone: eine Neonbahn, weiße Blöcke fallen auf die Spielfigur zu, oben die Zeit 95.0.",
+  "row2.label": "Zwei Bahnen, ein Kopf",
+  "row2.h2": "Der schwere Modus teilt den Bildschirm",
+  "row2.p": "Einfach hat eine Bahn, schwer zwei nebeneinander, eine pro Daumen. Teste dein Multitasking, oder gib eine Bahn an eine Freundin oder einen Freund ab und überlebt gemeinsam.",
+  "alt.hard": "Schwerer Modus auf dem iPhone: zwei Bahnen mit Blöcken, eine Reihe Wandblöcke und leuchtende Power-ups.",
+  "row3.label": "Es wird nur schneller",
+  "row3.h2": "Deine Punktzahl ist die Zeit, die du durchhältst",
+  "row3.p": "Je länger du überlebst, desto schneller fallen die Blöcke und desto dichter werden die Muster, und jede Runde ist ein neues Zufallsfeld. Tippe auf den Titel, um zu starten, und auf die Zeile darunter, um zwischen einfach und schwer zu wechseln.",
+  "alt.menu": "Der Titelbildschirm in der englischen Version: die Avoid-Kachel mit der Bestzeit 120.4, die Zeile „hard“ und die Knöpfe „Powerups Shop“, „Credits“ und „Game Center“.",
+  "more.label": "Mehr",
+  "more.h2": "Neon, Power-ups und eine Bestenliste",
+  "powerups.p": "Zwischen den Blöcken fallen leuchtende Kreise: Fang einen mit deiner Spielfigur, um ihn zu nutzen. Dazu kommen ein paar, die das Spiel auf den Kopf stellen.",
+  "chip.slow": "Zeitlupe",
+  "chip.shield": "Schutzschild",
+  "chip.shock": "Schockwelle",
+  "powerups.p2": "Schockwellen sammeln sich auf dem roten Feuerknopf. Eine abgefeuerte Schockwelle leert das ganze Feld.",
+  "world.h3": "Eine Synthwave-Welt",
+  "world.p": "Leuchtende Bahnen, eine gestreifte Retro-Sonne und eine Skyline, die im Takt von 13 Chiptune- und Synthwave-Tracks unabhängiger Künstler pulsiert.",
+  "compete.h3": "Miss dich mit anderen",
+  "compete.p": "Game-Center-Bestenlisten für einfach und schwer und zehn Überlebens-Erfolge, von 15 bis 150 Sekunden im schweren Modus. Melde dich bei Game Center an, und deine Bestzeiten kommen nach einer Neuinstallation zurück.",
+  "smooth.h3": "Flüssig und direkt",
+  "smooth.p": "Läuft mit der vollen Bildrate deines Displays, bis zu 120 Hz auf ProMotion, mit haptischem Feedback auf dem iPhone. Nach einem Anruf geht es mit einem 3-2-1-Countdown weiter.",
+  "alt.shield": "Ein leuchtend gelber Schutzschild über dem Neonraster.",
+  "upgrade.label": "Das eine Upgrade",
+  "upgrade.h2": "Start mit Schutzschild",
+  "upgrade.p": "Der Shop im Menü bietet ein optionales Upgrade: Jedes Spiel beginnt mit einem Schutzschild, der den ersten Treffer abfängt. Einmal kaufen und auf allen Geräten mit demselben Apple Account behalten.",
+  "ipad.h2": "Breitere Bahnen, dieselben Reflexe",
+  "alt.ipad": "Schwerer Modus auf dem iPad: zwei breite Neonbahnen unter der Retro-Sonne.",
+  "privacy.label": "Datenschutz",
+  "privacy.h2": "Kein Konto, keine Analyse, keine Werbung",
+  "privacy.p": "Avoid sammelt nichts und hat keine eigenen Server. Zeiten und Erfolge gehen nur an Apples Game Center, wenn du angemeldet bist, und der eine optionale Kauf läuft über Apples App Store. <a href='PRIVACY' hreflang='en'>Datenschutzerklärung lesen (EN)</a>.",
+  "foot.support": "Support (EN)",
+  "foot.privacy": "Datenschutzerklärung (EN)"
+}
+</script>
+<script src="../i18n.js"></script>
 <script>
 (() => {
   'use strict';
