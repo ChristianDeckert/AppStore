@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Avoid</title>
+<meta name="description" content="Avoid is a one-tap arcade game: blocks fall down a neon synthwave lane, and you switch walls to dodge them for as long as you can.">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0B0617">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Avoid">
+<meta property="og:description" content="One tap. Two walls. Endless blocks. A fast synthwave arcade game for iPhone and iPad.">
+<meta property="og:url" content="https://christiandeckert.github.io/AppStore/Avoid/">
+<meta property="og:image" content="https://christiandeckert.github.io/AppStore/Avoid/img/icon.png">
+<meta name="twitter:card" content="summary">
+<link rel="icon" type="image/png" href="img/favicon.png">
+<link rel="apple-touch-icon" href="img/icon.png">
+<style>
+:root {
+  /* The game's "neon duality" palette (GamePalette.swift) and its retro sun. */
+  --night: #0B0617;
+  --violet: #200E34;
+  --plum: #2A0F2E;
+  --card: #170B26;
+  --line: #3A1F55;
+  --pink: #FF2EAA;
+  --glow: #FF73C7;
+  --cyan: #2DE2E6;
+  --cyan-fill: #E6FBFF;
+  --ink: #F4EFFF;
+  --label: #C3B6DE;
+  --best: #F3C4FF;
+  --sun: linear-gradient(180deg, #FFF06B 0%, #FFB35C 35%, #FF5E8A 70%, #FF1F96 100%);
+  --slow: #2EC9FF; --shield: #FFD52E; --shock: #FF3B3B; --shop: #F9C80E; --gc: #9D4EDD;
+  --font: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, "Segoe UI", Roboto, sans-serif;
+  --font-black: "HelveticaNeue-CondensedBlack", "Helvetica Neue", "Arial Narrow", Impact, sans-serif;
+  --font-light: "HelveticaNeue-Light", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --gutter: max(16px, env(safe-area-inset-left, 0px));
+  --gutter-r: max(16px, env(safe-area-inset-right, 0px));
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; color: var(--ink); font: 400 16px/1.55 var(--font);
+  background: radial-gradient(90% 60% at 70% 0%, #2B0F3D 0%, transparent 60%), var(--night);
+}
+h1, h2, h3, p, figure, ul { margin: 0; }
+h2 { text-wrap: balance; }
+a { color: var(--glow); }
+a:focus-visible { outline: 3px solid var(--cyan); outline-offset: 3px; border-radius: 8px; }
+img { display: block; max-width: 100%; height: auto; }
+
+.page { max-width: 1120px; margin: 0 auto; padding: 0 var(--gutter-r) 56px var(--gutter); display: grid; gap: 80px; }
+/* Grid tracks default to their content's min width, so wide children would widen the page. */
+.page, .hero, .intro, .rows, .row, .more { grid-template-columns: minmax(0, 1fr); }
+
+.label { font: 900 13px/1 var(--font-black); font-stretch: condensed; letter-spacing: .14em; text-transform: uppercase; color: var(--pink); }
+.label::before { content: "■ "; }
+h2 { font: 900 clamp(30px, 5vw, 46px)/1.02 var(--font-black); font-stretch: condensed; text-transform: uppercase; letter-spacing: .01em; }
+.section-head { display: grid; gap: 10px; max-width: 60ch; }
+.section-head p, .row p, .card p { color: var(--label); }
+
+/* Hero */
+.hero { display: grid; gap: 40px; align-items: center; padding-top: 48px; }
+@media (min-width: 900px) { .hero { grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); padding-top: 72px; } }
+.intro { display: grid; gap: 18px; justify-items: start; }
+.app-id { display: flex; align-items: center; gap: 16px; }
+.app-icon { width: 88px; height: 88px; border-radius: 22.37%; box-shadow: 0 0 0 1px rgba(255, 255, 255, .1), 0 0 40px -6px rgba(255, 46, 170, .55); }
+.platforms { font-size: 13px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--label); }
+h1 { font: 300 clamp(56px, 10vw, 92px)/1 var(--font-light); letter-spacing: .02em; display: flex; align-items: center; gap: .22em; }
+h1 .sq { width: .32em; height: .32em; background: var(--ink); box-shadow: 0 0 18px rgba(244, 239, 255, .6); flex: none; }
+.tagline { font: 900 clamp(22px, 3.2vw, 30px)/1.1 var(--font-black); font-stretch: condensed; text-transform: uppercase; letter-spacing: .02em; }
+.tagline span:nth-child(1) { color: var(--cyan); } .tagline span:nth-child(2) { color: var(--pink); } .tagline span:nth-child(3) { color: var(--shield); }
+.promo { color: var(--label); max-width: 48ch; }
+.cta { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 18px; margin-top: 6px; }
+.soon {
+  display: inline-flex; align-items: center; gap: 10px; padding: 12px 18px; border-radius: 12px;
+  border: 1.5px solid var(--pink); color: var(--ink); font: 900 16px/1 var(--font-black); font-stretch: condensed; letter-spacing: .06em; text-transform: uppercase;
+  box-shadow: 0 0 22px -6px var(--pink), inset 0 0 18px -10px var(--pink);
+}
+.soon i { width: 9px; height: 9px; border-radius: 50%; background: var(--pink); box-shadow: 0 0 10px var(--pink); animation: blink 1.6s ease-in-out infinite; }
+@keyframes blink { 50% { opacity: .25; } }
+.meta { font-size: 14px; color: var(--label); }
+
+/* The stage: a CSS rendition of hard mode, composed like the app icon */
+.stage {
+  position: relative; aspect-ratio: 4 / 5; max-height: 640px; width: 100%; justify-self: center; border-radius: 30px; overflow: hidden;
+  background: #0B0617; box-shadow: 0 0 0 1px var(--line), 0 40px 90px -30px rgba(255, 46, 170, .45); isolation: isolate;
+}
+.sky { position: absolute; inset: 0 0 59% 0; overflow: hidden; background: linear-gradient(180deg, #07030F 0%, #1A0A2E 55%, #3A1240 100%); }
+.stars { position: absolute; inset: 0; opacity: .85; background:
+  radial-gradient(1.5px 1.5px at 12% 20%, #fff, transparent), radial-gradient(1px 1px at 30% 8%, #fff, transparent),
+  radial-gradient(1.5px 1.5px at 52% 12%, #fff, transparent), radial-gradient(1px 1px at 68% 22%, #fff, transparent),
+  radial-gradient(1.2px 1.2px at 84% 30%, #fff, transparent), radial-gradient(1px 1px at 92% 6%, #fff, transparent),
+  radial-gradient(1px 1px at 6% 44%, #fff, transparent), radial-gradient(1.2px 1.2px at 22% 52%, #fff, transparent); }
+.sun {
+  position: absolute; left: 50%; bottom: 0; width: 50%; aspect-ratio: 1; border-radius: 50%; transform: translate(-50%, 20%);
+  background: var(--sun); box-shadow: 0 0 70px rgba(255, 107, 168, .55);
+  -webkit-mask: linear-gradient(#000 38%, transparent 38% 41%, #000 41% 47%, transparent 47% 51%, #000 51% 56%, transparent 56% 61%, #000 61%);
+  mask: linear-gradient(#000 38%, transparent 38% 41%, #000 41% 47%, transparent 47% 51%, #000 51% 56%, transparent 56% 61%, #000 61%);
+}
+.skyline {
+  position: absolute; left: 0; right: 0; bottom: 0; height: 18%; background: #12081F;
+  clip-path: polygon(0 100%, 0 55%, 6% 55%, 6% 30%, 11% 30%, 11% 62%, 16% 62%, 16% 18%, 21% 18%, 21% 48%, 27% 48%, 27% 70%, 33% 70%, 33% 36%, 37% 36%, 37% 0, 41% 0, 41% 52%, 47% 52%, 47% 74%, 53% 74%, 53% 40%, 58% 40%, 58% 22%, 63% 22%, 63% 58%, 69% 58%, 69% 34%, 74% 34%, 74% 66%, 80% 66%, 80% 12%, 85% 12%, 85% 46%, 90% 46%, 90% 60%, 95% 60%, 95% 38%, 100% 38%, 100% 100%);
+}
+.floor { position: absolute; left: 0; right: 0; top: 41%; bottom: 0; perspective: 240px; perspective-origin: 50% 0; overflow: hidden;
+  background: linear-gradient(180deg, #2A0B2C, #0B0617 70%); }
+.plane {
+  position: absolute; left: -150%; right: -150%; top: 0; height: 400%; transform-origin: 50% 0; transform: rotateX(64deg);
+  background:
+    repeating-linear-gradient(90deg, rgba(255, 46, 170, .9) 0 2px, transparent 2px 3.4%),
+    repeating-linear-gradient(180deg, rgba(255, 46, 170, .85) 0 2px, transparent 2px 46px);
+  animation: run .9s linear infinite;
+}
+@keyframes run { to { background-position: 0 0, 0 46px; } }
+.horizon { position: absolute; left: 0; right: 0; top: 41%; height: 2px; background: var(--glow); box-shadow: 0 0 18px 3px rgba(255, 115, 199, .7); }
+.divider { position: absolute; left: 50%; top: 41%; bottom: 0; width: 4px; transform: translateX(-50%); background: #1A0A2E; box-shadow: 0 0 0 1px rgba(255, 46, 170, .6); }
+
+/* Blocks and players move in a flat overlay over the floor; % are of the floor area. */
+.lane { position: absolute; inset: 41% 0 0 0; --d: 4s; }
+.lane.b { --d: 3.2s; --delay: -1.1s; }
+.block, .player { position: absolute; aspect-ratio: 1; }
+.block {
+  top: 0; left: var(--x0); width: 1%; opacity: 0; border-radius: 3px;
+  background: linear-gradient(135deg, #FFFFFF, #D9D2F0); box-shadow: 0 0 14px rgba(244, 239, 255, .55);
+  animation: fall var(--d) infinite; animation-delay: var(--delay, 0s);
+}
+.block.second { animation-delay: calc(var(--delay, 0s) - var(--d) / 2); }
+.lane.a .r { --x0: 47%; --x1: 31%; --x2: 28%; } .lane.a .l { --x0: 45%; --x1: 7%; --x2: 2%; }
+.lane.b .l { --x0: 51%; --x1: 56%; --x2: 57%; } .lane.b .r { --x0: 53%; --x1: 80%; --x2: 85%; }
+@keyframes fall {
+  0% { top: -1%; left: var(--x0); width: 1%; opacity: 0; animation-timing-function: cubic-bezier(.5, 0, .9, .6); }
+  4% { opacity: 1; }
+  42% { top: 66%; left: var(--x1); width: 13%; opacity: 1; animation-timing-function: linear; }
+  50% { top: 104%; left: var(--x2); width: 15%; opacity: 1; }
+  50.1%, 100% { top: -1%; left: var(--x0); width: 1%; opacity: 0; }
+}
+.player {
+  top: 66%; width: 13%; border-radius: 22%; background: var(--cyan-fill);
+  box-shadow: 0 0 0 3px var(--cyan), 0 0 26px 6px rgba(45, 226, 230, .7);
+  animation: swap var(--d) infinite cubic-bezier(.3, 1.3, .5, 1); animation-delay: var(--delay, 0s);
+}
+.lane.a .player { --wall-a: 31%; --wall-b: 7%; } .lane.b .player { --wall-a: 80%; --wall-b: 56%; }
+@keyframes swap { 0%, 20% { left: var(--wall-a); } 26%, 70% { left: var(--wall-b); } 76%, 100% { left: var(--wall-a); } }
+.score { position: absolute; right: 16px; top: 14px; font: 900 26px/1 var(--font-black); font-stretch: condensed; color: var(--ink); font-variant-numeric: tabular-nums; text-shadow: 0 0 12px rgba(244, 239, 255, .5); }
+.mode { position: absolute; left: 16px; top: 16px; font: 900 12px/1 var(--font-black); letter-spacing: .14em; text-transform: uppercase; color: var(--best); }
+.stage-cap { font-size: 14px; color: var(--label); text-align: center; margin-top: 12px; }
+
+/* Rows */
+.rows { display: grid; gap: 64px; }
+.row { display: grid; gap: 28px; align-items: center; }
+@media (min-width: 820px) {
+  .row { grid-template-columns: minmax(0, 1fr) minmax(0, 300px); gap: 56px; }
+  .row:nth-child(even) { grid-template-columns: minmax(0, 300px) minmax(0, 1fr); }
+  .row:nth-child(even) .shot { order: -1; }
+}
+.row .text { display: grid; gap: 12px; max-width: 52ch; }
+.shot { justify-self: center; width: min(100%, 300px); }
+.shot img { border-radius: 30px; box-shadow: 0 0 0 1px var(--line), 0 30px 60px -24px rgba(255, 46, 170, .5); }
+
+/* Cards */
+.more { display: grid; gap: 28px; }
+.cards { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); }
+.card { background: linear-gradient(180deg, var(--card), var(--night)); border: 1px solid var(--line); border-radius: 20px; padding: 22px; display: grid; gap: 10px; align-content: start; }
+.card h3 { font: 900 20px/1.1 var(--font-black); font-stretch: condensed; text-transform: uppercase; letter-spacing: .03em; }
+.card:nth-child(1) h3 { color: var(--cyan); } .card:nth-child(2) h3 { color: var(--glow); } .card:nth-child(3) h3 { color: var(--shield); } .card:nth-child(4) h3 { color: #C99BFF; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; padding: 0; }
+.chips li { display: inline-flex; align-items: center; gap: 7px; padding: 6px 11px; border-radius: 999px; background: rgba(255, 255, 255, .05); border: 1px solid var(--line); font-size: 13px; font-weight: 600; }
+.chips li::before { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--c); box-shadow: 0 0 8px var(--c); }
+
+/* Upgrade */
+.upgrade { display: grid; gap: 24px; align-items: center; padding: 28px; border-radius: 28px; border: 1px solid var(--line); background: radial-gradient(80% 120% at 0% 50%, rgba(255, 213, 46, .14), transparent 60%), var(--card); }
+@media (min-width: 720px) { .upgrade { grid-template-columns: 180px minmax(0, 1fr); } }
+.upgrade img { width: 180px; border-radius: 28px; justify-self: center; box-shadow: 0 0 40px -8px rgba(255, 213, 46, .55); }
+.upgrade .text { display: grid; gap: 10px; }
+.upgrade p { color: var(--label); max-width: 60ch; }
+.upgrade h2 { color: var(--shield); }
+
+.ipad { display: grid; gap: 24px; justify-items: center; text-align: center; }
+.ipad .section-head { justify-items: center; }
+.ipad img { width: min(100%, 560px); border-radius: 28px; box-shadow: 0 0 0 1px var(--line), 0 40px 80px -30px rgba(255, 46, 170, .5); }
+
+/* Privacy and footer */
+.privacy { display: grid; gap: 10px; padding: 28px; border-radius: 24px; border: 1px solid var(--line); background: linear-gradient(135deg, var(--violet), var(--night)); }
+.privacy p { color: var(--label); max-width: 70ch; }
+.foot { display: flex; flex-wrap: wrap; gap: 8px 20px; font-size: 14px; color: var(--label); border-top: 1px solid var(--line); padding-top: 24px; }
+.foot a { color: var(--label); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .block { opacity: 1; }
+  .lane.a .r { top: 34%; left: 38%; width: 7%; } .lane.a .l { top: 4%; left: 41%; width: 2%; }
+  .lane.b .l { top: 14%; left: 53%; width: 4%; } .lane.b .r { top: 50%; left: 70%; width: 10%; }
+  .lane.a .player { left: 7%; } .lane.b .player { left: 56%; }
+}
+</style>
+</head>
+<body>
+<main class="page">
+
+  <header class="hero">
+    <div class="intro">
+      <div class="app-id">
+        <img class="app-icon" src="img/icon.png" width="88" height="88" alt="">
+        <span class="platforms">iPhone · iPad</span>
+      </div>
+      <h1><span class="sq" aria-hidden="true"></span>Avoid<span class="sq" aria-hidden="true"></span></h1>
+      <p class="tagline"><span>One tap.</span> <span>Two walls.</span> <span>Endless blocks.</span></p>
+      <p class="promo">A fast arcade game about survival: blocks rain down a neon synthwave lane, and you switch walls to dodge them for as long as you can. Easy to learn, hard to put down.</p>
+      <div class="cta">
+        <span class="soon"><i aria-hidden="true"></i>Coming soon to the App Store</span>
+        <span class="meta">No ads. No account. One optional upgrade.<br>Requires iOS or iPadOS 17 or later.</span>
+      </div>
+    </div>
+
+    <figure>
+      <div class="stage" role="img" aria-label="Hard mode: blocks fall down two neon lanes toward a striped retro sun, and two glowing cyan players switch walls to dodge them.">
+        <div class="sky"><div class="stars"></div><div class="sun"></div><div class="skyline"></div></div>
+        <div class="floor"><div class="plane"></div></div>
+        <div class="horizon"></div>
+        <div class="divider"></div>
+        <div class="lane a"><i class="block r"></i><i class="block l second"></i><i class="player"></i></div>
+        <div class="lane b"><i class="block r"></i><i class="block l second"></i><i class="player"></i></div>
+        <span class="mode">hard</span>
+        <span class="score" id="score" aria-hidden="true">0.0</span>
+      </div>
+      <figcaption class="stage-cap">Hard mode: two lanes, one for each thumb.</figcaption>
+    </figure>
+  </header>
+
+  <section class="rows" aria-label="How to play">
+    <article class="row">
+      <div class="text">
+        <span class="label">One tap to dodge</span>
+        <h2>Tap. You're on the other wall.</h2>
+        <p>Tap anywhere to jump to the other wall and out of the way of the falling blocks. Hold to wait in the middle of the lane, and drag to choose which wall you land on.</p>
+        <p>Dodge a block at the very last moment for a near miss: it earns you extra time.</p>
+      </div>
+      <figure class="shot"><img src="img/iphone-easy.webp" width="600" height="1304" loading="lazy" decoding="async" alt="Easy mode on iPhone: one neon lane, white blocks falling toward the player, and the time 95.0 at the top."></figure>
+    </article>
+    <article class="row">
+      <div class="text">
+        <span class="label">Two lanes, one brain</span>
+        <h2>Hard mode splits the screen</h2>
+        <p>Easy has one lane. Hard has two lanes side by side, one for each thumb. Test your multitasking, or hand one lane to a friend and survive together.</p>
+      </div>
+      <figure class="shot"><img src="img/iphone-hard.webp" width="600" height="1304" loading="lazy" decoding="async" alt="Hard mode on iPhone: two lanes with blocks, a row of wall blocks and glowing power-ups."></figure>
+    </article>
+    <article class="row">
+      <div class="text">
+        <span class="label">It only gets faster</span>
+        <h2>Your score is the time you last</h2>
+        <p>Blocks fall faster and the patterns get denser the longer you survive, and every run is a new random field. Tap the title to start, and the row below it to switch between easy and hard.</p>
+      </div>
+      <figure class="shot"><img src="img/iphone-menu.webp" width="600" height="1304" loading="lazy" decoding="async" alt="The title screen: the Avoid tile with the best time 120.4, the hard mode row, and buttons for the shop, credits and Game Center."></figure>
+    </article>
+  </section>
+
+  <section class="more" aria-labelledby="more-h">
+    <div class="section-head">
+      <span class="label">More</span>
+      <h2 id="more-h">Neon, power-ups and a leaderboard</h2>
+    </div>
+    <div class="cards">
+      <article class="card">
+        <h3>Power-ups</h3>
+        <p>Glowing circles fall between the blocks. Catch one with your player to use it, plus a few that turn the game upside down.</p>
+        <ul class="chips">
+          <li style="--c: var(--slow)">Slow motion</li>
+          <li style="--c: var(--shield)">Shield</li>
+          <li style="--c: var(--shock)">Shockwave</li>
+        </ul>
+        <p>Shockwave charges collect on the red fire button. Firing one clears the whole field.</p>
+      </article>
+      <article class="card">
+        <h3>A synthwave world</h3>
+        <p>Glowing lanes, a striped retro sun and a city skyline that pulses to 13 chiptune and synthwave tracks by independent artists.</p>
+      </article>
+      <article class="card">
+        <h3>Compete</h3>
+        <p>Game Center leaderboards for easy and hard, and ten survival achievements, from 15 to 150 seconds on hard. Sign in to Game Center and your best times come back after a reinstall.</p>
+      </article>
+      <article class="card">
+        <h3>Smooth and responsive</h3>
+        <p>Runs at your display's full refresh rate, up to 120 Hz on ProMotion, with haptic feedback on iPhone. After a call, a 3-2-1 countdown brings you right back.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="upgrade" aria-labelledby="upgrade-h">
+    <img src="img/invincible.webp" width="480" height="480" loading="lazy" decoding="async" alt="A glowing yellow shield over the neon grid.">
+    <div class="text">
+      <span class="label">The one upgrade</span>
+      <h2 id="upgrade-h">Invincible start</h2>
+      <p>The shop in the menu sells one optional upgrade: every game begins with a shield that absorbs your first hit. Buy it once and keep it on all your devices with the same Apple Account.</p>
+    </div>
+  </section>
+
+  <section class="ipad" aria-labelledby="ipad-h">
+    <div class="section-head">
+      <span class="label">iPad</span>
+      <h2 id="ipad-h">Bigger lanes, same reflexes</h2>
+    </div>
+    <img src="img/ipad-hard.webp" width="900" height="1200" loading="lazy" decoding="async" alt="Hard mode on iPad: two wide neon lanes under the retro sun.">
+  </section>
+
+  <section class="privacy" aria-labelledby="privacy-h">
+    <span class="label">Privacy</span>
+    <h2 id="privacy-h">No account, no analytics, no ads</h2>
+    <p>Avoid collects nothing and has no servers of its own. Scores and achievements go to Apple's Game Center only if you are signed in, and the one optional purchase goes through Apple's App Store. <a href="PRIVACY">Read the privacy policy</a>.</p>
+  </section>
+
+  <footer class="foot">
+    <a href="SUPPORT">Support</a>
+    <a href="PRIVACY">Privacy policy</a>
+    <a href="https://github.com/ChristianDeckert/AppStore">App Store documents</a>
+  </footer>
+</main>
+
+<script>
+(() => {
+  'use strict';
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) { document.getElementById('score').textContent = '48.0'; return; }
+  const score = document.getElementById('score');
+  let start = performance.now();
+  setInterval(() => {
+    const t = (performance.now() - start) / 1000;
+    if (t > 150) start = performance.now();
+    score.textContent = t.toFixed(1);
+  }, 100);
+})();
+</script>
+</body>
+</html>
