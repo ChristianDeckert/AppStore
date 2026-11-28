@@ -84,6 +84,11 @@ h2 { font: 700 clamp(28px, 4.4vw, 42px)/1.1 var(--font-round); letter-spacing: -
 .site-head .home:hover { color: var(--ink); }
 .site-head .home svg { width: 16px; height: 16px; color: var(--accent); }
 .site-head .here { display: inline-flex; align-items: center; gap: 9px; min-width: 0; font: 800 17px/1 var(--font-round); color: var(--ink); white-space: nowrap; }
+.lang-switch { margin-left: auto; display: inline-flex; padding: 3px; border-radius: 999px; background: var(--glass); box-shadow: 0 0 0 1px var(--hairline); }
+.lang-switch a { padding: 5px 10px; border-radius: 999px; font: 700 12px/1 var(--font-round); letter-spacing: .08em; color: var(--ink-2); text-decoration: none; }
+.lang-switch a:hover { color: var(--ink); }
+.lang-switch a[aria-current] { background: var(--accent); color: var(--on-accent); }
+@media (max-width: 420px) { .site-head .here-name { display: none; } }
 .site-head .here img { width: 28px; height: 28px; border-radius: 22.37%; box-shadow: 0 4px 10px -4px rgba(75, 46, 143, .5); }
 
 /* Hero */
@@ -111,9 +116,9 @@ h1 { font: 800 clamp(48px, 8vw, 80px)/1 var(--font-round); letter-spacing: -.03e
   display: inline-flex; align-items: center; gap: 9px; padding: 9px 14px 9px 9px; border-radius: 999px; cursor: pointer;
   font: 600 14px/1.2 var(--font); color: var(--ink-2); border: 1px solid var(--glass-edge); background: var(--glass);
 }
-.tab span { display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: var(--hairline); color: var(--ink); font: 700 13px/1 var(--font-round); }
+.tab > span:first-child { display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: var(--hairline); color: var(--ink); font: 700 13px/1 var(--font-round); }
 .tab[aria-selected="true"] { color: var(--ink); border-color: var(--accent); }
-.tab[aria-selected="true"] span { background: var(--accent); color: var(--on-accent); }
+.tab[aria-selected="true"] > span:first-child { background: var(--accent); color: var(--on-accent); }
 .tab .bar { position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: var(--accent); transform-origin: left; transform: scaleX(var(--p, 0)); }
 .controls { display: flex; align-items: center; gap: 6px; }
 .ctl {
@@ -156,21 +161,22 @@ h1 { font: 800 clamp(48px, 8vw, 80px)/1 var(--font-round); letter-spacing: -.03e
 <body>
 <header class="site-head">
   <div class="bar">
-    <a class="home" href="../"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>All apps</a>
-    <span class="here"><img src="img/icon-192.webp" width="28" height="28" alt="">Quick Gif</span>
+    <a class="home" href="../"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg><span data-i18n="nav.all">All apps</span></a>
+    <nav class="lang-switch" aria-label="Language" data-i18n-aria="lang.label"><a href="?lang=de" hreflang="de" lang="de" title="Deutsch">DE</a><a href="?lang=en" hreflang="en" lang="en" title="English">EN</a></nav>
+    <span class="here"><img src="img/icon-192.webp" width="28" height="28" alt=""><span class="here-name">Quick Gif</span></span>
   </div>
 </header>
 <main class="page">
 
   <header class="hero">
     <div class="intro">
-      <span class="badge-gif"><b>GIF</b>A menu-bar app for Mac</span>
+      <span class="badge-gif"><b>GIF</b><span data-i18n="badge">A menu-bar app for Mac</span></span>
       <h1>Quick Gif</h1>
-      <p class="subtitle">Drop a video, <span>get a GIF</span>.</p>
-      <p class="promo">A GIF converter that stays out of your way. It lives in the menu bar, opens when your pointer finds a corner, and never steals focus from what you were doing.</p>
+      <p class="subtitle" data-i18n="subtitle">Drop a video, <span>get a GIF</span>.</p>
+      <p class="promo" data-i18n="promo">A GIF converter that stays out of your way. It lives in the menu bar, opens when your pointer finds a corner, and never steals focus from what you were doing.</p>
       <div class="cta">
-        <span class="soon glass"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Coming soon to the Mac App Store</span>
-        <span class="meta">25 free conversions to start.<br>Requires macOS 15 or later, Apple silicon or Intel.</span>
+        <span class="soon glass"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span data-i18n="soon">Coming soon to the Mac App Store</span></span>
+        <span class="meta" data-i18n="meta">25 free conversions to start.<br>Requires macOS 15 or later, Apple silicon or Intel.</span>
       </div>
     </div>
     <img class="big-icon" src="img/icon.png" width="512" height="512" alt="">
@@ -178,106 +184,169 @@ h1 { font: 800 clamp(48px, 8vw, 80px)/1 var(--font-round); letter-spacing: -.03e
 
   <section class="story" id="story" aria-labelledby="story-h" aria-roledescription="slideshow">
     <div class="section-head">
-      <span class="eyebrow">How it works</span>
-      <h2 id="story-h">Four moves, one GIF</h2>
+      <span class="eyebrow" data-i18n="story.eyebrow">How it works</span>
+      <h2 id="story-h" data-i18n="story.h2">Four moves, one GIF</h2>
     </div>
     <div class="story-bar">
-      <div class="tabs" role="tablist" aria-label="Steps" id="tabs">
-        <button class="tab" role="tab" id="tab-1" aria-controls="screen" aria-selected="true" tabindex="0"><span>1</span>Rest in a corner<i class="bar" aria-hidden="true"></i></button>
-        <button class="tab" role="tab" id="tab-2" aria-controls="screen" aria-selected="false" tabindex="-1"><span>2</span>It peeks out<i class="bar" aria-hidden="true"></i></button>
-        <button class="tab" role="tab" id="tab-3" aria-controls="screen" aria-selected="false" tabindex="-1"><span>3</span>Drop a video<i class="bar" aria-hidden="true"></i></button>
-        <button class="tab" role="tab" id="tab-4" aria-controls="screen" aria-selected="false" tabindex="-1"><span>4</span>Your GIF is ready<i class="bar" aria-hidden="true"></i></button>
+      <div class="tabs" role="tablist" aria-label="Steps" data-i18n-aria="story.tabs" id="tabs">
+        <button class="tab" role="tab" id="tab-1" aria-controls="screen" aria-selected="true" tabindex="0"><span>1</span><span class="tab-label" data-i18n="tab.1">Rest in a corner</span><i class="bar" aria-hidden="true"></i></button>
+        <button class="tab" role="tab" id="tab-2" aria-controls="screen" aria-selected="false" tabindex="-1"><span>2</span><span class="tab-label" data-i18n="tab.2">It peeks out</span><i class="bar" aria-hidden="true"></i></button>
+        <button class="tab" role="tab" id="tab-3" aria-controls="screen" aria-selected="false" tabindex="-1"><span>3</span><span class="tab-label" data-i18n="tab.3">Drop a video</span><i class="bar" aria-hidden="true"></i></button>
+        <button class="tab" role="tab" id="tab-4" aria-controls="screen" aria-selected="false" tabindex="-1"><span>4</span><span class="tab-label" data-i18n="tab.4">Your GIF is ready</span><i class="bar" aria-hidden="true"></i></button>
       </div>
       <div class="controls">
-        <button class="ctl" id="prev" type="button" aria-label="Previous step"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
-        <button class="ctl play" id="play" type="button" aria-label="Pause the slideshow"><svg id="play-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></svg></button>
-        <button class="ctl" id="next" type="button" aria-label="Next step"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+        <button class="ctl" id="prev" type="button" aria-label="Previous step" data-i18n-aria="story.prev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+        <button class="ctl play" id="play" type="button" aria-label="Pause the slideshow" data-i18n-aria="story.pause"><svg id="play-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></svg></button>
+        <button class="ctl" id="next" type="button" aria-label="Next step" data-i18n-aria="story.next"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
       </div>
     </div>
     <figure class="screen glass" id="screen" role="tabpanel" aria-labelledby="tab-1">
-      <img class="on" src="img/step-01.webp" width="1440" height="900" decoding="async" alt="Step 1: rest the pointer in the bottom-left corner of the screen.">
-      <img src="img/step-02.webp" width="1440" height="900" loading="lazy" decoding="async" alt="Step 2: the converter panel peeks out of the corner.">
-      <img src="img/step-03.webp" width="1440" height="900" loading="lazy" decoding="async" alt="Step 3: the panel slides in, and an MP4 file is dropped on Drop file here.">
-      <img src="img/step-04.webp" width="1440" height="900" loading="lazy" decoding="async" alt="Step 4: that's it, the GIF is ready, with confetti.">
+      <img class="on" src="img/step-01.webp" width="1440" height="900" decoding="async" data-i18n-alt="alt.1" alt="Step 1: rest the pointer in the bottom-left corner of the screen.">
+      <img src="img/step-02.webp" width="1440" height="900" loading="lazy" decoding="async" data-i18n-alt="alt.2" alt="Step 2: the converter panel peeks out of the corner.">
+      <img src="img/step-03.webp" width="1440" height="900" loading="lazy" decoding="async" data-i18n-alt="alt.3" alt="Step 3: the panel slides in, and an MP4 file is dropped on Drop file here.">
+      <img src="img/step-04.webp" width="1440" height="900" loading="lazy" decoding="async" data-i18n-alt="alt.4" alt="Step 4: that's it, the GIF is ready, with confetti.">
     </figure>
-    <p class="story-cap" id="story-cap" aria-live="off">Rest the pointer in the bottom-left corner of the screen for a moment. Pick a different corner, or switch the feature off, in Settings.</p>
+    <p class="story-cap" id="story-cap" aria-live="off" data-i18n="cap.1">Rest the pointer in the bottom-left corner of the screen for a moment. Pick a different corner, or switch the feature off, in Settings.</p>
   </section>
 
   <section class="features" aria-labelledby="features-h">
     <div class="section-head">
-      <span class="eyebrow">Built for the everyday case</span>
-      <h2 id="features-h">From screen recording to chat, ticket or pull request</h2>
+      <span data-i18n="feat.eyebrow" class="eyebrow">Built for the everyday case</span>
+      <h2 data-i18n="feat.h2" id="features-h">From screen recording to chat, ticket or pull request</h2>
     </div>
     <div class="cards">
       <article class="card glass">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M3 9h18M15 6.5h3"/></svg>
-        <h3>Lives in the menu bar</h3>
-        <p>No Dock icon, no window to manage, no project to set up. Look for the small rounded GIF badge at the right-hand end of the menu bar. The panel never takes focus from the app you were using.</p>
+        <h3 data-i18n="c1.h3">Lives in the menu bar</h3>
+        <p data-i18n="c1.p">No Dock icon, no window to manage, no project to set up. Look for the small rounded GIF badge at the right-hand end of the menu bar. The panel never takes focus from the app you were using.</p>
       </article>
       <article class="card glass">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 21V12M3 21h9"/><path d="M3 21 11 13"/><path d="M14 3h7v7"/></svg>
-        <h3>A hot corner of its own</h3>
-        <p>Rest the pointer in a corner and the panel arrives; press Escape and it's gone. Pick any corner, or switch it off. The macOS hot corners keep working as before.</p>
+        <h3 data-i18n="c2.h3">A hot corner of its own</h3>
+        <p data-i18n="c2.p">Rest the pointer in a corner and the panel arrives; press Escape and it's gone. Pick any corner, or switch it off. The macOS hot corners keep working as before.</p>
       </article>
       <article class="card glass">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
-        <h3>Drop and done</h3>
+        <h3 data-i18n="c3.h3">Drop and done</h3>
         <ul>
-          <li>Drag a video onto the panel, or pick one with Convert File…</li>
-          <li>Drop several at once and they convert in turn.</li>
-          <li>GIFs save to a folder you pick once; Downloads is one click.</li>
-          <li>Drag the result out of the preview into any app.</li>
+          <li data-i18n="c3.li1">Drag a video onto the panel, or pick one with Convert File…</li>
+          <li data-i18n="c3.li2">Drop several at once and they convert in turn.</li>
+          <li data-i18n="c3.li3">GIFs save to a folder you pick once; Downloads is one click.</li>
+          <li data-i18n="c3.li4">Drag the result out of the preview into any app.</li>
         </ul>
       </article>
       <article class="card glass">
         <div class="presets" aria-hidden="true"><span>S</span><span>M</span><span>L</span><span>XL</span></div>
-        <h3>Quality worth the wait</h3>
-        <p>The S, M, L and XL presets set frame rate, size and palette in one tap, or dial in your own. Two-pass palette generation gives colour that holds up against the source, and Lanczos scaling never upscales past the original.</p>
+        <h3 data-i18n="c4.h3">Quality worth the wait</h3>
+        <p data-i18n="c4.p">The S, M, L and XL presets set frame rate, size and palette in one tap, or dial in your own. Two-pass palette generation gives colour that holds up against the source, and Lanczos scaling never upscales past the original.</p>
       </article>
       <article class="card glass">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="13" height="12" rx="2.5"/><path d="m16 10 5-3v10l-5-3"/></svg>
-        <h3>Takes what macOS plays</h3>
-        <p>Video files macOS can decode, including .mp4, .mov and .m4v, plus .gif, .png and .jpg images. Screen recordings from macOS or the iOS Simulator work directly.</p>
+        <h3 data-i18n="c5.h3">Takes what macOS plays</h3>
+        <p data-i18n="c5.p">Video files macOS can decode, including .mp4, .mov and .m4v, plus .gif, .png and .jpg images. Screen recordings from macOS or the iOS Simulator work directly.</p>
       </article>
       <article class="card glass">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12v8H4v-8M2 7h20v5H2zM12 21V7M12 7H8a2.5 2.5 0 1 1 0-5c3 0 4 5 4 5ZM12 7h4a2.5 2.5 0 1 0 0-5c-3 0-4 5-4 5Z"/></svg>
-        <h3>Start free</h3>
-        <p>You get 25 free conversions; a failed or cancelled one costs nothing. Then buy a pack of 100, or unlock unlimited conversions for good with a one-time Lifetime Unlock.</p>
+        <h3 data-i18n="c6.h3">Start free</h3>
+        <p data-i18n="c6.p">You get 25 free conversions; a failed or cancelled one costs nothing. Then buy a pack of 100, or unlock unlimited conversions for good with a one-time Lifetime Unlock.</p>
       </article>
     </div>
   </section>
 
   <section class="privacy glass" aria-labelledby="privacy-h">
-    <span class="eyebrow">Privacy</span>
-    <h2 id="privacy-h">Everything happens on your Mac</h2>
-    <p>Quick Gif collects no data, has no servers and no account. Its only network connection is to Apple's App Store, for purchases. <a href="PRIVACY">Read the privacy policy</a>.</p>
+    <span data-i18n="privacy.eyebrow" class="eyebrow">Privacy</span>
+    <h2 data-i18n="privacy.h2" id="privacy-h">Everything happens on your Mac</h2>
+    <p data-i18n="privacy.p">Quick Gif collects no data, has no servers and no account. Its only network connection is to Apple's App Store, for purchases. <a href="PRIVACY" hreflang="en">Read the privacy policy</a>.</p>
   </section>
 
   <footer class="foot">
-    <nav aria-label="Documents">
-      <a href="SUPPORT">Support</a>
-      <a href="PRIVACY">Privacy policy</a>
-      <a href="../">All apps</a>
+    <nav aria-label="Documents" data-i18n-aria="foot.nav">
+      <a href="SUPPORT" hreflang="en" data-i18n="foot.support">Support</a>
+      <a href="PRIVACY" hreflang="en" data-i18n="foot.privacy">Privacy policy</a>
+      <a href="../" data-i18n="foot.all">All apps</a>
     </nav>
     <p>© 2026 Christian Deckert · <a href="mailto:deckert.christian@icloud.com">deckert.christian@icloud.com</a></p>
-    <p>Quick Gif uses FFmpeg under the GNU LGPL v2.1 or later.</p>
+    <p data-i18n="foot.ffmpeg">Quick Gif uses FFmpeg under the GNU LGPL v2.1 or later.</p>
   </footer>
 </main>
 
+<script type="application/json" id="strings-de">
+{
+  "title": "Quick Gif",
+  "description": "Quick Gif ist ein Programm für die Menüleiste deines Mac, das aus einem Video mit einer einzigen Bewegung ein animiertes GIF macht. Alles passiert auf deinem Mac.",
+  "lang.label": "Sprache",
+  "nav.all": "Alle Apps",
+  "badge": "Eine Menüleisten-App für den Mac",
+  "subtitle": "Video rein, <span>GIF raus</span>.",
+  "promo": "Ein GIF-Konverter, der nicht im Weg steht. Er wohnt in der Menüleiste, öffnet sich, wenn der Zeiger eine Bildschirmecke findet, und nimmt dir nie den Fokus weg.",
+  "soon": "Demnächst im Mac App Store",
+  "meta": "Zum Start 25 kostenlose Konvertierungen.<br>Erfordert macOS 15 oder neuer, auf Macs mit Apple Chip oder Intel-Prozessor.",
+  "story.eyebrow": "So funktioniert’s",
+  "story.h2": "Vier Schritte, ein GIF",
+  "story.tabs": "Schritte",
+  "tab.1": "Zeiger in die Ecke",
+  "tab.2": "Es lugt hervor",
+  "tab.3": "Video ablegen",
+  "tab.4": "Dein GIF ist fertig",
+  "story.prev": "Vorheriger Schritt",
+  "story.next": "Nächster Schritt",
+  "story.pause": "Diashow pausieren",
+  "story.play": "Diashow abspielen",
+  "story.held": "Pausiert, während du dich umsiehst. Läuft nach 30 Sekunden ohne Eingabe weiter.",
+  "story.role": "Diashow",
+  "alt.1": "Schritt 1: Der Zeiger ruht in der linken unteren Ecke des Bildschirms.",
+  "alt.2": "Schritt 2: Das Konverter-Panel lugt aus der Ecke hervor.",
+  "alt.3": "Schritt 3: Das Panel gleitet herein, und eine MP4-Datei wird auf sein Ablagefeld gezogen.",
+  "alt.4": "Schritt 4: Geschafft, das GIF ist fertig, mit Konfetti.",
+  "cap.1": "Lass den Zeiger einen Moment in der linken unteren Ecke des Bildschirms ruhen. In den Einstellungen wählst du eine andere Ecke oder schaltest die Funktion ab.",
+  "cap.2": "Der Konverter lugt aus der Ecke hervor. Gehst du weg, bevor er ganz erscheint, gleitet er wieder zurück.",
+  "cap.3": "Dann gleitet er herein. Zieh ein Video darauf oder klick darin auf „Datei auswählen …“.",
+  "cap.4": "Fertig: Das GIF liegt in deinem Ordner, und eine Vorschau öffnet sich. Zieh es in jede App, oder nimm „Sichern unter …“ oder „Im Finder zeigen“.",
+  "feat.eyebrow": "Gebaut für den Alltag",
+  "feat.h2": "Von der Bildschirmaufnahme in Chat, Ticket oder Pull Request",
+  "c1.h3": "Wohnt in der Menüleiste",
+  "c1.p": "Kein Dock-Symbol, kein Fenster, das verwaltet werden will, kein Projekt, das erst angelegt werden muss. Such das kleine abgerundete GIF-Symbol rechts in der Menüleiste. Das Panel nimmt der App, in der du gerade arbeitest, nie den Fokus.",
+  "c2.h3": "Eine eigene Bildschirmecke",
+  "c2.p": "Lass den Zeiger in einer Ecke ruhen, und das Panel ist da; drück Escape, und es ist wieder weg. Die Ecke ist frei wählbar, oder du schaltest die Funktion ganz ab. Die aktiven Ecken von macOS funktionieren weiter wie bisher.",
+  "c3.h3": "Ziehen und fertig",
+  "c3.li1": "Zieh ein Video auf das Panel oder wähl eins über „Datei konvertieren …“ aus.",
+  "c3.li2": "Leg mehrere auf einmal ab, und sie werden nacheinander umgewandelt.",
+  "c3.li3": "GIFs landen in einem Ordner, den du einmal auswählst; Downloads ist ein Klick.",
+  "c3.li4": "Zieh das Ergebnis aus der Vorschau in jede App.",
+  "c4.h3": "Qualität, die sich lohnt",
+  "c4.p": "Die Voreinstellungen S, M, L und XL setzen Bildrate, Größe und Palette mit einem Klick, oder du stellst eigene Werte ein. Die zweistufige Palettenerzeugung liefert Farben, die dem Original standhalten, und die Lanczos-Skalierung vergrößert nie über das Original hinaus.",
+  "c5.h3": "Nimmt, was macOS abspielt",
+  "c5.p": "Videodateien, die macOS dekodieren kann, darunter .mp4, .mov und .m4v, dazu Bilder im Format .gif, .png und .jpg. Bildschirmaufnahmen aus macOS oder dem iOS-Simulator funktionieren direkt.",
+  "c6.h3": "Kostenlos starten",
+  "c6.p": "Du bekommst 25 kostenlose Konvertierungen; eine fehlgeschlagene oder abgebrochene kostet nichts. Danach kaufst du ein Paket mit 100 Credits, oder du schaltest mit der einmaligen Vollversion unbegrenzte Konvertierungen für immer frei.",
+  "privacy.eyebrow": "Datenschutz",
+  "privacy.h2": "Alles passiert auf deinem Mac",
+  "privacy.p": "Quick Gif erhebt keine Daten, hat keine Server und kein Benutzerkonto. Die einzige Netzwerkverbindung geht zum App Store von Apple, für Käufe. <a href='PRIVACY' hreflang='en'>Zur Datenschutzerklärung (EN)</a>.",
+  "foot.nav": "Dokumente",
+  "foot.support": "Support (EN)",
+  "foot.privacy": "Datenschutzerklärung (EN)",
+  "foot.all": "Alle Apps",
+  "foot.ffmpeg": "Quick Gif verwendet FFmpeg unter der GNU LGPL v2.1 oder höher."
+}
+</script>
+<script src="../i18n.js"></script>
 <script>
 (() => {
   'use strict';
   const CAPTIONS = [
-    'Rest the pointer in the bottom-left corner of the screen for a moment. Pick a different corner, or switch the feature off, in Settings.',
-    'The converter peeks out of the corner. Move away before it commits and it slides back out.',
-    'Then it slides in. Drop a video on it, or click Choose File… inside it.',
-    'That’s it: the GIF is saved to your folder, and a preview opens. Drag it into any app, Save As…, or Show in Finder.',
+    I18N.t('cap.1', 'Rest the pointer in the bottom-left corner of the screen for a moment. Pick a different corner, or switch the feature off, in Settings.'),
+    I18N.t('cap.2', 'The converter peeks out of the corner. Move away before it commits and it slides back out.'),
+    I18N.t('cap.3', 'Then it slides in. Drop a video on it, or click Choose File… inside it.'),
+    I18N.t('cap.4', 'That’s it: the GIF is saved to your folder, and a preview opens. Drag it into any app, Save As…, or Show in Finder.'),
   ];
   const DURATION = 5000, RESUME_AFTER = 30000;
   const PAUSE_ICON = '<path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/>';
   const PLAY_ICON = '<path d="M8 4.8v14.4L19.5 12 8 4.8Z"/>';
   const $ = (id) => document.getElementById(id);
   const story = $('story'), screen = $('screen'), playBtn = $('play'), cap = $('story-cap');
+  const PAUSE = I18N.t('story.pause', 'Pause the slideshow'), PLAY = I18N.t('story.play', 'Play the slideshow');
+  const HELD = I18N.t('story.held', 'Paused while you look around. Plays on after 30 seconds without input.');
+  story.setAttribute('aria-roledescription', I18N.t('story.role', 'slideshow'));
   const tabs = [...document.querySelectorAll('.tab')];
   const imgs = [...screen.querySelectorAll('img')];
   const reduce = matchMedia('(prefers-reduced-motion: reduce)');
@@ -298,8 +367,8 @@ h1 { font: 800 clamp(48px, 8vw, 80px)/1 var(--font-round); letter-spacing: -.03e
 
   function render() {
     const playing = mode === 'playing';
-    playBtn.setAttribute('aria-label', playing ? 'Pause the slideshow' : 'Play the slideshow');
-    playBtn.title = mode === 'held' ? 'Paused while you look around. Plays on after 30 seconds without input.' : '';
+    playBtn.setAttribute('aria-label', playing ? PAUSE : PLAY);
+    playBtn.title = mode === 'held' ? HELD : '';
     $('play-icon').innerHTML = playing ? PAUSE_ICON : PLAY_ICON;
     cap.setAttribute('aria-live', playing ? 'off' : 'polite');
   }
