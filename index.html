@@ -67,7 +67,9 @@ h1 { font-size: clamp(40px, 6.6vw, 72px); line-height: 1.02; font-weight: 800; l
 .promises li { font-size: 14px; font-weight: 600; padding: 7px 12px; border-radius: 999px; background: var(--card); box-shadow: 0 0 0 1px var(--line); }
 
 .shelf { position: relative; height: clamp(180px, 26vw, 260px); justify-self: center; width: min(100%, 460px); }
-/* Three layers per icon: .slot is placed and pushed aside, .float bobs, the img tilts and lifts. */
+/* Three layers per icon: .slot is placed and pushed aside, .float bobs, the img tilts and lifts.
+   The slots repeat the tiles' links for pointer and touch only, so the shelf stays out of the
+   tab order and the accessibility tree. */
 .shelf .slot {
   position: absolute; width: clamp(72px, 11vw, 112px); aspect-ratio: 1;
   transform: translate(var(--sx, 0px), var(--sy, 0px));
@@ -189,12 +191,12 @@ a.status:hover { filter: brightness(1.08); }
       </ul>
     </div>
     <div class="shelf" id="shelf" aria-hidden="true">
-      <span class="slot"><span class="float"><img src="AnalogClock/img/icon-192.webp" width="96" height="96" alt=""></span></span>
-      <span class="slot"><span class="float"><img src="Flashcards/img/icon-192.webp" width="96" height="96" alt=""></span></span>
-      <span class="slot"><span class="float"><img src="MyMusic/img/icon-192.webp" width="96" height="96" alt=""></span></span>
-      <span class="slot"><span class="float"><img src="CRTCam/img/icon-192.webp" width="96" height="96" alt=""></span></span>
-      <span class="slot"><span class="float"><img src="Avoid/img/icon-192.webp" width="96" height="96" alt=""></span></span>
-      <span class="slot"><span class="float"><img src="QuickGif/img/icon-192.webp" width="96" height="96" alt=""></span></span>
+      <a class="slot" href="AnalogClock/" tabindex="-1"><span class="float"><img src="AnalogClock/img/icon-192.webp" width="96" height="96" alt=""></span></a>
+      <a class="slot" href="Flashcards/" tabindex="-1"><span class="float"><img src="Flashcards/img/icon-192.webp" width="96" height="96" alt=""></span></a>
+      <a class="slot" href="MyMusic/" tabindex="-1"><span class="float"><img src="MyMusic/img/icon-192.webp" width="96" height="96" alt=""></span></a>
+      <a class="slot" href="CRTCam/" tabindex="-1"><span class="float"><img src="CRTCam/img/icon-192.webp" width="96" height="96" alt=""></span></a>
+      <a class="slot" href="Avoid/" tabindex="-1"><span class="float"><img src="Avoid/img/icon-192.webp" width="96" height="96" alt=""></span></a>
+      <a class="slot" href="QuickGif/" tabindex="-1"><span class="float"><img src="QuickGif/img/icon-192.webp" width="96" height="96" alt=""></span></a>
     </div>
   </header>
 
