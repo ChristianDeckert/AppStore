@@ -96,6 +96,11 @@ img { display: block; max-width: 100%; height: auto; }
 .site-head .home svg { width: 16px; height: 16px; color: var(--ink); }
 .site-head .here { display: inline-flex; align-items: center; gap: 9px; min-width: 0; font: italic 500 20px/1 var(--font-display); color: var(--ink); white-space: nowrap; }
 .site-head .here img { width: 28px; height: 28px; border-radius: 22.37%; box-shadow: 0 2px 0 var(--key-edge); }
+.lang-switch { margin-left: auto; display: inline-flex; padding: 3px; border-radius: 10px; background: var(--card); box-shadow: inset 0 1px 3px var(--shade); }
+.lang-switch a { padding: 6px 9px; border-radius: 7px; font: 600 11px/1 var(--font-mono); letter-spacing: .1em; color: var(--label); text-decoration: none; }
+.lang-switch a:hover { color: var(--ink); }
+.lang-switch a[aria-current] { background: linear-gradient(180deg, var(--key-dark-top), var(--key-dark)); color: var(--on-dark); box-shadow: 0 2px 0 var(--key-dark-edge); }
+@media (max-width: 420px) { .site-head .here-name { display: none; } }
 
 .page {
   max-width: 1140px; margin: 0 auto; display: grid; gap: 72px;
@@ -175,6 +180,12 @@ h1 { font: italic 500 clamp(46px, 7vw, 68px)/1 var(--font-display); letter-spaci
 .cell { display: grid; gap: 2px; min-width: 0; }
 .cell .k { font: 600 10px/1.2 var(--font-mono); letter-spacing: .14em; color: var(--vf-dim); }
 .cell .v { font: 600 clamp(16px, 2.4vw, 22px)/1.25 var(--font-mono); color: var(--s2); font-variant-numeric: tabular-nums; }
+/* "EINGERASTET" is longer than a third of a phone-width readout, so German cells size to their
+   content and wrap on the narrowest phones; the German note ends the issues URL with a comma. */
+html:lang(de) .cells { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px 16px; }
+html:lang(de) .cell { flex: none; }
+html:lang(de) .cell .v { font-size: clamp(15px, 2.4vw, 22px); }
+html:lang(de) .early .note a { overflow-wrap: anywhere; }
 
 /* Steps */
 .steps-wrap { display: grid; gap: 28px; }
@@ -249,8 +260,9 @@ h1 { font: italic 500 clamp(46px, 7vw, 68px)/1 var(--font-display); letter-spaci
 <header class="site-head">
   <div class="stripe" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div>
   <div class="bar">
-    <a class="home" href="../"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>All apps</a>
-    <span class="here"><img src="img/icon-192.webp" width="28" height="28" alt="">CRT Retro Cam</span>
+    <a class="home" href="../"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg><span data-i18n="nav.all">All apps</span></a>
+    <nav class="lang-switch" aria-label="Language" data-i18n-aria="lang.label"><a href="?lang=de" hreflang="de" lang="de" title="Deutsch">DE</a><a href="?lang=en" hreflang="en" lang="en" title="English">EN</a></nav>
+    <span class="here"><img src="img/icon-192.webp" width="28" height="28" alt=""><span class="here-name">CRT Retro Cam</span></span>
   </div>
 </header>
 <main class="page">
@@ -261,172 +273,266 @@ h1 { font: italic 500 clamp(46px, 7vw, 68px)/1 var(--font-display); letter-spaci
         <source srcset="img/icon-dark.png" media="(prefers-color-scheme: dark)">
         <img class="app-icon" src="img/icon.png" width="92" height="92" alt="">
       </picture>
-      <span class="brand"><i aria-hidden="true"><b></b><b></b><b></b><b></b><b></b><b></b></i>iPhone · Android preview</span>
+      <span class="brand"><i aria-hidden="true"><b></b><b></b><b></b><b></b><b></b><b></b></i><span data-i18n="hero.platforms">iPhone · Android preview</span></span>
       <h1>CRT Retro Cam</h1>
-      <p class="subtitle">Flicker-free CRT TV photos.</p>
-      <p class="promo">Point, sync, shoot: CRT Retro Cam times the shutter to your screen's refresh rate, so retro games and old monitors look as clean in photos as they do in person.</p>
+      <p class="subtitle" data-i18n="hero.subtitle">Flicker-free CRT TV photos.</p>
+      <p class="promo" data-i18n="hero.promo">Point, sync, shoot: CRT Retro Cam times the shutter to your screen's refresh rate, so retro games and old monitors look as clean in photos as they do in person.</p>
       <div class="stores">
-        <span class="soon"><span class="led" aria-hidden="true"></span>Coming soon to the App Store</span>
-        <span class="soon play"><span class="led" aria-hidden="true"></span>Coming soon to Google Play</span>
+        <span class="soon"><span class="led" aria-hidden="true"></span><span data-i18n="store.app">Coming soon to the App Store</span></span>
+        <span class="soon play"><span class="led" aria-hidden="true"></span><span data-i18n="store.play">Coming soon to Google Play</span></span>
       </div>
       <div class="cta">
-        <a class="dl dark" href="https://testflight.apple.com/join/Wc9429HK"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3h6M10 3v6.5L4.8 18.2A1.9 1.9 0 0 0 6.4 21h11.2a1.9 1.9 0 0 0 1.6-2.8L14 9.5V3"/><path d="M7.5 15h9"/></svg><span>Join the iPhone beta<small>on TestFlight</small></span></a>
-        <a class="dl light apk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M12 7v7M9 11.5l3 3 3-3M10.5 18.5h3"/></svg><span>Android preview<small class="when-soon">APK coming soon</small><small class="when-ready">Download APK</small></span></a>
+        <a class="dl dark" href="https://testflight.apple.com/join/Wc9429HK"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3h6M10 3v6.5L4.8 18.2A1.9 1.9 0 0 0 6.4 21h11.2a1.9 1.9 0 0 0 1.6-2.8L14 9.5V3"/><path d="M7.5 15h9"/></svg><span data-i18n="key.beta">Join the iPhone beta<small>on TestFlight</small></span></a>
+        <a class="dl light apk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M12 7v7M9 11.5l3 3 3-3M10.5 18.5h3"/></svg><span data-i18n="key.apk">Android preview<small class="when-soon">APK coming soon</small><small class="when-ready">Download APK</small></span></a>
       </div>
-      <p class="meta">Try it now: the iPhone beta, or the Android preview once it is ready.<br>Free to shoot; Premium is a one-time purchase. iOS 15 or Android 10 or later.</p>
+      <p class="meta" data-i18n="hero.meta">Try it now: the iPhone beta, or the Android preview once it is ready.<br>Free to shoot; Premium is a one-time purchase. iOS 15 or Android 10 or later.</p>
     </div>
 
     <figure class="compare-card">
       <div class="compare" id="compare">
-        <img src="img/after.webp" width="1200" height="824" alt="The same CRT photographed with CRT Retro Cam: the whole picture is lit, no bands.">
-        <img class="before" src="img/before.webp" width="1200" height="825" alt="The CRT through a normal phone camera: a dark band covers most of the picture.">
-        <span class="tag l"><span class="led"></span>PHONE CAMERA</span>
-        <span class="tag r"><span class="led"></span>SYNCED</span>
-        <input type="range" id="compare-range" min="0" max="100" value="50" aria-label="Compare a normal phone photo, left, with a CRT Retro Cam photo, right">
+        <img src="img/after.webp" width="1200" height="824" data-i18n-alt="cmp.afterAlt" alt="The same CRT photographed with CRT Retro Cam: the whole picture is lit, no bands.">
+        <img class="before" src="img/before.webp" width="1200" height="825" data-i18n-alt="cmp.beforeAlt" alt="The CRT through a normal phone camera: a dark band covers most of the picture.">
+        <span class="tag l"><span class="led"></span><span data-i18n="cmp.phone">PHONE CAMERA</span></span>
+        <span class="tag r"><span class="led"></span><span data-i18n="cmp.synced">SYNCED</span></span>
+        <input type="range" id="compare-range" min="0" max="100" value="50" aria-label="Compare a normal phone photo, left, with a CRT Retro Cam photo, right" data-i18n-aria="cmp.range">
         <span class="handle" aria-hidden="true"><span class="grip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l-5 6 5 6M15 6l5 6-5 6"/></svg></span></span>
       </div>
-      <figcaption class="compare-cap">Same TV, same game. Drag to compare a normal phone photo with a synced one.</figcaption>
+      <figcaption class="compare-cap" data-i18n="cmp.cap">Same TV, same game. Drag to compare a normal phone photo with a synced one.</figcaption>
     </figure>
   </header>
 
   <section class="why" aria-labelledby="why-h">
     <div class="section-head">
-      <span class="brand"><i aria-hidden="true"><b></b><b></b><b></b><b></b><b></b><b></b></i>Why the bands appear</span>
-      <h2 id="why-h">One refresh per photo, every line lit</h2>
-      <p>A CRT draws its picture line by line, 50 to 120 times a second, and each line glows only briefly. A phone photo with a short shutter catches the screen half-drawn, so dark bands cross it.</p>
-      <p>CRT Retro Cam keeps the shutter open for exactly one refresh, or a whole number of them, so the screen is drawn completely during the exposure.</p>
+      <span class="brand"><i aria-hidden="true"><b></b><b></b><b></b><b></b><b></b><b></b></i><span data-i18n="why.brand">Why the bands appear</span></span>
+      <h2 id="why-h" data-i18n="why.h2">One refresh per photo, every line lit</h2>
+      <p data-i18n="why.p1">A CRT draws its picture line by line, 50 to 120 times a second, and each line glows only briefly. A phone photo with a short shutter catches the screen half-drawn, so dark bands cross it.</p>
+      <p data-i18n="why.p2">CRT Retro Cam keeps the shutter open for exactly one refresh, or a whole number of them, so the screen is drawn completely during the exposure.</p>
     </div>
-    <div class="readout" role="img" aria-label="Example readout: scan 59.94 hertz, shutter one sixtieth of a second, status locked.">
+    <div class="readout" role="img" aria-label="Example readout: scan 59.94 hertz, shutter one sixtieth of a second, status locked." data-i18n-aria="why.readout">
       <div class="cells">
-        <div class="cell"><span class="k">SCAN</span><span class="v">59.94 Hz</span></div>
-        <div class="cell"><span class="k">SHUTTER</span><span class="v">1/60 s</span></div>
-        <div class="cell"><span class="k">STATUS</span><span class="v">LOCKED</span></div>
+        <div class="cell"><span class="k" data-i18n="why.scan">SCAN</span><span class="v" data-i18n="why.scanValue">59.94 Hz</span></div>
+        <div class="cell"><span class="k" data-i18n="why.shutter">SHUTTER</span><span class="v">1/60 s</span></div>
+        <div class="cell"><span class="k">STATUS</span><span class="v" data-i18n="why.locked">LOCKED</span></div>
       </div>
-      <p><b>Detect</b> finds rates from 45 to 165 Hz. Most European TVs run at 50 Hz, most American and Japanese ones at 59.94 Hz, and computer monitors at 60 to 85 Hz or more.</p>
+      <p data-i18n="why.detect"><b>Detect</b> finds rates from 45 to 165 Hz. Most European TVs run at 50 Hz, most American and Japanese ones at 59.94 Hz, and computer monitors at 60 to 85 Hz or more.</p>
     </div>
   </section>
 
   <section class="steps-wrap" aria-labelledby="steps-h">
     <div class="section-head">
-      <span class="brand"><i aria-hidden="true"><b></b><b></b><b></b><b></b><b></b><b></b></i>Taking a photo</span>
-      <h2 id="steps-h">Point, sync, shoot</h2>
+      <span class="brand"><i aria-hidden="true"><b></b><b></b><b></b><b></b><b></b><b></b></i><span data-i18n="steps.brand">Taking a photo</span></span>
+      <h2 id="steps-h" data-i18n="steps.h2">Point, sync, shoot</h2>
     </div>
     <ol class="steps">
       <li>
-        <img src="img/camera.webp" width="600" height="1304" loading="lazy" decoding="async" alt="The camera screen: a beige TV in the full-width viewfinder, the status pill reading SYNCED 59.94 Hz, rate keys for AUTO, 50, 59.94, 60 and 70 Hz, and the shutter knob.">
-        <h3>Fill the frame</h3>
-        <p>Turn the screen on and fill most of the frame with it. The viewfinder shows exactly what the photo will contain; tap it to focus.</p>
+        <img src="img/camera.webp" data-i18n-src="img/de/camera.webp" width="600" height="1304" loading="lazy" decoding="async" data-i18n-alt="step1.alt" alt="The camera screen: a beige TV in the full-width viewfinder, the status pill reading SYNCED 59.94 Hz, rate keys for AUTO, 50, 59.94, 60 and 70 Hz, and the shutter knob.">
+        <h3 data-i18n="step1.h3">Fill the frame</h3>
+        <p data-i18n="step1.p">Turn the screen on and fill most of the frame with it. The viewfinder shows exactly what the photo will contain; tap it to focus.</p>
       </li>
       <li>
-        <img src="img/detecting.webp" width="600" height="1304" loading="lazy" decoding="async" alt="Detecting: a meter checks 59.94 Hz while the picture in the viewfinder rolls.">
-        <h3>Detect, or pick the rate</h3>
-        <p>Tap Detect and hold still. The app samples the flicker and locks onto the rate where the banding disappears. Or pick a preset: 50 Hz PAL, 59.94 Hz NTSC, VGA and VESA rates.</p>
+        <img src="img/detecting.webp" data-i18n-src="img/de/detecting.webp" width="600" height="1304" loading="lazy" decoding="async" data-i18n-alt="step2.alt" alt="Detecting: a meter checks 59.94 Hz while the picture in the viewfinder rolls.">
+        <h3 data-i18n="step2.h3">Detect, or pick the rate</h3>
+        <p data-i18n="step2.p">Tap Detect and hold still. The app samples the flicker and locks onto the rate where the banding disappears. Or pick a preset: 50 Hz PAL, 59.94 Hz NTSC, VGA and VESA rates.</p>
       </li>
       <li>
-        <img src="img/locked.webp" width="600" height="1304" loading="lazy" decoding="async" alt="Locked at 59.94 Hz with a shutter of 1/60 s, the picture clean and still.">
-        <h3>Fine-tune</h3>
-        <p>Fine-tuning tries shutter times around the detected rate and keeps the one that leaves the least banding, with a "vertical hold" animation while it locks on.</p>
+        <img src="img/locked.webp" data-i18n-src="img/de/locked.webp" width="600" height="1304" loading="lazy" decoding="async" data-i18n-alt="step3.alt" alt="Locked at 59.94 Hz with a shutter of 1/60 s, the picture clean and still.">
+        <h3 data-i18n="step3.h3">Fine-tune</h3>
+        <p data-i18n="step3.p">Fine-tuning tries shutter times around the detected rate and keeps the one that leaves the least banding, with a "vertical hold" animation while it locks on.</p>
       </li>
       <li>
-        <img src="img/folded.webp" width="600" height="1304" loading="lazy" decoding="async" alt="The control deck folded down to the knob and the last photo, for a clear view of the frame.">
-        <h3>Shoot</h3>
-        <p>Turn the knob, or press a volume button or the Camera Control. Fold the controls away with the grabber for a clear view of the whole frame.</p>
+        <img src="img/folded.webp" data-i18n-src="img/de/folded.webp" width="600" height="1304" loading="lazy" decoding="async" data-i18n-alt="step4.alt" alt="The control deck folded down to the knob and the last photo, for a clear view of the frame.">
+        <h3 data-i18n="step4.h3">Shoot</h3>
+        <p data-i18n="step4.p">Turn the knob, or press a volume button or the Camera Control. Fold the controls away with the grabber for a clear view of the whole frame.</p>
       </li>
     </ol>
   </section>
 
   <section aria-labelledby="deck-h" class="steps-wrap">
     <div class="section-head">
-      <span class="brand"><i aria-hidden="true"><b></b><b></b><b></b><b></b><b></b><b></b></i>Made for retro screens</span>
-      <h2 id="deck-h">A camera that looks the part</h2>
+      <span class="brand"><i aria-hidden="true"><b></b><b></b><b></b><b></b><b></b><b></b></i><span data-i18n="deck.brand">Made for retro screens</span></span>
+      <h2 id="deck-h" data-i18n="deck.h2">A camera that looks the part</h2>
     </div>
     <div class="cards">
-      <article class="card"><span class="k">Lenses</span><h3>Every back camera</h3><p>Switch between the back lenses your phone has, for example 0.5×, 1× and 2×.</p></article>
-      <article class="card"><span class="k">Controls</span><h3>Knob, buttons, Camera Control</h3><p>Shoot with the on-screen knob, the volume buttons, or the Camera Control on iPhones that have one.</p></article>
-      <article class="card"><span class="k">Look</span><h3>Beige box, six stripes</h3><p>A retro look inspired by beige computers, CRT TVs and VHS tapes, with a short guide on first start.</p></article>
+      <article class="card"><span class="k" data-i18n="deck.lensesK">Lenses</span><h3 data-i18n="deck.lensesH">Every back camera</h3><p data-i18n="deck.lensesP">Switch between the back lenses your phone has, for example 0.5×, 1× and 2×.</p></article>
+      <article class="card"><span class="k" data-i18n="deck.controlsK">Controls</span><h3 data-i18n="deck.controlsH">Knob, buttons, Camera Control</h3><p data-i18n="deck.controlsP">Shoot with the on-screen knob, the volume buttons, or the Camera Control on iPhones that have one.</p></article>
+      <article class="card"><span class="k">Look</span><h3 data-i18n="deck.lookH">Beige box, six stripes</h3><p data-i18n="deck.lookP">A retro look inspired by beige computers, CRT TVs and VHS tapes, with a short guide on first start.</p></article>
     </div>
   </section>
 
   <section class="photos" aria-labelledby="photos-h">
     <div class="shots">
-      <img src="img/roll.webp" width="600" height="1304" loading="lazy" decoding="async" alt="The roll: photos grouped by day, each marked with the rate it was taken at.">
-      <img src="img/premium.webp" width="600" height="1304" loading="lazy" decoding="async" alt="The Premium page: AirDrop and share, Save to Photos, and no watermark, with Upgrade and Restore purchases.">
+      <img src="img/roll.webp" data-i18n-src="img/de/roll.webp" width="600" height="1304" loading="lazy" decoding="async" data-i18n-alt="photos.rollAlt" alt="The roll: photos grouped by day, each marked with the rate it was taken at.">
+      <img src="img/premium.webp" data-i18n-src="img/de/premium.webp" width="600" height="1304" loading="lazy" decoding="async" data-i18n-alt="photos.premiumAlt" alt="The Premium page: AirDrop and share, Save to Photos, and no watermark, with Upgrade and Restore purchases.">
     </div>
     <div class="text">
       <div class="section-head">
-        <span class="brand"><i aria-hidden="true"><b></b><b></b><b></b><b></b><b></b><b></b></i>Your photos</span>
-        <h2 id="photos-h">They stay in the app until you export them</h2>
-        <p>Mark favourites, and see the rate and shutter each photo was taken with.</p>
+        <span class="brand"><i aria-hidden="true"><b></b><b></b><b></b><b></b><b></b><b></b></i><span data-i18n="photos.brand">Your photos</span></span>
+        <h2 id="photos-h" data-i18n="photos.h2">They stay in the app until you export them</h2>
+        <p data-i18n="photos.p">Mark favourites, and see the rate and shutter each photo was taken with.</p>
       </div>
       <div class="plans">
         <article class="plan">
-          <h3>Free</h3>
-          <ul><li>Sync, Detect and fine-tuning</li><li>All lenses</li><li>Full-size photos kept in the app</li></ul>
+          <h3 data-i18n="plan.free">Free</h3>
+          <ul><li data-i18n="plan.free1">Sync, Detect and fine-tuning</li><li data-i18n="plan.free2">All lenses</li><li data-i18n="plan.free3">Full-size photos kept in the app</li></ul>
         </article>
         <article class="plan premium">
           <h3>Premium</h3>
-          <ul><li>AirDrop &amp; share the original photos</li><li>Save to Photos at full resolution</li><li>Photos without the watermark pattern</li></ul>
+          <ul><li data-i18n="plan.prem1">AirDrop &amp; share the original photos</li><li data-i18n="plan.prem2">Save to Photos at full resolution</li><li data-i18n="plan.prem3">Photos without the watermark pattern</li></ul>
         </article>
       </div>
-      <p class="meta">Premium is a one-time in-app purchase, not a subscription, and applies to every photo, including the ones you took before.</p>
+      <p class="meta" data-i18n="photos.meta">Premium is a one-time in-app purchase, not a subscription, and applies to every photo, including the ones you took before.</p>
     </div>
   </section>
 
   <section class="early" id="beta" aria-labelledby="early-h">
     <div class="section-head">
-      <span class="brand"><i aria-hidden="true"><b></b><b></b><b></b><b></b><b></b><b></b></i>Try it early</span>
-      <h2 id="early-h">Beta on iPhone, preview on Android</h2>
-      <p>CRT Retro Cam is not in the stores yet. You can try it now and tell us what your screens make of it.</p>
+      <span class="brand"><i aria-hidden="true"><b></b><b></b><b></b><b></b><b></b><b></b></i><span data-i18n="early.brand">Try it early</span></span>
+      <h2 id="early-h" data-i18n="early.h2">Beta on iPhone, preview on Android</h2>
+      <p data-i18n="early.p">CRT Retro Cam is not in the stores yet. You can try it now and tell us what your screens make of it.</p>
     </div>
     <div class="cards">
       <article class="card">
         <span class="k">iPhone · TestFlight</span>
-        <h3>Join the beta</h3>
+        <h3 data-i18n="beta.h3">Join the beta</h3>
         <ol>
-          <li>Install Apple's TestFlight app from the App Store.</li>
-          <li>Open the invitation on your iPhone and tap Accept, then Install.</li>
-          <li>Beta updates arrive through TestFlight by themselves.</li>
+          <li data-i18n="beta.li1">Install Apple's TestFlight app from the App Store.</li>
+          <li data-i18n="beta.li2">Open the invitation on your iPhone and tap Accept, then Install.</li>
+          <li data-i18n="beta.li3">Beta updates arrive through TestFlight by themselves.</li>
         </ol>
-        <a class="dl dark" href="https://testflight.apple.com/join/Wc9429HK"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3h6M10 3v6.5L4.8 18.2A1.9 1.9 0 0 0 6.4 21h11.2a1.9 1.9 0 0 0 1.6-2.8L14 9.5V3"/><path d="M7.5 15h9"/></svg><span>Join the iPhone beta<small>on TestFlight</small></span></a>
-        <p class="note">Requires an iPhone with iOS 15 or later.</p>
+        <a class="dl dark" href="https://testflight.apple.com/join/Wc9429HK"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3h6M10 3v6.5L4.8 18.2A1.9 1.9 0 0 0 6.4 21h11.2a1.9 1.9 0 0 0 1.6-2.8L14 9.5V3"/><path d="M7.5 15h9"/></svg><span data-i18n="key.beta">Join the iPhone beta<small>on TestFlight</small></span></a>
+        <p class="note" data-i18n="beta.note">Requires an iPhone with iOS 15 or later.</p>
       </article>
       <article class="card">
         <span class="k">Android · APK</span>
-        <h3>Install the preview</h3>
+        <h3 data-i18n="apk.h3">Install the preview</h3>
         <ol>
-          <li>Download the APK on your Android phone.</li>
-          <li>Open it, and allow your browser to install apps when Android asks.</li>
-          <li>Install a newer preview over the old one to update.</li>
+          <li data-i18n="apk.li1">Download the APK on your Android phone.</li>
+          <li data-i18n="apk.li2">Open it, and allow your browser to install apps when Android asks.</li>
+          <li data-i18n="apk.li3">Install a newer preview over the old one to update.</li>
         </ol>
-        <a class="dl light apk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M12 7v7M9 11.5l3 3 3-3M10.5 18.5h3"/></svg><span>Android preview<small class="when-soon">APK coming soon</small><small class="when-ready">Download APK</small></span></a>
-        <p class="note">Requires Android 10 or later and a camera that allows a manual shutter time. Some Android phones don't let apps set the shutter time; CRT Retro Cam cannot sync on them.</p>
+        <a class="dl light apk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M12 7v7M9 11.5l3 3 3-3M10.5 18.5h3"/></svg><span data-i18n="key.apk">Android preview<small class="when-soon">APK coming soon</small><small class="when-ready">Download APK</small></span></a>
+        <p class="note" data-i18n="apk.note">Requires Android 10 or later and a camera that allows a manual shutter time. Some Android phones don't let apps set the shutter time; CRT Retro Cam cannot sync on them.</p>
       </article>
     </div>
-    <p class="note">Found a bug? Open an issue at <a href="https://github.com/ChristianDeckert/AppStore/issues">github.com/ChristianDeckert/AppStore/issues</a> with your phone model and system version.</p>
+    <p class="note" data-i18n="early.bug">Found a bug? Open an issue at <a href="https://github.com/ChristianDeckert/AppStore/issues">github.com/ChristianDeckert/AppStore/issues</a> with your phone model and system version.</p>
   </section>
 
   <section class="test" aria-labelledby="test-h">
-    <h2 id="test-h">No CRT at hand?</h2>
-    <p>The CRT test screen lets a computer monitor stand in for a CRT. A real flicker for the camera needs a fast monitor, 120 Hz or more; on a 60 Hz monitor the page shows rolling bars that demonstrate the effect.</p>
-    <a class="key" href="simulator/"><i aria-hidden="true"><b></b><b></b><b></b><b></b><b></b><b></b></i>Open the CRT test screen</a>
+    <h2 id="test-h" data-i18n="test.h2">No CRT at hand?</h2>
+    <p data-i18n="test.p">The CRT test screen lets a computer monitor stand in for a CRT. A real flicker for the camera needs a fast monitor, 120 Hz or more; on a 60 Hz monitor the page shows rolling bars that demonstrate the effect.</p>
+    <a class="key" href="simulator/" hreflang="en"><i aria-hidden="true"><b></b><b></b><b></b><b></b><b></b><b></b></i><span data-i18n="test.key">Open the CRT test screen</span></a>
   </section>
 
   <section class="privacy" aria-labelledby="privacy-h">
-    <span class="brand"><i aria-hidden="true"><b></b><b></b><b></b><b></b><b></b><b></b></i>Privacy</span>
-    <h2 id="privacy-h">No account, no ads, no analytics, no tracking</h2>
-    <p>Your photos stay on your device until you export them, and the app's only network connection is for in-app purchases through Apple's App Store. <a href="PRIVACY">Read the privacy policy</a>.</p>
+    <span class="brand"><i aria-hidden="true"><b></b><b></b><b></b><b></b><b></b><b></b></i><span data-i18n="privacy.brand">Privacy</span></span>
+    <h2 id="privacy-h" data-i18n="privacy.h2">No account, no ads, no analytics, no tracking</h2>
+    <p data-i18n="privacy.p">Your photos stay on your device until you export them, and the app's only network connection is for in-app purchases through Apple's App Store. <a href="PRIVACY">Read the privacy policy</a>.</p>
   </section>
 
   <footer class="foot">
-    <a href="SUPPORT">Support</a>
-    <a href="PRIVACY">Privacy policy</a>
-    <a href="simulator/">CRT test screen</a>
-    <a href="https://testflight.apple.com/join/Wc9429HK">TestFlight beta</a>
-    <a href="../">All apps</a>
+    <a href="SUPPORT" hreflang="en" data-i18n="foot.support">Support</a>
+    <a href="PRIVACY" hreflang="en" data-i18n="foot.privacy">Privacy policy</a>
+    <a href="simulator/" hreflang="en" data-i18n="foot.test">CRT test screen</a>
+    <a href="https://testflight.apple.com/join/Wc9429HK" data-i18n="foot.beta">TestFlight beta</a>
+    <a href="../" data-i18n="nav.all">All apps</a>
     <span class="legal">© 2026 Christian Deckert · <a href="mailto:deckert.christian@icloud.com">deckert.christian@icloud.com</a></span>
   </footer>
 </main>
 
+<script type="application/json" id="strings-de">
+{
+  "title": "CRT Retro Cam",
+  "description": "CRT Retro Cam fotografiert Röhrenfernseher und -monitore ohne die dunklen Balken, die ein normales Handyfoto zeigt: Der Verschluss läuft synchron zur Bildwiederholrate des Bildschirms.",
+  "lang.label": "Sprache",
+  "nav.all": "Alle Apps",
+  "hero.platforms": "iPhone · Android-Vorschau",
+  "hero.subtitle": "Röhrenfernseher ohne Flimmern.",
+  "hero.promo": "Zielen, synchronisieren, auslösen: CRT Retro Cam stimmt den Verschluss auf die Bildwiederholrate deines Bildschirms ab. So wirken Retro-Spiele und alte Monitore im Foto so sauber wie live.",
+  "store.app": "Demnächst im App Store",
+  "store.play": "Demnächst bei Google Play",
+  "key.beta": "Zur iPhone-Beta<small>über TestFlight</small>",
+  "key.apk": "Android-Vorschau<small class='when-soon'>APK folgt bald</small><small class='when-ready'>APK laden</small>",
+  "hero.meta": "Jetzt ausprobieren: die iPhone-Beta oder, sobald sie fertig ist, die Android-Vorschau.<br>Fotografieren ist gratis, Premium ein einmaliger Kauf. iOS 15 oder Android 10 oder neuer.",
+  "cmp.afterAlt": "Derselbe Röhrenfernseher, fotografiert mit CRT Retro Cam: Das ganze Bild leuchtet, keine Streifen.",
+  "cmp.beforeAlt": "Der Röhrenfernseher durch eine normale Handykamera: Ein dunkler Balken verdeckt fast das ganze Bild.",
+  "cmp.phone": "HANDYKAMERA",
+  "cmp.synced": "SYNCHRON",
+  "cmp.range": "Vergleiche ein normales Handyfoto, links, mit einem Foto aus CRT Retro Cam, rechts",
+  "cmp.cap": "Gleicher Fernseher, gleiches Spiel. Zieh, um ein normales Handyfoto mit einem synchronen zu vergleichen.",
+  "why.brand": "Warum die Balken entstehen",
+  "why.h2": "Ein Bildaufbau pro Foto, jede Zeile belichtet",
+  "why.p1": "Ein Röhrenbildschirm zeichnet sein Bild Zeile für Zeile, 50- bis 120-mal pro Sekunde, und jede Zeile leuchtet nur kurz. Ein Handyfoto mit kurzer Verschlusszeit erwischt ihn halb gezeichnet, deshalb laufen dunkle Balken durchs Bild.",
+  "why.p2": "CRT Retro Cam hält den Verschluss genau einen Bildaufbau lang offen, oder eine ganze Zahl davon. So wird der Bildschirm während der Belichtung vollständig gezeichnet.",
+  "why.readout": "Beispielanzeige: Bildschirm 59,94 Hertz, Verschluss eine Sechzigstelsekunde, Status eingerastet.",
+  "why.scan": "BILDSCHIRM",
+  "why.scanValue": "59,94 Hz",
+  "why.shutter": "VERSCHLUSS",
+  "why.locked": "EINGERASTET",
+  "why.detect": "<b>Suchen</b> findet Raten von 45 bis 165 Hz. Die meisten europäischen Fernseher laufen mit 50 Hz, die meisten amerikanischen und japanischen mit 59,94 Hz, Computermonitore mit 60 bis 85 Hz oder mehr.",
+  "steps.brand": "Ein Foto machen",
+  "steps.h2": "Zielen, synchronisieren, auslösen",
+  "step1.alt": "Der Kamerabildschirm: ein beiger Fernseher im Sucher über die ganze Breite, die Statusanzeige SYNCHRON 59,94 Hz, Tasten für AUTO/SUCHEN, 50, 59,94, 60 und 70 Hz und der Aufnahmeknopf.",
+  "step1.h3": "Füll das Bild",
+  "step1.p": "Schalte den Bildschirm ein und füll den größten Teil des Bildes damit. Der Sucher zeigt genau, was aufs Foto kommt; tippe hinein, um zu fokussieren.",
+  "step2.alt": "Suchlauf bei 65 %: Eine Skala prüft 59,94 Hz, während das Bild im Sucher läuft.",
+  "step2.h3": "Suchen oder Rate wählen",
+  "step2.p": "Tippe auf Suchen und halt still. Die App misst das Flimmern und rastet auf der Rate ein, bei der die Streifen verschwinden. Oder wähle eine Voreinstellung: 50 Hz PAL, 59,94 Hz NTSC, VGA- und VESA-Raten.",
+  "step3.alt": "Eingerastet bei 59,94 Hz mit einer Verschlusszeit von 1/60 s, das Bild sauber und ruhig.",
+  "step3.h3": "Feinabstimmung",
+  "step3.p": "Die Feinabstimmung probiert Verschlusszeiten rund um die erkannte Rate und behält die mit den wenigsten Streifen. Eine Suchlauf-Animation zeigt, wie sie einrastet.",
+  "step4.alt": "Das Bedienfeld eingeklappt bis auf den Knopf und das letzte Foto, für den freien Blick aufs Bild.",
+  "step4.h3": "Auslösen",
+  "step4.p": "Dreh den Knopf oder drück eine Lautstärketaste oder die Kamerasteuerung. Klapp das Bedienfeld am Griff ein, um das ganze Bild frei zu sehen.",
+  "deck.brand": "Gemacht für Retro-Bildschirme",
+  "deck.h2": "Eine Kamera, die zum Thema passt",
+  "deck.lensesK": "Objektive",
+  "deck.lensesH": "Jede Rückkamera",
+  "deck.lensesP": "Wechsle zwischen den Rückkameras deines Telefons, zum Beispiel 0,5×, 1× und 2×.",
+  "deck.controlsK": "Bedienung",
+  "deck.controlsH": "Knopf, Tasten, Kamerasteuerung",
+  "deck.controlsP": "Löse mit dem Knopf auf dem Bildschirm aus, mit den Lautstärketasten oder mit der Kamerasteuerung auf iPhones, die eine haben.",
+  "deck.lookH": "Beige Kiste, sechs Streifen",
+  "deck.lookP": "Ein Retro-Look nach beigen Computern, Röhrenfernsehern und VHS-Kassetten, mit einer kurzen Anleitung beim ersten Start.",
+  "photos.rollAlt": "Die Filmrolle: Fotos nach Tagen sortiert, Heute und Gestern, jedes mit der Rate markiert, bei der es entstand.",
+  "photos.premiumAlt": "Die Premium-Seite: AirDrop & Teilen, In Fotos sichern und Kein Wasserzeichen, mit Upgrade und Käufe wiederherstellen.",
+  "photos.brand": "Deine Fotos",
+  "photos.h2": "Sie bleiben in der App, bis du sie exportierst",
+  "photos.p": "Markiere Favoriten und sieh nach, mit welcher Rate und Verschlusszeit ein Foto entstand.",
+  "plan.free": "Gratis",
+  "plan.free1": "Synchronisieren, Suchen und Feinabstimmung",
+  "plan.free2": "Alle Objektive",
+  "plan.free3": "Fotos in voller Größe in der App",
+  "plan.prem1": "AirDrop &amp; Teilen der Originalfotos",
+  "plan.prem2": "In Fotos sichern in voller Auflösung",
+  "plan.prem3": "Fotos ohne Wasserzeichen-Muster",
+  "photos.meta": "Premium ist ein einmaliger In-App-Kauf, kein Abo, und gilt für jedes Foto, auch für die, die du vorher gemacht hast.",
+  "early.brand": "Früh ausprobieren",
+  "early.h2": "Beta auf dem iPhone, Vorschau auf Android",
+  "early.p": "CRT Retro Cam ist noch nicht in den Stores. Du kannst die App schon jetzt ausprobieren und uns erzählen, wie sie sich an deinen Bildschirmen schlägt.",
+  "beta.h3": "Bei der Beta mitmachen",
+  "beta.li1": "Installiere Apples TestFlight-App aus dem App Store.",
+  "beta.li2": "Öffne die Einladung auf deinem iPhone, nimm sie an und installiere die App.",
+  "beta.li3": "Beta-Updates kommen von selbst über TestFlight.",
+  "beta.note": "Erfordert ein iPhone mit iOS 15 oder neuer.",
+  "apk.h3": "Vorschau installieren",
+  "apk.li1": "Lade die APK auf deinem Android-Telefon herunter.",
+  "apk.li2": "Öffne sie und erlaube deinem Browser, Apps zu installieren, wenn Android fragt.",
+  "apk.li3": "Zum Aktualisieren installierst du eine neuere Vorschau über die alte.",
+  "apk.note": "Erfordert Android 10 oder neuer und eine Kamera, die eine manuelle Verschlusszeit erlaubt. Manche Android-Telefone lassen Apps die Verschlusszeit nicht einstellen; dort kann CRT Retro Cam nicht synchronisieren.",
+  "early.bug": "Fehler gefunden? Eröffne ein Issue auf <a href='https://github.com/ChristianDeckert/AppStore/issues'>github.com/ChristianDeckert/AppStore/issues</a>, mit deinem Telefonmodell und der Systemversion.",
+  "test.h2": "Kein Röhrenfernseher zur Hand?",
+  "test.p": "Mit dem CRT-Testbild springt ein Computermonitor für einen Röhrenfernseher ein. Ein echtes Flimmern für die Kamera braucht einen schnellen Monitor mit 120 Hz oder mehr; auf einem 60-Hz-Monitor zeigt die Seite rollende Balken, die den Effekt vorführen.",
+  "test.key": "CRT-Testbild öffnen (EN)",
+  "privacy.brand": "Datenschutz",
+  "privacy.h2": "Kein Konto, keine Werbung, keine Analyse, kein Tracking",
+  "privacy.p": "Deine Fotos bleiben auf deinem Gerät, bis du sie exportierst, und die einzige Netzwerkverbindung der App dient In-App-Käufen über Apples App Store. <a href='PRIVACY' hreflang='en'>Datenschutzerklärung lesen (EN)</a>.",
+  "foot.support": "Support (EN)",
+  "foot.privacy": "Datenschutzerklärung (EN)",
+  "foot.test": "CRT-Testbild (EN)",
+  "foot.beta": "TestFlight-Beta"
+}
+</script>
+<script src="../i18n.js"></script>
 <script>
 (() => {
   'use strict';
